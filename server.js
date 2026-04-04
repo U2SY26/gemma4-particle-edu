@@ -8,6 +8,8 @@ import { v4 as uuidv4 } from 'uuid';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
 const PORT = process.env.PORT || 3000;
+const OLLAMA_BASE = process.env.OLLAMA_BASE || 'http://localhost:11434';
+const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'gemma4';
 const DATA_DIR = join(__dirname, 'data');
 const CARDS_FILE = join(DATA_DIR, 'cards.json');
 const PID_FILE = join(__dirname, '.server.pid');
@@ -140,12 +142,23 @@ app.post('/api/cards/:id/chat', (req, res) => {
 
 // ==================== SERVER STATUS ====================
 
-app.get('/api/status', (req, res) => {
+app.get('/api/status', async (req, res) => {
+    let ollamaStatus = { ollama: false, model: null };
+    try {
+        const response = await fetch(`${OLLAMA_BASE}/api/tags`);
+        if (response.ok) {
+            const data = await response.json();
+            const models = (data.models || []).map(m => m.name);
+            const hasModel = models.some(name => name.startsWith(OLLAMA_MODEL));
+            ollamaStatus = { ollama: true, model: hasModel ? OLLAMA_MODEL : null };
+        }
+    } catch {}
     res.json({
         status: 'running',
         uptime: process.uptime(),
         pid: process.pid,
         version: '1.0.0',
+        ollama: ollamaStatus,
         capabilities: {
             physics: true,
             ai_chat: true,
@@ -210,6 +223,67 @@ app.post('/api/worldmodel/import', (req, res) => {
         error: 'Not implemented',
         message: 'World model import will be available in a future update',
     });
+});
+
+// ==================== OLLAMA PROXY ====================
+
+app.post('/api/ollama/chat', async (req, res) => {
+    const { messages } = req.body || {};
+    if (!messages || !Array.isArray(messages) || messages.length === 0) {
+        return res.status(400).json({ error: 'messages array is required' });
+    }
+
+    try {
+        const ollamaRes = await fetch(`${OLLAMA_BASE}/api/chat`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ model: OLLAMA_MODEL, messages, stream: true }),
+        });
+
+        if (!ollamaRes.ok) {
+            const text = await ollamaRes.text().catch(() => '');
+            return res.status(ollamaRes.status).json({ error: `Ollama error: ${ollamaRes.status}`, detail: text });
+        }
+
+        res.setHeader('Content-Type', 'text/event-stream');
+        res.setHeader('Cache-Control', 'no-cache');
+        res.setHeader('Connection', 'keep-alive');
+        res.flushHeaders();
+
+        const reader = ollamaRes.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split('\n');
+            buffer = lines.pop() || '';
+            for (const line of lines) {
+                const trimmed = line.trim();
+                if (trimmed) res.write(`data: ${trimmed}\n\n`);
+            }
+        }
+        if (buffer.trim()) res.write(`data: ${buffer.trim()}\n\n`);
+        res.end();
+    } catch {
+        if (!res.headersSent) return res.status(503).json({ error: 'Ollama not available' });
+        res.end();
+    }
+});
+
+app.get('/api/ollama/status', async (req, res) => {
+    try {
+        const response = await fetch(`${OLLAMA_BASE}/api/tags`);
+        if (!response.ok) return res.json({ ollama: false, model: null, models: [] });
+        const data = await response.json();
+        const models = (data.models || []).map(m => m.name);
+        const hasModel = models.some(name => name.startsWith(OLLAMA_MODEL));
+        return res.json({ ollama: true, model: hasModel ? OLLAMA_MODEL : null, models });
+    } catch {
+        return res.json({ ollama: false, model: null, models: [] });
+    }
 });
 
 // ==================== START SERVER ====================
