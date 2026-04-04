@@ -126,12 +126,21 @@ export class SimulationManager {
                 document.getElementById('server-label').textContent = 'ONLINE';
                 this._loadHistory();
 
-                // Check Ollama from the same status response
+                // Check providers from the status response
                 const data = await res.json();
                 const ollamaInfo = data.ollama || {};
+                const providers = data.providers || {};
                 this._ollamaAvailable = ollamaInfo.ollama === true && ollamaInfo.model !== null;
+
+                // Determine the active provider label
                 if (this._ollamaAvailable) {
-                    document.getElementById('server-label').textContent = `ONLINE (Gemma)`;
+                    document.getElementById('server-label').textContent = 'ONLINE (Gemma 4)';
+                    this._removeOfflineBanner();
+                } else if (providers.gemini) {
+                    document.getElementById('server-label').textContent = 'ONLINE (Gemini)';
+                    this._removeOfflineBanner();
+                } else if (providers.claude) {
+                    document.getElementById('server-label').textContent = 'ONLINE (Claude)';
                     this._removeOfflineBanner();
                 } else {
                     this._showOfflineBanner();

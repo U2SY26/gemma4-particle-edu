@@ -161,6 +161,11 @@ app.get('/api/status', async (req, res) => {
         pid: process.pid,
         version: '1.0.0',
         ollama: ollamaStatus,
+        providers: {
+            ollama: ollamaStatus.ollama,
+            gemini: !!GEMINI_API_KEY,
+            claude: !!ANTHROPIC_API_KEY,
+        },
         capabilities: {
             physics: true,
             ai_chat: true,
@@ -293,12 +298,14 @@ app.post('/api/worldmodel/import', (req, res) => {
 // ==================== OLLAMA PROXY ====================
 
 // Primary route (matches Vercel serverless function at /api/chat)
+// Provider fallback: Ollama -> Gemini -> Claude
 app.post('/api/chat', async (req, res) => {
     const { messages } = req.body || {};
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
         return res.status(400).json({ error: 'messages array is required' });
     }
 
+    // 1. Try Ollama (local dev, first priority)
     try {
         const ollamaRes = await fetch(`${OLLAMA_BASE}/api/chat`, {
             method: 'POST',
@@ -306,37 +313,117 @@ app.post('/api/chat', async (req, res) => {
             body: JSON.stringify({ model: OLLAMA_MODEL, messages, stream: true }),
         });
 
-        if (!ollamaRes.ok) {
-            const text = await ollamaRes.text().catch(() => '');
-            return res.status(ollamaRes.status).json({ error: `Ollama error: ${ollamaRes.status}`, detail: text });
-        }
+        if (ollamaRes.ok) {
+            res.setHeader('Content-Type', 'text/event-stream');
+            res.setHeader('Cache-Control', 'no-cache');
+            res.setHeader('Connection', 'keep-alive');
+            res.flushHeaders();
 
+            const reader = ollamaRes.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = '';
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                buffer += decoder.decode(value, { stream: true });
+                const lines = buffer.split('\n');
+                buffer = lines.pop() || '';
+                for (const line of lines) {
+                    const trimmed = line.trim();
+                    if (trimmed) res.write(`data: ${trimmed}\n\n`);
+                }
+            }
+            if (buffer.trim()) res.write(`data: ${buffer.trim()}\n\n`);
+            return res.end();
+        }
+    } catch {
+        // Ollama not available, try next provider
+    }
+
+    // Helper: send non-streaming result as SSE in Ollama-compatible format
+    const sendAsSSE = (text, provider) => {
         res.setHeader('Content-Type', 'text/event-stream');
         res.setHeader('Cache-Control', 'no-cache');
         res.setHeader('Connection', 'keep-alive');
         res.flushHeaders();
+        const ollamaFormat = JSON.stringify({
+            message: { role: 'assistant', content: text },
+            done: true,
+            provider,
+        });
+        res.write(`data: ${ollamaFormat}\n\n`);
+        return res.end();
+    };
 
-        const reader = ollamaRes.body.getReader();
-        const decoder = new TextDecoder();
-        let buffer = '';
-
-        while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-            buffer += decoder.decode(value, { stream: true });
-            const lines = buffer.split('\n');
-            buffer = lines.pop() || '';
-            for (const line of lines) {
-                const trimmed = line.trim();
-                if (trimmed) res.write(`data: ${trimmed}\n\n`);
+    // 2. Try Gemini Pro
+    if (GEMINI_API_KEY) {
+        try {
+            const contents = messages
+                .filter(m => m.role !== 'system')
+                .map(m => ({
+                    role: m.role === 'assistant' ? 'model' : 'user',
+                    parts: [{ text: m.content }]
+                }));
+            const systemInstruction = messages.find(m => m.role === 'system');
+            const body = { contents };
+            if (systemInstruction) {
+                body.systemInstruction = { parts: [{ text: systemInstruction.content }] };
             }
+
+            const geminiRes = await fetch(
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body),
+                }
+            );
+            if (geminiRes.ok) {
+                const data = await geminiRes.json();
+                const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (text) return sendAsSSE(text, 'gemini');
+            }
+        } catch {
+            // Gemini failed, try next provider
         }
-        if (buffer.trim()) res.write(`data: ${buffer.trim()}\n\n`);
-        res.end();
-    } catch {
-        if (!res.headersSent) return res.status(503).json({ error: 'Ollama not available' });
-        res.end();
     }
+
+    // 3. Try Claude
+    if (ANTHROPIC_API_KEY) {
+        try {
+            const systemMsg = messages.find(m => m.role === 'system');
+            const chatMsgs = messages.filter(m => m.role !== 'system');
+
+            const claudeRes = await fetch('https://api.anthropic.com/v1/messages', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-api-key': ANTHROPIC_API_KEY,
+                    'anthropic-version': '2023-06-01',
+                },
+                body: JSON.stringify({
+                    model: 'claude-sonnet-4-20250514',
+                    max_tokens: 4096,
+                    system: systemMsg?.content || '',
+                    messages: chatMsgs.map(m => ({ role: m.role, content: m.content })),
+                }),
+            });
+            if (claudeRes.ok) {
+                const data = await claudeRes.json();
+                const text = data.content?.[0]?.text;
+                if (text) return sendAsSSE(text, 'claude');
+            }
+        } catch {
+            // Claude failed
+        }
+    }
+
+    // 4. All providers failed
+    if (!res.headersSent) {
+        return res.status(503).json({ error: 'No AI provider available' });
+    }
+    res.end();
 });
 
 // Legacy alias — keep for backward compatibility

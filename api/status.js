@@ -1,5 +1,7 @@
 const OLLAMA_BASE = process.env.OLLAMA_BASE || 'http://localhost:11434';
 const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'gemma4';
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
+const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY || '';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -21,6 +23,11 @@ export default async function handler(req, res) {
     status: 'running',
     version: '1.0.0',
     ollama: ollamaStatus,
+    providers: {
+      ollama: ollamaStatus.ollama,
+      gemini: !!GEMINI_API_KEY,
+      claude: !!ANTHROPIC_API_KEY,
+    },
     capabilities: {
       physics: true,
       ai_chat: true,
