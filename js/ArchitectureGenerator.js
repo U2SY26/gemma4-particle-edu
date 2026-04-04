@@ -2749,6 +2749,531 @@ export class ArchitectureGenerator {
         };
     }
 
+    // ==================== UNIVERSAL GENERATOR ====================
+
+    /**
+     * Generate a simulation from a Gemma 4 particle spec.
+     * Called when `simulation.particles` exists in the JSON response.
+     * Returns the same { targets, assignments, connections, loads, roles, metadata } format
+     * as generate() so the rest of the pipeline works identically.
+     *
+     * @param {Object} spec  — the `simulation.particles` object from Gemma 4
+     * @param {number} totalParticles — max particle budget
+     * @returns {{ targets, assignments, connections, loads, roles, metadata }}
+     */
+    generateFromSpec(spec, totalParticles) {
+        const groups = spec.groups || [];
+        if (groups.length === 0) {
+            // Empty spec — fall through to default
+            return this.generate('sphere', totalParticles);
+        }
+
+        const positions = [];
+        const roles = [];
+        const connections = [];
+        const groupMeta = [];  // track start/end indices per group
+
+        for (const group of groups) {
+            const startIdx = positions.length / 3;
+            const count = Math.min(group.count || 100, totalParticles - positions.length / 3);
+            if (count <= 0) break;
+
+            const shape = (group.shape || 'random_sphere').toLowerCase();
+            const params = group.params || {};
+            const role = (group.role !== undefined) ? group.role : 3;
+
+            // Generate positions for this group
+            this._generateShape(positions, roles, shape, params, count, role);
+
+            const endIdx = positions.length / 3;
+            const actualCount = endIdx - startIdx;
+
+            // Generate connections for this group
+            const connect = (group.connect || 'none').toLowerCase();
+            this._generateConnections(connections, positions, connect, startIdx, endIdx);
+
+            groupMeta.push({ name: group.name || `group_${groupMeta.length}`, startIdx, endIdx, count: actualCount });
+        }
+
+        let structCount = positions.length / 3;
+
+        // Trim if over budget
+        if (structCount > totalParticles) {
+            positions.length = totalParticles * 3;
+            roles.length = totalParticles;
+            const trimmedConns = connections.filter(c => c.i < totalParticles && c.j < totalParticles);
+            connections.length = 0;
+            connections.push(...trimmedConns);
+            structCount = totalParticles;
+        }
+
+        const assignments = new Uint32Array(structCount);
+        for (let i = 0; i < structCount; i++) assignments[i] = i;
+
+        const allRoles = new Uint8Array(totalParticles);
+        const allLoads = new Float32Array(totalParticles);
+        allRoles.set(new Uint8Array(roles.slice(0, Math.min(structCount, totalParticles))));
+        allLoads.fill(0);
+        this._calculateLoads(allLoads, connections, allRoles, structCount);
+
+        return {
+            targets: new Float32Array(positions),
+            assignments,
+            connections,
+            loads: allLoads,
+            roles: allRoles,
+            metadata: {
+                type: 'custom',
+                particleCount: totalParticles,
+                structuralParticles: structCount,
+                ambientParticles: totalParticles - structCount,
+                description: `Universal spec: ${groups.map(g => g.name || g.shape).join(', ')}`,
+                groups: groupMeta,
+            },
+        };
+    }
+
+    // ---- Shape generators ----
+
+    _generateShape(positions, roles, shape, params, count, role) {
+        switch (shape) {
+            case 'helix':       return this._shapeHelix(positions, roles, params, count, role);
+            case 'sphere':      return this._shapeSphere(positions, roles, params, count, role);
+            case 'random_sphere': return this._shapeRandomSphere(positions, roles, params, count, role);
+            case 'grid':        return this._shapeGrid(positions, roles, params, count, role);
+            case 'ring':        return this._shapeRing(positions, roles, params, count, role);
+            case 'disk':        return this._shapeDisk(positions, roles, params, count, role);
+            case 'line':        return this._shapeLine(positions, roles, params, count, role);
+            case 'wave':        return this._shapeWave(positions, roles, params, count, role);
+            case 'spiral':      return this._shapeSpiral(positions, roles, params, count, role);
+            case 'shell':       return this._shapeShell(positions, roles, params, count, role);
+            case 'cylinder':    return this._shapeCylinder(positions, roles, params, count, role);
+            case 'cone':        return this._shapeCone(positions, roles, params, count, role);
+            case 'torus':       return this._shapeTorus(positions, roles, params, count, role);
+            case 'random_box':  return this._shapeRandomBox(positions, roles, params, count, role);
+            case 'point_cloud': return this._shapePointCloud(positions, roles, params, count, role);
+            default:            return this._shapeRandomSphere(positions, roles, params, count, role);
+        }
+    }
+
+    _center(params) {
+        const c = params.center || [0, 5, 0];
+        return { cx: c[0], cy: c[1], cz: c[2] };
+    }
+
+    /** Helix (spring/coil) — radius, pitch, turns */
+    _shapeHelix(positions, roles, params, count, role) {
+        const r = params.radius || 3;
+        const pitch = params.pitch || 0.5;
+        const turns = params.turns || 5;
+        const { cx, cy, cz } = this._center(params);
+
+        for (let i = 0; i < count; i++) {
+            const t = (i / (count - 1)) * turns * Math.PI * 2;
+            positions.push(
+                cx + Math.cos(t) * r,
+                cy + (t / (Math.PI * 2)) * pitch + (i / count) * turns * pitch,
+                cz + Math.sin(t) * r
+            );
+            roles.push(role);
+        }
+    }
+
+    /** Fibonacci sphere — evenly distributed points on a sphere surface */
+    _shapeSphere(positions, roles, params, count, role) {
+        const r = params.radius || 3;
+        const { cx, cy, cz } = this._center(params);
+        const goldenAngle = Math.PI * (3 - Math.sqrt(5));
+
+        for (let i = 0; i < count; i++) {
+            const y = 1 - (2 * i / (count - 1));
+            const radiusAtY = Math.sqrt(1 - y * y);
+            const theta = goldenAngle * i;
+            positions.push(
+                cx + Math.cos(theta) * radiusAtY * r,
+                cy + y * r,
+                cz + Math.sin(theta) * radiusAtY * r
+            );
+            roles.push(role);
+        }
+    }
+
+    /** Random sphere — random points inside a sphere volume */
+    _shapeRandomSphere(positions, roles, params, count, role) {
+        const r = params.radius || 3;
+        const { cx, cy, cz } = this._center(params);
+
+        for (let i = 0; i < count; i++) {
+            const u = Math.random();
+            const v = Math.random();
+            const theta = 2 * Math.PI * u;
+            const phi = Math.acos(2 * v - 1);
+            const rr = r * Math.cbrt(Math.random());
+            positions.push(
+                cx + rr * Math.sin(phi) * Math.cos(theta),
+                cy + rr * Math.sin(phi) * Math.sin(theta),
+                cz + rr * Math.cos(phi)
+            );
+            roles.push(role);
+        }
+    }
+
+    /** 3D grid */
+    _shapeGrid(positions, roles, params, count, role) {
+        const spacing = params.spacing || 0.3;
+        const { cx, cy, cz } = this._center(params);
+        const side = Math.max(2, Math.ceil(Math.cbrt(count)));
+        let placed = 0;
+
+        for (let ix = 0; ix < side && placed < count; ix++) {
+            for (let iy = 0; iy < side && placed < count; iy++) {
+                for (let iz = 0; iz < side && placed < count; iz++) {
+                    positions.push(
+                        cx + (ix - side / 2) * spacing,
+                        cy + (iy - side / 2) * spacing,
+                        cz + (iz - side / 2) * spacing
+                    );
+                    roles.push(role);
+                    placed++;
+                }
+            }
+        }
+    }
+
+    /** Circular ring */
+    _shapeRing(positions, roles, params, count, role) {
+        const r = params.radius || 3;
+        const { cx, cy, cz } = this._center(params);
+
+        for (let i = 0; i < count; i++) {
+            const theta = (2 * Math.PI * i) / count;
+            positions.push(
+                cx + Math.cos(theta) * r,
+                cy,
+                cz + Math.sin(theta) * r
+            );
+            roles.push(role);
+        }
+    }
+
+    /** Flat disk (filled circle) */
+    _shapeDisk(positions, roles, params, count, role) {
+        const r = params.radius || 3;
+        const { cx, cy, cz } = this._center(params);
+
+        for (let i = 0; i < count; i++) {
+            const rr = r * Math.sqrt(Math.random());
+            const theta = Math.random() * 2 * Math.PI;
+            positions.push(
+                cx + rr * Math.cos(theta),
+                cy,
+                cz + rr * Math.sin(theta)
+            );
+            roles.push(role);
+        }
+    }
+
+    /** Linear arrangement */
+    _shapeLine(positions, roles, params, count, role) {
+        const length = params.length || 10;
+        const dir = params.direction || [1, 0, 0];
+        const { cx, cy, cz } = this._center(params);
+        const mag = Math.sqrt(dir[0] * dir[0] + dir[1] * dir[1] + dir[2] * dir[2]) || 1;
+        const nx = dir[0] / mag, ny = dir[1] / mag, nz = dir[2] / mag;
+
+        for (let i = 0; i < count; i++) {
+            const t = (i / (count - 1)) * length - length / 2;
+            positions.push(cx + nx * t, cy + ny * t, cz + nz * t);
+            roles.push(role);
+        }
+    }
+
+    /** Sinusoidal wave surface */
+    _shapeWave(positions, roles, params, count, role) {
+        const amplitude = params.amplitude || 2;
+        const wavelength = params.wavelength || 4;
+        const width = params.width || 10;
+        const depth = params.depth || 10;
+        const { cx, cy, cz } = this._center(params);
+        const side = Math.max(2, Math.ceil(Math.sqrt(count)));
+        let placed = 0;
+
+        for (let ix = 0; ix < side && placed < count; ix++) {
+            for (let iz = 0; iz < side && placed < count; iz++) {
+                const x = (ix / (side - 1) - 0.5) * width;
+                const z = (iz / (side - 1) - 0.5) * depth;
+                const y = amplitude * Math.sin((2 * Math.PI * x) / wavelength)
+                        * Math.cos((2 * Math.PI * z) / wavelength);
+                positions.push(cx + x, cy + y, cz + z);
+                roles.push(role);
+                placed++;
+            }
+        }
+    }
+
+    /** Flat spiral (galaxy-like) */
+    _shapeSpiral(positions, roles, params, count, role) {
+        const r = params.radius || 8;
+        const turns = params.turns || 3;
+        const spread = params.spread || 0.5;
+        const { cx, cy, cz } = this._center(params);
+
+        for (let i = 0; i < count; i++) {
+            const t = i / count;
+            const angle = t * turns * 2 * Math.PI;
+            const rr = t * r;
+            // Add some random spread for naturalism
+            const jitter = (Math.random() - 0.5) * spread * rr * 0.3;
+            positions.push(
+                cx + Math.cos(angle) * (rr + jitter),
+                cy + (Math.random() - 0.5) * spread * 0.5,
+                cz + Math.sin(angle) * (rr + jitter)
+            );
+            roles.push(role);
+        }
+    }
+
+    /** Hollow sphere surface (shell) */
+    _shapeShell(positions, roles, params, count, role) {
+        const r = params.radius || 3;
+        const { cx, cy, cz } = this._center(params);
+        const goldenAngle = Math.PI * (3 - Math.sqrt(5));
+
+        for (let i = 0; i < count; i++) {
+            const y = 1 - (2 * i / (count - 1));
+            const radiusAtY = Math.sqrt(1 - y * y);
+            const theta = goldenAngle * i;
+            positions.push(
+                cx + Math.cos(theta) * radiusAtY * r,
+                cy + y * r,
+                cz + Math.sin(theta) * radiusAtY * r
+            );
+            roles.push(role);
+        }
+    }
+
+    /** Cylindrical distribution */
+    _shapeCylinder(positions, roles, params, count, role) {
+        const r = params.radius || 2;
+        const height = params.height || 6;
+        const { cx, cy, cz } = this._center(params);
+
+        for (let i = 0; i < count; i++) {
+            const rr = r * Math.sqrt(Math.random());
+            const theta = Math.random() * 2 * Math.PI;
+            const y = (Math.random() - 0.5) * height;
+            positions.push(
+                cx + rr * Math.cos(theta),
+                cy + y,
+                cz + rr * Math.sin(theta)
+            );
+            roles.push(role);
+        }
+    }
+
+    /** Conical distribution */
+    _shapeCone(positions, roles, params, count, role) {
+        const r = params.radius || 3;
+        const height = params.height || 6;
+        const { cx, cy, cz } = this._center(params);
+
+        for (let i = 0; i < count; i++) {
+            const t = Math.random();          // 0=tip, 1=base
+            const rr = r * t * Math.sqrt(Math.random());
+            const theta = Math.random() * 2 * Math.PI;
+            positions.push(
+                cx + rr * Math.cos(theta),
+                cy + (1 - t) * height,
+                cz + rr * Math.sin(theta)
+            );
+            roles.push(role);
+        }
+    }
+
+    /** Torus (donut) — majorRadius, minorRadius */
+    _shapeTorus(positions, roles, params, count, role) {
+        const R = params.majorRadius || 4;
+        const rr = params.minorRadius || 1;
+        const { cx, cy, cz } = this._center(params);
+
+        for (let i = 0; i < count; i++) {
+            const theta = Math.random() * 2 * Math.PI;
+            const phi = Math.random() * 2 * Math.PI;
+            const x = (R + rr * Math.cos(phi)) * Math.cos(theta);
+            const y = rr * Math.sin(phi);
+            const z = (R + rr * Math.cos(phi)) * Math.sin(theta);
+            positions.push(cx + x, cy + y, cz + z);
+            roles.push(role);
+        }
+    }
+
+    /** Random box — width, height, depth */
+    _shapeRandomBox(positions, roles, params, count, role) {
+        const w = params.width || 6;
+        const h = params.height || 6;
+        const d = params.depth || 6;
+        const { cx, cy, cz } = this._center(params);
+
+        for (let i = 0; i < count; i++) {
+            positions.push(
+                cx + (Math.random() - 0.5) * w,
+                cy + (Math.random() - 0.5) * h,
+                cz + (Math.random() - 0.5) * d
+            );
+            roles.push(role);
+        }
+    }
+
+    /** Point cloud — scattered loosely in space */
+    _shapePointCloud(positions, roles, params, count, role) {
+        const spread = params.spread || 10;
+        const { cx, cy, cz } = this._center(params);
+
+        for (let i = 0; i < count; i++) {
+            // Gaussian-ish distribution
+            const r = spread * (Math.random() + Math.random() + Math.random()) / 3;
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos(2 * Math.random() - 1);
+            positions.push(
+                cx + r * Math.sin(phi) * Math.cos(theta),
+                cy + r * Math.sin(phi) * Math.sin(theta),
+                cz + r * Math.cos(phi)
+            );
+            roles.push(role);
+        }
+    }
+
+    // ---- Connection generators ----
+
+    _generateConnections(connections, positions, connectType, startIdx, endIdx) {
+        const count = endIdx - startIdx;
+        if (count < 2) return;
+
+        // Parse connect type — e.g. "nearest:5"
+        const [type, argStr] = connectType.split(':');
+        const arg = argStr ? parseInt(argStr) : undefined;
+
+        switch (type) {
+            case 'chain':   return this._connectChain(connections, positions, startIdx, endIdx);
+            case 'grid':    return this._connectGrid(connections, positions, startIdx, endIdx);
+            case 'nearest': return this._connectNearest(connections, positions, startIdx, endIdx, arg || 3);
+            case 'all':     return this._connectAll(connections, positions, startIdx, endIdx);
+            case 'surface': return this._connectSurface(connections, positions, startIdx, endIdx);
+            case 'none':    return;
+            default:        return;
+        }
+    }
+
+    _dist3(positions, i, j) {
+        const dx = positions[i * 3] - positions[j * 3];
+        const dy = positions[i * 3 + 1] - positions[j * 3 + 1];
+        const dz = positions[i * 3 + 2] - positions[j * 3 + 2];
+        return Math.sqrt(dx * dx + dy * dy + dz * dz);
+    }
+
+    /** Chain — connect sequential neighbors */
+    _connectChain(connections, positions, startIdx, endIdx) {
+        for (let i = startIdx; i < endIdx - 1; i++) {
+            const dist = this._dist3(positions, i, i + 1);
+            connections.push({
+                i, j: i + 1,
+                restLength: dist,
+                stiffness: 40,
+                damping: 5.0,
+            });
+        }
+    }
+
+    /** Grid — connect each particle to its 6 nearest sequential neighbors */
+    _connectGrid(connections, positions, startIdx, endIdx) {
+        const count = endIdx - startIdx;
+        const side = Math.ceil(Math.cbrt(count));
+
+        for (let idx = 0; idx < count; idx++) {
+            const ix = idx % side;
+            const iy = Math.floor(idx / side) % side;
+            const iz = Math.floor(idx / (side * side));
+            const pi = startIdx + idx;
+
+            // Connect to +x, +y, +z neighbors
+            const neighbors = [
+                { dx: 1, dy: 0, dz: 0 },
+                { dx: 0, dy: 1, dz: 0 },
+                { dx: 0, dy: 0, dz: 1 },
+            ];
+
+            for (const n of neighbors) {
+                const nx = ix + n.dx, ny = iy + n.dy, nz = iz + n.dz;
+                if (nx >= side || ny >= side || nz >= side) continue;
+                const ni = nz * side * side + ny * side + nx;
+                if (ni >= count) continue;
+                const pj = startIdx + ni;
+                const dist = this._dist3(positions, pi, pj);
+                connections.push({
+                    i: pi, j: pj,
+                    restLength: dist,
+                    stiffness: 30,
+                    damping: 4.0,
+                });
+            }
+        }
+    }
+
+    /** Nearest N — connect to N nearest neighbors (brute-force, capped for perf) */
+    _connectNearest(connections, positions, startIdx, endIdx, N) {
+        const count = endIdx - startIdx;
+        // Cap to prevent O(n^2) blowup on large groups
+        const maxScan = Math.min(count, 500);
+        const step = count > maxScan ? Math.floor(count / maxScan) : 1;
+        const connected = new Set();
+
+        for (let i = startIdx; i < endIdx; i += step) {
+            // Find N nearest to particle i
+            const dists = [];
+            for (let j = startIdx; j < endIdx; j++) {
+                if (i === j) continue;
+                dists.push({ j, d: this._dist3(positions, i, j) });
+            }
+            dists.sort((a, b) => a.d - b.d);
+
+            for (let k = 0; k < Math.min(N, dists.length); k++) {
+                const key = Math.min(i, dists[k].j) + '_' + Math.max(i, dists[k].j);
+                if (connected.has(key)) continue;
+                connected.add(key);
+                connections.push({
+                    i, j: dists[k].j,
+                    restLength: dists[k].d,
+                    stiffness: 25,
+                    damping: 4.0,
+                });
+            }
+        }
+    }
+
+    /** All — fully connected (small groups only, capped at 100 particles) */
+    _connectAll(connections, positions, startIdx, endIdx) {
+        const count = endIdx - startIdx;
+        const cap = Math.min(endIdx, startIdx + 100);
+
+        for (let i = startIdx; i < cap; i++) {
+            for (let j = i + 1; j < cap; j++) {
+                const dist = this._dist3(positions, i, j);
+                connections.push({
+                    i, j,
+                    restLength: dist,
+                    stiffness: 15,
+                    damping: 3.0,
+                });
+            }
+        }
+    }
+
+    /** Surface — connect neighbors on a surface (Delaunay-like approximation) */
+    _connectSurface(connections, positions, startIdx, endIdx) {
+        // Approximation: connect to nearest 6 neighbors
+        this._connectNearest(connections, positions, startIdx, endIdx, 6);
+    }
+
     // ==================== UTILITY ====================
 
     _generateAmbientParticles(structPositions, count, scale) {

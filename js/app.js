@@ -342,8 +342,10 @@ class App {
         // Apply card's physics parameters
         this._applyPhysics(card.physics);
 
-        // Build the structure from card's prompt
-        if (card.prompt) {
+        // Build the structure from card's prompt or particle spec
+        if (card.particleSpec) {
+            this._onPromptSubmit(card.prompt, card.particleSpec);
+        } else if (card.prompt) {
             this._onPromptSubmit(card.prompt);
         }
     }
@@ -394,22 +396,25 @@ class App {
 
     // ==================== STRUCTURE BUILDING ====================
 
-    _onPromptSubmit(promptText) {
+    _onPromptSubmit(promptText, particleSpec) {
         this._updateStatus('Generating...');
 
         if (this.currentStructure) {
             this.physics.releaseTargets(1.0);
-            setTimeout(() => this._buildStructure(promptText), 1200);
+            setTimeout(() => this._buildStructure(promptText, particleSpec), 1200);
         } else {
-            this._buildStructure(promptText);
+            this._buildStructure(promptText, particleSpec);
         }
     }
 
-    _buildStructure(promptText) {
+    _buildStructure(promptText, particleSpec) {
         this._updateStatus('Building structure...');
 
         try {
-            const structure = this.archGen.generate(promptText, this.activeParticleCount);
+            // Universal pipeline: use particleSpec if available, else fall back to template
+            const structure = particleSpec
+                ? this.archGen.generateFromSpec(particleSpec, this.activeParticleCount)
+                : this.archGen.generate(promptText, this.activeParticleCount);
             this.currentStructure = structure;
 
             const needed = structure.metadata.particleCount;

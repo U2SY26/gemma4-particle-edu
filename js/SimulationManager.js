@@ -19,6 +19,17 @@ const BASE_PHYSICS = {
 
 const p = (overrides) => ({ ...BASE_PHYSICS, ...overrides });
 
+// Domain-specific physics defaults — applied when Gemma 4 specifies a domain
+const DOMAIN_PHYSICS = {
+    physics:       { gravity: -9.81, damping: 0.97 },
+    chemistry:     { gravity: 0, damping: 0.99, viscosity: 0.5 },
+    biology:       { gravity: -2.0, damping: 0.95, viscosity: 1.0 },
+    astronomy:     { gravity: 0, damping: 0.999, turbulence: 0.5 },
+    earth_science: { gravity: -9.81, damping: 0.90 },
+    engineering:   { gravity: -9.81, damping: 0.97 },
+    mathematics:   { gravity: 0, damping: 0.999 },
+};
+
 // Default physics presets for quick card creation
 const PRESETS = [
     // ========== BUILDINGS ==========
@@ -456,7 +467,17 @@ export class SimulationManager {
                         this._syncPhysicsUI(card.physics);
                         if (this.onPhysicsChange) this.onPhysicsChange(card.physics);
                     }
-                    if (simParams.prompt) {
+
+                    // Store particle spec on card for universal pipeline
+                    if (simParams.particles) {
+                        card.particleSpec = simParams.particles;
+                        card.prompt = simParams.prompt || 'custom';
+                        if (simParams.title) card.name = simParams.title;
+                        document.getElementById('prompt-input').value = card.prompt;
+                        if (this.onCardSelect) this.onCardSelect(card);
+                    } else if (simParams.prompt) {
+                        // Clear any previous particle spec — fall back to template
+                        card.particleSpec = null;
                         card.prompt = simParams.prompt;
                         document.getElementById('prompt-input').value = simParams.prompt;
                         if (this.onCardSelect) this.onCardSelect(card);
@@ -476,48 +497,109 @@ export class SimulationManager {
     async _sendToOllama(userMessage) {
         const SYSTEM_PROMPT = `You are a universal particle simulation AI. You can simulate ANYTHING the user imagines using particles in a 3D space.
 
-Your capabilities include:
-- Architecture: buildings, bridges, towers, cathedrals, pyramids, stadiums
-- Molecular: proteins, DNA, molecular structures, crystal lattices
-- Space: solar systems, galaxies, asteroid fields, planetary orbits
-- Weather: clouds, tornadoes, rain, storms, atmospheric phenomena
-- Fluid: water drops, rivers, ocean waves, viscous flows
-- Electromagnetic: magnetic fields, electron clouds, plasma
-- Abstract: any shape or pattern the user can imagine
+## Capabilities
+- **Physics**: pendulum, wave interference, double slit, electric field, magnetic field
+- **Chemistry**: crystal lattice, molecular orbital, reaction kinetics, water molecule
+- **Biology**: cell division, protein folding, DNA replication, neuron network
+- **Astronomy**: nebula, black hole accretion disk, comet trail, binary star, galaxy
+- **Earth Science**: tectonic plates, volcano eruption, ocean current, atmosphere layers
+- **Engineering**: stress test, fluid dynamics, heat transfer, aerodynamics, bridge
+- **Mathematics**: fractal, attractor, topology surface, fibonacci spiral
+- **Architecture**: buildings, bridges, towers, cathedrals, pyramids, stadiums
 
+## Response Format
 When the user describes a scenario, respond with:
-1. A brief explanation of what you'll simulate
-2. A JSON block with simulation parameters:
+1. A brief explanation (2-3 sentences) of what you'll simulate
+2. A JSON block with simulation parameters
 
+### Option A — Simple (use a built-in template)
+For common structures use a prompt keyword:
 \`\`\`json
 {
   "simulation": {
     "prompt": "<structure_type>",
     "physics": {
-      "gravity": -9.81,
-      "damping": 0.97,
-      "springStiffness": 20,
-      "particleCount": 25000,
-      "timeScale": 1.0,
-      "friction": 0.8,
-      "bounciness": 0.3,
-      "windX": 0, "windY": 0, "windZ": 0,
-      "turbulence": 0,
-      "viscosity": 0,
-      "temperature": 293,
-      "foundation": 5.0,
-      "density": 2.4,
+      "gravity": -9.81, "damping": 0.97, "springStiffness": 20,
+      "particleCount": 25000, "timeScale": 1.0, "friction": 0.8,
+      "bounciness": 0.3, "windX": 0, "windY": 0, "windZ": 0,
+      "turbulence": 0, "viscosity": 0, "temperature": 293,
+      "foundation": 5.0, "density": 2.4,
       "seismic": 0, "seismicFreq": 2.0
     }
   }
 }
 \`\`\`
+Available prompt types: house, tower, bridge, dome, pyramid, cathedral, temple, castle, wall, stadium, arch, sphere, cube, molecule, dna, protein, solar_system, galaxy, asteroid_field, cloud, tornado, rain, water_drop, river, ocean_wave, magnet, electron_cloud
 
-Available prompt types: house, tower, bridge, dome, pyramid, cathedral, temple, castle, wall, stadium, arch, sphere, cube,
-molecule, dna, protein, solar_system, galaxy, asteroid_field, cloud, tornado, rain, water_drop, river, ocean_wave, magnet, electron_cloud
+### Option B — Custom (define particle groups for ANY science domain)
+For anything beyond built-in templates, use the \`particles\` field:
+\`\`\`json
+{
+  "simulation": {
+    "prompt": "custom",
+    "title": "Descriptive Title",
+    "description": "What this simulates and why",
+    "domain": "physics|chemistry|biology|astronomy|earth_science|engineering|mathematics",
+    "physics": { ... },
+    "particles": {
+      "groups": [
+        {
+          "name": "group_name",
+          "count": 200,
+          "shape": "helix",
+          "params": { "radius": 2, "pitch": 0.5, "turns": 5 },
+          "role": 2,
+          "connect": "chain"
+        }
+      ]
+    }
+  }
+}
+\`\`\`
 
-Respond in the same language as the user (Korean or English).
-Always suggest a follow-up experiment.`;
+#### Available shapes and their params:
+- **helix**: radius, pitch, turns, center:[x,y,z] — spiral coil
+- **sphere**: radius, center — Fibonacci-distributed points on sphere surface
+- **random_sphere**: radius, center — random points inside sphere volume
+- **grid**: spacing, center — 3D cubic grid
+- **ring**: radius, center — circular ring
+- **disk**: radius, center — flat filled circle
+- **line**: length, direction:[x,y,z], center — linear arrangement
+- **wave**: amplitude, wavelength, width, depth, center — sinusoidal surface
+- **spiral**: radius, turns, spread, center — flat spiral (galaxy-like)
+- **shell**: radius, center — hollow sphere surface
+- **cylinder**: radius, height, center — cylindrical volume
+- **cone**: radius, height, center — conical distribution
+- **torus**: majorRadius, minorRadius, center — donut shape
+- **random_box**: width, height, depth, center — random in rectangular volume
+- **point_cloud**: spread, center — scattered in space
+
+#### Available connect types:
+- **chain** — sequential neighbor connections (good for strands, ropes, orbits)
+- **grid** — connect to 3D grid neighbors (good for lattices, crystals)
+- **nearest:N** — connect to N nearest neighbors (good for networks, clusters)
+- **all** — fully connected (small groups only, <100 particles)
+- **surface** — connect surface neighbors (good for membranes, shells)
+- **none** — no connections (good for gas, clouds, independent particles)
+
+#### Roles (particle visual weight): 1=foundation(heavy), 2=column, 3=beam, 4=brace, 5=arch/decorative
+
+#### Domain examples:
+- DNA: two helices (backbone) + rungs between them (hydrogen bonds)
+- Solar system: ring (orbit) + sphere (planet) per orbit layer
+- Crystal lattice: grid with grid connections
+- Neuron: random_sphere (soma) + helix (axon) + point_cloud (dendrites)
+- Galaxy: spiral (disk) + random_sphere (core) + point_cloud (halo)
+- Pendulum: line (string) + sphere (bob)
+- Volcano: cone (mountain) + cylinder (magma chamber) + point_cloud (eruption)
+
+When the \`domain\` field is set, appropriate physics defaults are auto-applied (e.g., zero gravity for astronomy, high viscosity for biology).
+
+## Rules
+- Respond in the same language as the user (Korean or English).
+- Always suggest a follow-up experiment.
+- Keep total particle count across all groups under 25000.
+- Use Option B (custom particles) for anything NOT in the built-in prompt list.`;
 
         // Build message history
         const messages = [
@@ -576,7 +658,15 @@ Always suggest a follow-up experiment.`;
         if (!match) return null;
         try {
             const parsed = JSON.parse(match[1]);
-            return parsed.simulation || null;
+            const sim = parsed.simulation || null;
+            if (!sim) return null;
+
+            // Apply domain-specific physics defaults if domain is specified
+            if (sim.domain && DOMAIN_PHYSICS[sim.domain]) {
+                sim.physics = { ...BASE_PHYSICS, ...DOMAIN_PHYSICS[sim.domain], ...(sim.physics || {}) };
+            }
+
+            return sim;
         } catch {
             return null;
         }
