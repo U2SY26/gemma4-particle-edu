@@ -6,12 +6,21 @@
  * 시뮬레이션을 생성하고 히스토리 DB에 저장합니다.
  *
  * Usage: node scripts/run-100-simulations.js
- * Requires: Ollama running with gemma4 model
+ * Requires: Ollama running with a supported model
+ *
+ * Environment variables:
+ *   OLLAMA_BASE   - Ollama server URL (default: http://localhost:11434)
+ *   SERVER_BASE   - App server URL (default: http://localhost:3000)
+ *   OLLAMA_MODEL  - Model name (default: gemma4). Examples: gemma3:27b, gemma4
+ *   MAX_RETRIES   - Retries per scenario on JSON parse failure (default: 3)
+ *   REQUEST_TIMEOUT - Per-request timeout in ms (default: 60000)
  */
 
 const OLLAMA_BASE = process.env.OLLAMA_BASE || 'http://localhost:11434';
 const SERVER_BASE = process.env.SERVER_BASE || 'http://localhost:3000';
 const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'gemma4';
+const MAX_RETRIES = parseInt(process.env.MAX_RETRIES || '3', 10);
+const REQUEST_TIMEOUT = parseInt(process.env.REQUEST_TIMEOUT || '60000', 10);
 
 const SCENARIOS = [
   // === 물리학 (Physics) ===
@@ -132,17 +141,37 @@ const SCENARIOS = [
   "열전도: 금속 막대의 온도 구배 전파",
 ];
 
-const SYSTEM_PROMPT = `You are a universal particle simulation AI for the Gemma 4 Particle Edu platform.
-Generate simulation parameters for the given scenario.
+// Map each scenario index to a domain name for per-domain tracking
+const DOMAIN_MAP = {};
+const DOMAIN_RANGES = [
+  [0, 14, 'physics'],
+  [15, 24, 'astronomy'],
+  [25, 34, 'chemistry'],
+  [35, 44, 'biology'],
+  [45, 54, 'earth_science'],
+  [55, 64, 'engineering'],
+  [65, 74, 'mathematics'],
+  [75, 79, 'materials'],
+  [80, 84, 'quantum'],
+  [85, 89, 'electromagnetism'],
+  [90, 94, 'thermodynamics'],
+];
+for (const [start, end, domain] of DOMAIN_RANGES) {
+  for (let i = start; i <= end; i++) DOMAIN_MAP[i] = domain;
+}
 
-Respond with ONLY a JSON block (no explanation needed for this batch run):
+const SYSTEM_PROMPT = `You are a universal particle simulation AI for the Gemma 4 Particle Edu platform.
+Generate simulation parameters for the given science scenario.
+
+You MUST respond with a short explanation (2-3 sentences) of the simulation followed by a \`\`\`json block.
+The JSON block is MANDATORY — never omit it.
 
 \`\`\`json
 {
   "simulation": {
-    "prompt": "<structure_keyword>",
-    "title": "<short title>",
-    "description": "<one line description>",
+    "prompt": "custom",
+    "title": "<short descriptive title>",
+    "description": "<one sentence describing what this simulates>",
     "domain": "<physics|chemistry|biology|astronomy|earth_science|engineering|mathematics|materials|quantum|electromagnetism|thermodynamics>",
     "physics": {
       "gravity": -9.81,
@@ -162,11 +191,11 @@ Respond with ONLY a JSON block (no explanation needed for this batch run):
         {
           "name": "group_name",
           "count": 5000,
-          "shape": "sphere|helix|grid|ring|disk|line|wave|spiral|shell|cylinder|cone|torus|random_box|point_cloud|random_sphere",
+          "shape": "sphere",
           "params": {},
-          "color": "cyan|magenta|lime|orange|purple|blue|pink|yellow|teal|indigo",
+          "color": "cyan",
           "role": 0,
-          "connect": "chain|grid|nearest:3|all|surface|none"
+          "connect": "none"
         }
       ]
     }
@@ -174,22 +203,86 @@ Respond with ONLY a JSON block (no explanation needed for this batch run):
 }
 \`\`\`
 
-Use the particles.groups field to create complex multi-part simulations.
-Adjust physics parameters to match the scientific scenario.
-Keep total particle count under 30000 for performance.`;
+Available shapes: sphere, helix, grid, ring, disk, line, wave, spiral, shell, cylinder, cone, torus, random_box, point_cloud, random_sphere
+Available connect: chain, grid, nearest:N, all, surface, none
+Available colors: cyan, magenta, lime, orange, purple, blue, pink, yellow, teal, indigo
+
+Use the particles.groups field to create complex multi-part simulations with multiple groups.
+Adjust physics parameters to match the scientific scenario (e.g., gravity=0 for space, high viscosity for fluids).
+Keep total particle count under 30000 for performance.
+
+IMPORTANT: The \`\`\`json block must always be present and must contain a valid "simulation" object with "prompt" and "physics" fields.`;
+
+// ==================== HELPERS ====================
+
+/**
+ * Fetch with timeout using AbortController.
+ */
+function fetchWithTimeout(url, options, timeoutMs) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  return fetch(url, { ...options, signal: controller.signal }).finally(() => clearTimeout(timer));
+}
+
+/**
+ * Validate that a parsed simulation object has the required fields.
+ * Returns { valid: true } or { valid: false, reason: string }.
+ */
+function validateSimulation(sim) {
+  if (!sim) return { valid: false, reason: 'simulation object is null/undefined' };
+
+  // simulation.prompt must exist and be non-empty
+  if (!sim.prompt || typeof sim.prompt !== 'string' || sim.prompt.trim() === '') {
+    return { valid: false, reason: 'simulation.prompt is missing or empty' };
+  }
+
+  // simulation.physics must exist with at least gravity and damping
+  if (!sim.physics || typeof sim.physics !== 'object') {
+    return { valid: false, reason: 'simulation.physics is missing' };
+  }
+  if (sim.physics.gravity === undefined || sim.physics.gravity === null) {
+    return { valid: false, reason: 'simulation.physics.gravity is missing' };
+  }
+  if (sim.physics.damping === undefined || sim.physics.damping === null) {
+    return { valid: false, reason: 'simulation.physics.damping is missing' };
+  }
+
+  // If particles.groups exist, validate each group
+  if (sim.particles && sim.particles.groups) {
+    if (!Array.isArray(sim.particles.groups) || sim.particles.groups.length === 0) {
+      return { valid: false, reason: 'simulation.particles.groups is not a non-empty array' };
+    }
+    for (let i = 0; i < sim.particles.groups.length; i++) {
+      const g = sim.particles.groups[i];
+      if (!g.count || typeof g.count !== 'number' || g.count <= 0) {
+        return { valid: false, reason: `group[${i}].count is missing or invalid` };
+      }
+      if (!g.shape || typeof g.shape !== 'string' || g.shape.trim() === '') {
+        return { valid: false, reason: `group[${i}].shape is missing or empty` };
+      }
+      if (g.connect === undefined || g.connect === null) {
+        return { valid: false, reason: `group[${i}].connect is missing` };
+      }
+    }
+  }
+
+  return { valid: true };
+}
+
+// ==================== OLLAMA ====================
 
 async function checkOllama() {
   try {
     const res = await fetch(`${OLLAMA_BASE}/api/tags`);
     const data = await res.json();
     const models = data.models?.map(m => m.name) || [];
-    const hasGemma = models.some(n => n.startsWith('gemma4'));
-    if (!hasGemma) {
-      console.error(`Gemma 4 not found. Available models: ${models.join(', ')}`);
-      console.error('Run: ollama pull gemma4');
+    const hasModel = models.some(n => n.startsWith(OLLAMA_MODEL.split(':')[0]));
+    if (!hasModel) {
+      console.error(`Model "${OLLAMA_MODEL}" not found. Available models: ${models.join(', ')}`);
+      console.error(`Run: ollama pull ${OLLAMA_MODEL}`);
       return false;
     }
-    console.log(`✓ Ollama running, Gemma 4 available`);
+    console.log(`✓ Ollama running, model "${OLLAMA_MODEL}" available`);
     return true;
   } catch {
     console.error('Ollama not running. Start with: ollama serve');
@@ -197,45 +290,77 @@ async function checkOllama() {
   }
 }
 
-async function generateSimulation(scenario, index) {
-  const messages = [
-    { role: 'system', content: SYSTEM_PROMPT },
-    { role: 'user', content: scenario },
-  ];
-
-  try {
-    const res = await fetch(`${OLLAMA_BASE}/api/chat`, {
+/**
+ * Attempt a single Ollama call and return parsed result or throw.
+ */
+async function callOllama(messages) {
+  const res = await fetchWithTimeout(
+    `${OLLAMA_BASE}/api/chat`,
+    {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ model: OLLAMA_MODEL, messages, stream: false }),
-    });
+    },
+    REQUEST_TIMEOUT,
+  );
 
-    if (!res.ok) throw new Error(`Ollama returned ${res.status}`);
+  if (!res.ok) throw new Error(`Ollama returned ${res.status}`);
 
-    const data = await res.json();
-    const content = data.message?.content || '';
+  const data = await res.json();
+  const content = data.message?.content || '';
 
-    // Extract JSON
-    const match = content.match(/```json\s*([\s\S]*?)```/);
-    if (!match) {
-      console.warn(`  [${index}] No JSON found in response`);
-      return { success: false, scenario, error: 'No JSON in response', response: content };
-    }
+  // Extract JSON
+  const match = content.match(/```json\s*([\s\S]*?)```/);
+  if (!match) throw new Error('No JSON block in response');
 
-    const parsed = JSON.parse(match[1]);
-    const sim = parsed.simulation;
+  const parsed = JSON.parse(match[1]);
+  const sim = parsed.simulation;
 
-    return {
-      success: true,
-      scenario,
-      simulation: sim,
-      response: content,
-    };
-  } catch (err) {
-    console.warn(`  [${index}] Error: ${err.message}`);
-    return { success: false, scenario, error: err.message };
-  }
+  // Validate completeness
+  const validation = validateSimulation(sim);
+  if (!validation.valid) throw new Error(`Validation failed: ${validation.reason}`);
+
+  return { simulation: sim, response: content };
 }
+
+/**
+ * Generate simulation with retry logic.
+ * On retry, appends an explicit JSON reminder to the user message.
+ */
+async function generateSimulation(scenario, index) {
+  let lastError = '';
+
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    const userContent = attempt === 0
+      ? scenario
+      : `${scenario}\n\nIMPORTANT: You MUST include a \`\`\`json block with simulation parameters. Include "simulation" with "prompt", "physics" (with "gravity" and "damping"), and "particles.groups" (each with "count", "shape", and "connect").`;
+
+    const messages = [
+      { role: 'system', content: SYSTEM_PROMPT },
+      { role: 'user', content: userContent },
+    ];
+
+    try {
+      const result = await callOllama(messages);
+      return {
+        success: true,
+        scenario,
+        simulation: result.simulation,
+        response: result.response,
+        attempts: attempt + 1,
+      };
+    } catch (err) {
+      lastError = err.message;
+      if (attempt < MAX_RETRIES) {
+        process.stdout.write(` [retry ${attempt + 1}/${MAX_RETRIES}]`);
+      }
+    }
+  }
+
+  return { success: false, scenario, error: lastError, attempts: MAX_RETRIES + 1 };
+}
+
+// ==================== SAVE ====================
 
 async function saveToHistory(result) {
   try {
@@ -260,41 +385,69 @@ async function saveToHistory(result) {
   }
 }
 
-async function saveResultsLocal(results) {
-  const { writeFileSync } = await import('fs');
-  const path = new URL('../data/simulation-results-100.json', import.meta.url).pathname;
-  writeFileSync(path, JSON.stringify(results, null, 2));
-  console.log(`\nResults saved to ${path}`);
+async function saveResultsLocal(results, failed) {
+  const { writeFileSync, mkdirSync } = await import('fs');
+  const { dirname } = await import('path');
+
+  const resultsPath = new URL('../data/simulation-results-100.json', import.meta.url).pathname;
+  mkdirSync(dirname(resultsPath), { recursive: true });
+  writeFileSync(resultsPath, JSON.stringify(results, null, 2));
+  console.log(`\nResults saved to ${resultsPath}`);
+
+  // Save failed scenarios separately for analysis
+  if (failed.length > 0) {
+    const failedPath = new URL('../data/simulation-failures.json', import.meta.url).pathname;
+    writeFileSync(failedPath, JSON.stringify(failed, null, 2));
+    console.log(`Failed scenarios saved to ${failedPath}`);
+  }
 }
 
+// ==================== MAIN ====================
+
 async function main() {
-  console.log('=== Gemma 4 Particle Edu — 100 Simulation E2E Run ===\n');
+  console.log('=== Gemma 4 Particle Edu — 100 Simulation E2E Run ===');
+  console.log(`Model: ${OLLAMA_MODEL} | Timeout: ${REQUEST_TIMEOUT}ms | Max retries: ${MAX_RETRIES}\n`);
 
   // Check Ollama
   const ok = await checkOllama();
   if (!ok) process.exit(1);
 
   const results = [];
+  const failed = [];
   let successCount = 0;
   let failCount = 0;
 
+  // Per-domain tracking
+  const domainStats = {};  // { domain: { total: N, success: N, fail: N } }
+
   for (let i = 0; i < SCENARIOS.length; i++) {
     const scenario = SCENARIOS[i];
+    const expectedDomain = DOMAIN_MAP[i] || 'unknown';
     const progress = `[${String(i + 1).padStart(3)}/${SCENARIOS.length}]`;
 
-    process.stdout.write(`${progress} ${scenario.slice(0, 60)}...`);
+    process.stdout.write(`${progress} ${scenario.slice(0, 55).padEnd(55)}...`);
 
     const result = await generateSimulation(scenario, i);
+    result.expectedDomain = expectedDomain;
     results.push(result);
+
+    // Init domain stats
+    if (!domainStats[expectedDomain]) domainStats[expectedDomain] = { total: 0, success: 0, fail: 0 };
+    domainStats[expectedDomain].total++;
 
     if (result.success) {
       successCount++;
-      process.stdout.write(` ✓ ${result.simulation.title}\n`);
+      domainStats[expectedDomain].success++;
+      const title = result.simulation.title || result.simulation.prompt || '?';
+      const retryInfo = result.attempts > 1 ? ` (${result.attempts} attempts)` : '';
+      process.stdout.write(` ✓ ${title}${retryInfo}\n`);
 
       // Save to history API
       await saveToHistory(result);
     } else {
       failCount++;
+      domainStats[expectedDomain].fail++;
+      failed.push({ index: i, scenario, error: result.error, domain: expectedDomain });
       process.stdout.write(` ✗ ${result.error}\n`);
     }
 
@@ -302,26 +455,49 @@ async function main() {
     await new Promise(r => setTimeout(r, 500));
   }
 
-  console.log(`\n=== Results ===`);
+  // ==================== REPORT ====================
+
+  console.log(`\n${'='.repeat(60)}`);
+  console.log(`=== RESULTS ===`);
+  console.log(`${'='.repeat(60)}`);
   console.log(`Success: ${successCount}/${SCENARIOS.length}`);
   console.log(`Failed:  ${failCount}/${SCENARIOS.length}`);
   console.log(`Rate:    ${(successCount / SCENARIOS.length * 100).toFixed(1)}%`);
 
-  // Save all results locally
-  await saveResultsLocal(results);
+  // Per-domain success rate
+  console.log(`\n--- Success Rate by Domain ---`);
+  const sortedDomains = Object.entries(domainStats).sort((a, b) => a[1].success / a[1].total - b[1].success / b[1].total);
+  for (const [domain, stats] of sortedDomains) {
+    const rate = (stats.success / stats.total * 100).toFixed(0);
+    const bar = '█'.repeat(Math.round(stats.success / stats.total * 20));
+    const empty = '░'.repeat(20 - Math.round(stats.success / stats.total * 20));
+    console.log(`  ${domain.padEnd(20)} ${bar}${empty} ${rate}% (${stats.success}/${stats.total})`);
+  }
 
-  // Domain breakdown
-  const domains = {};
+  // List failed scenarios
+  if (failed.length > 0) {
+    console.log(`\n--- Failed Scenarios ---`);
+    for (const f of failed) {
+      console.log(`  [${f.index}] (${f.domain}) ${f.scenario}`);
+      console.log(`       Error: ${f.error}`);
+    }
+  }
+
+  // Response domain distribution (from AI output)
+  const aiDomains = {};
   for (const r of results) {
     if (r.success) {
       const d = r.simulation.domain || 'unknown';
-      domains[d] = (domains[d] || 0) + 1;
+      aiDomains[d] = (aiDomains[d] || 0) + 1;
     }
   }
-  console.log('\nDomain breakdown:');
-  for (const [d, c] of Object.entries(domains).sort((a, b) => b[1] - a[1])) {
+  console.log('\n--- AI-reported Domain Breakdown ---');
+  for (const [d, c] of Object.entries(aiDomains).sort((a, b) => b[1] - a[1])) {
     console.log(`  ${d}: ${c}`);
   }
+
+  // Save all results locally
+  await saveResultsLocal(results, failed);
 }
 
 main().catch(console.error);
