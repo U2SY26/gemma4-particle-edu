@@ -3,7 +3,7 @@
  * Handles simulation card CRUD, sidebar UI, physics parameter binding,
  * AI chat interface, and server communication.
  */
-import { tPreset } from './i18n.js';
+import { t, tPreset } from './i18n.js';
 
 const API_BASE = '';  // Same origin
 
@@ -125,24 +125,48 @@ export class SimulationManager {
                 document.getElementById('server-dot').classList.add('online');
                 document.getElementById('server-label').textContent = 'ONLINE';
                 this._loadHistory();
-            }
-        } catch {
-            this.serverOnline = false;
-        }
 
-        // Check Ollama availability separately
-        try {
-            const res = await fetch(`${API_BASE}/api/ollama/status`);
-            if (res.ok) {
+                // Check Ollama from the same status response
                 const data = await res.json();
-                this._ollamaAvailable = data.ollama === true && data.model !== null;
+                const ollamaInfo = data.ollama || {};
+                this._ollamaAvailable = ollamaInfo.ollama === true && ollamaInfo.model !== null;
                 if (this._ollamaAvailable) {
                     document.getElementById('server-label').textContent = `ONLINE (Gemma)`;
+                    this._removeOfflineBanner();
+                } else {
+                    this._showOfflineBanner();
                 }
+            } else {
+                this._showOfflineBanner();
             }
-        } catch {
+        } catch (err) {
+            console.warn('[Server] Connection check failed:', err.message || err);
+            this.serverOnline = false;
             this._ollamaAvailable = false;
+            this._showOfflineBanner();
         }
+    }
+
+    _showOfflineBanner() {
+        const serverLabel = document.getElementById('server-label');
+        if (serverLabel && !this._ollamaAvailable) {
+            serverLabel.textContent = 'OFFLINE';
+            serverLabel.style.color = 'var(--accent-red)';
+        }
+        // Add inline banner in chat area if not already present
+        const chatContainer = document.getElementById('chat-container');
+        if (chatContainer && !chatContainer.querySelector('.ai-offline-banner')) {
+            const banner = document.createElement('div');
+            banner.className = 'ai-offline-banner';
+            banner.setAttribute('data-i18n', 'aiOffline');
+            banner.textContent = t('aiOffline');
+            chatContainer.insertBefore(banner, chatContainer.firstChild);
+        }
+    }
+
+    _removeOfflineBanner() {
+        const banner = document.querySelector('.ai-offline-banner');
+        if (banner) banner.remove();
     }
 
     // ==================== CARDS CRUD ====================
@@ -151,10 +175,19 @@ export class SimulationManager {
         if (this.serverOnline) {
             try {
                 const res = await fetch(`${API_BASE}/api/cards`);
+                if (!res.ok) throw new Error('Server returned ' + res.status);
                 this.cards = await res.json();
             } catch {
-                this.cards = [];
+                // localStorage fallback for Vercel static deploy
+                try {
+                    this.cards = JSON.parse(localStorage.getItem('sim-cards') || '[]');
+                } catch { this.cards = []; }
             }
+        } else {
+            // Offline — try localStorage
+            try {
+                this.cards = JSON.parse(localStorage.getItem('sim-cards') || '[]');
+            } catch { this.cards = []; }
         }
 
         // If no cards (first run or offline), create from presets
@@ -180,11 +213,17 @@ export class SimulationManager {
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(card),
                         });
+                        if (!res.ok) throw new Error('Server returned ' + res.status);
                         const saved = await res.json();
                         card.id = saved.id; // Use server-assigned ID
-                    } catch {}
+                    } catch (err) {
+                        console.warn('[Cards] Failed to save preset card to server:', err.message || err);
+                    }
                 }
             }
+
+            // Always persist to localStorage as fallback
+            this._saveCardsLocal();
         }
 
         this._renderCardList();
@@ -193,6 +232,12 @@ export class SimulationManager {
         if (this.cards.length > 0) {
             this.selectCard(this.cards[0].id);
         }
+    }
+
+    _saveCardsLocal() {
+        try {
+            localStorage.setItem('sim-cards', JSON.stringify(this.cards));
+        } catch {}
     }
 
     async createCard(name, prompt, physics) {
@@ -215,12 +260,14 @@ export class SimulationManager {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(card),
                 });
+                if (!res.ok) throw new Error();
                 const saved = await res.json();
                 card.id = saved.id;
             } catch {}
         }
 
         this.cards.unshift(card);
+        this._saveCardsLocal();
         this._renderCardList();
         this.selectCard(card.id);
         return card;
@@ -231,6 +278,7 @@ export class SimulationManager {
         if (this.serverOnline) {
             try { await fetch(`${API_BASE}/api/cards/${id}`, { method: 'DELETE' }); } catch {}
         }
+        this._saveCardsLocal();
 
         if (this.activeCardId === id) {
             this.activeCardId = null;
@@ -264,6 +312,7 @@ export class SimulationManager {
                 });
             } catch {}
         }
+        this._saveCardsLocal();
     }
 
     // ==================== CARD SELECTION ====================
@@ -457,6 +506,8 @@ export class SimulationManager {
                 });
             } catch {}
         }
+        // Always persist cards to localStorage as fallback
+        this._saveCardsLocal();
 
         return msg;
     }
@@ -742,7 +793,7 @@ I'll create two intertwined helices for the backbones, with small connecting par
         ];
 
         try {
-            const response = await fetch(`${API_BASE}/api/ollama/chat`, {
+            const response = await fetch(`${API_BASE}/api/chat`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ messages }),
@@ -831,21 +882,34 @@ I'll create two intertwined helices for the backbones, with small connecting par
 
     async _saveToHistory(entry) {
         try {
-            await fetch('/api/history', {
+            const res = await fetch('/api/history', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(entry),
             });
+            if (!res.ok) throw new Error('Server returned ' + res.status);
             // Refresh history list after saving
             this._loadHistory();
-        } catch (err) {
-            console.warn('Failed to save history:', err.message);
+        } catch {
+            // localStorage fallback for Vercel static deploy
+            try {
+                const history = JSON.parse(localStorage.getItem('sim-history') || '[]');
+                history.unshift({
+                    ...entry,
+                    id: Date.now().toString(),
+                    timestamp: new Date().toISOString(),
+                });
+                if (history.length > 100) history.length = 100;
+                localStorage.setItem('sim-history', JSON.stringify(history));
+                this._loadHistory();
+            } catch {}
         }
     }
 
     async _loadHistory(page = 0) {
         try {
             const res = await fetch(`/api/history?page=${page}&limit=20`);
+            if (!res.ok) throw new Error('Server returned ' + res.status);
             const data = await res.json();
             this._renderHistoryList(data.items, page === 0);
             // Update count badge
@@ -857,7 +921,22 @@ I'll create two intertwined helices for the backbones, with small connecting par
                 loadMoreBtn.style.display = data.hasMore ? 'block' : 'none';
                 loadMoreBtn.onclick = () => this._loadHistory(page + 1);
             }
-        } catch {}
+        } catch {
+            // localStorage fallback for Vercel static deploy
+            try {
+                const history = JSON.parse(localStorage.getItem('sim-history') || '[]');
+                const start = page * 20;
+                const items = history.slice(start, start + 20);
+                this._renderHistoryList(items, page === 0);
+                const countEl = document.getElementById('history-count');
+                if (countEl) countEl.textContent = history.length;
+                const loadMoreBtn = document.getElementById('load-more-history');
+                if (loadMoreBtn) {
+                    loadMoreBtn.style.display = start + 20 < history.length ? 'block' : 'none';
+                    loadMoreBtn.onclick = () => this._loadHistory(page + 1);
+                }
+            } catch {}
+        }
     }
 
     _renderHistoryList(items, clear = true) {

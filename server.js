@@ -290,7 +290,8 @@ app.post('/api/worldmodel/import', (req, res) => {
 
 // ==================== OLLAMA PROXY ====================
 
-app.post('/api/ollama/chat', async (req, res) => {
+// Primary route (matches Vercel serverless function at /api/chat)
+app.post('/api/chat', async (req, res) => {
     const { messages } = req.body || {};
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
         return res.status(400).json({ error: 'messages array is required' });
@@ -336,6 +337,7 @@ app.post('/api/ollama/chat', async (req, res) => {
     }
 });
 
+// Legacy alias — keep for backward compatibility
 app.get('/api/ollama/status', async (req, res) => {
     try {
         const response = await fetch(`${OLLAMA_BASE}/api/tags`);
