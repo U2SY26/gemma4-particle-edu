@@ -8,14 +8,14 @@ let UnrealBloomPass = null;
 
 async function loadThreeJS() {
   try {
-    THREE = await import('/node_modules/three/build/three.module.js');
-    const controls = await import('/node_modules/three/examples/jsm/controls/OrbitControls.js');
+    THREE = await import('three');
+    const controls = await import('three/addons/controls/OrbitControls.js');
     OrbitControls = controls.OrbitControls;
-    const composer = await import('/node_modules/three/examples/jsm/postprocessing/EffectComposer.js');
+    const composer = await import('three/addons/postprocessing/EffectComposer.js');
     EffectComposer = composer.EffectComposer;
-    const rp = await import('/node_modules/three/examples/jsm/postprocessing/RenderPass.js');
+    const rp = await import('three/addons/postprocessing/RenderPass.js');
     RenderPass = rp.RenderPass;
-    const bloom = await import('/node_modules/three/examples/jsm/postprocessing/UnrealBloomPass.js');
+    const bloom = await import('three/addons/postprocessing/UnrealBloomPass.js');
     UnrealBloomPass = bloom.UnrealBloomPass;
   } catch (err) {
     console.warn('Three.js loading failed:', err.message);
