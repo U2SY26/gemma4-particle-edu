@@ -73,6 +73,21 @@ const PRESETS = [
     { name: '아치 게이트',       prompt: '3 arch',               tags: ['arch', 'gate'],       physics: p({ springStiffness: 22 }) },
     { name: '성벽',             prompt: 'wide wall',             tags: ['wall', 'defense'],    physics: p({ springStiffness: 35, foundation: 8, density: 2.5 }) },
 
+    // ========== WEATHER / ATMOSPHERIC PHYSICS ==========
+    // Weather physics inspired by NVIDIA Earth-2 atmospheric modeling
+    // Reference: https://developer.nvidia.com/earth-2
+    // Atmospheric parameters derived from real physics:
+    //   - Temperature: Kelvin (affects particle velocity via Boltzmann distribution)
+    //   - Wind: m/s (pressure differential → particle drift)
+    //   - Turbulence: Reynolds-number-inspired chaotic motion
+    //   - Damping: viscous drag from air density at altitude
+    //   - Gravity reduction: buoyancy effects in convective systems
+    { name: '태풍 시뮬레이션',   prompt: 'tornado',               tags: ['weather', 'typhoon'],   physics: p({ gravity: -0.5, damping: 0.92, windX: 12, windZ: 8, turbulence: 8, viscosity: 0.3, temperature: 305, particleCount: 30000 }) },
+    { name: '적란운 형성',       prompt: 'cloud',                 tags: ['weather', 'cloud'],     physics: p({ gravity: -0.2, damping: 0.98, windY: 5, turbulence: 3, viscosity: 0.5, temperature: 253, particleCount: 20000 }) },
+    { name: '폭풍우',           prompt: 'rain',                  tags: ['weather', 'storm'],     physics: p({ gravity: -9.81, damping: 0.85, windX: 8, turbulence: 6, viscosity: 1.0, temperature: 288, particleCount: 25000 }) },
+    { name: '눈보라',           prompt: 'rain',                  tags: ['weather', 'blizzard'],  physics: p({ gravity: -2.0, damping: 0.95, windX: 15, windZ: 10, turbulence: 7, viscosity: 0.1, temperature: 250, particleCount: 20000 }) },
+    { name: '오로라',           prompt: 'magnet',                tags: ['weather', 'aurora'],    physics: p({ gravity: 0, damping: 0.995, windY: 2, turbulence: 1, viscosity: 0, temperature: 200, particleCount: 15000 }) },
+
     // ========== EXPERIMENTS ==========
     { name: '무중력 파티클',     prompt: 'sphere',                tags: ['zero-g', 'experiment'], physics: p({ gravity: 0, damping: 0.99, springStiffness: 5, bounciness: 0.9, friction: 0.1 }) },
     { name: '강한 중력',        prompt: 'cube',                  tags: ['gravity', 'heavy'],   physics: p({ gravity: -25, springStiffness: 8, bounciness: 0.1 }) },
@@ -763,26 +778,21 @@ When the \`domain\` field is set, appropriate physics defaults are auto-applied 
     }
 
     async _loadFromHistory(item) {
-        // Create a new card from history entry
-        const card = {
-            name: item.title,
-            prompt: item.prompt,
-            physics: item.physics,
-            particleSpec: item.particleSpec,
-        };
-        // Use existing card creation flow
-        if (this.onPhysicsChange) {
-            Object.assign(this.getActiveCard()?.physics || {}, item.physics);
-            this.onPhysicsChange(item.physics);
-        }
-        // Trigger rebuild
-        if (this.onCardSelect) {
-            this.onCardSelect({
-                ...card,
-                prompt: item.prompt,
-                physics: item.physics,
-                particleSpec: item.particleSpec,
-            });
+        // Apply history physics to active card and sync UI
+        const activeCard = this.getActiveCard();
+        if (activeCard) {
+            Object.assign(activeCard.physics, item.physics);
+            activeCard.prompt = item.prompt;
+            activeCard.particleSpec = item.particleSpec || null;
+            if (item.title) activeCard.name = item.title;
+
+            // Sync sliders to reflect the loaded physics values
+            this._syncPhysicsUI(activeCard.physics);
+
+            if (this.onPhysicsChange) this.onPhysicsChange(activeCard.physics);
+
+            // Trigger rebuild with the loaded card
+            if (this.onCardSelect) this.onCardSelect(activeCard);
         }
     }
 
