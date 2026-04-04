@@ -1,3 +1,49 @@
+
+> **[필수] 모든 작업은 칸반보드를 통해야 합니다. 예외 없음.**
+>
+> ```
+> 1. kanban_team_create → 팀 생성
+> 2. kanban_member_spawn → 전문 에이전트 스폰 (역할 지정 필수)
+> 3. kanban_ticket_create → 티켓 생성
+> 4. kanban_ticket_claim → 에이전트 클레임 (역할-티켓 매칭)
+> 5. kanban_ticket_progress → progress_note 등록 (필수)
+> 6. 작업 수행
+> 7. kanban_artifact_create → 산출물 등록 (필수)
+> 8. kanban_ticket_status → Review 전환
+> 9. Supervisor QA 자동 검수 → Done 또는 rework
+> ```
+>
+> **위반 시**: InProgress 전환 차단(agent_required), Review 차단(artifact_required), Done 차단(review_required)
+> **칸반 오프라인 시**: curl REST API로 재시도 3회. 오프라인 핑계로 규칙 무시 = 헌법 위반.
+
+### progress_note 업데이트 조건 (v4.1 — 구체적 실행 규칙)
+
+> **에이전트는 아래 5가지 시점에 반드시 progress_note를 업데이트한다.**
+
+| 시점 | 예시 |
+|------|------|
+| **1. 클레임 직후** | "분석 시작. 파일 3개 확인 예정" |
+| **2. 파일 읽기/분석 완료 시** | "코드 분석 완료. 수정 필요 3곳 확인" |
+| **3. 코드 수정 시작 시** | "server.py 수정 시작" |
+| **4. 코드 수정 완료 시** | "수정 완료. 테스트 진행 중" |
+| **5. Review 전환 직전** | "산출물 등록 완료. Review 전환" |
+
+**업데이트 방법 (둘 중 택 1):**
+```
+# MCP
+kanban_ticket_progress(ticket_id, note="수정 완료. 테스트 진행 중")
+
+# REST API
+curl -X PUT http://localhost:5555/api/tickets/{ticket_id}/progress   -H "Content-Type: application/json"   -d '{"note":"수정 완료. 테스트 진행 중"}'
+```
+
+**미이행 시:**
+- Supervisor 순회 점검 (5분마다)에서 경고 발송
+- 경고 3회 누적 → 자동 unclaim (Backlog 복귀)
+
+
+
+
 # gemma4-particle-edu — 에이전트 가이드
 
 ## 프로젝트 개요
@@ -63,3 +109,32 @@ JavaScript, Express.js, Three.js, WebGL, Ollama, Gemma 4
 - MCP 실패 시 curl REST API로 재시도 (3회, 10초 간격)
 - 완전 오프라인 시 로컬 기록 후 복구 시 일괄 등록
 - "오프라인이니 규칙 무시" = 헌법 위반
+
+### REST API 치트시트 (MCP 대체용)
+
+```bash
+# 팀 생성
+curl -X POST http://localhost:5555/api/teams -H "Content-Type: application/json" -d '{"name":"팀명","project_group":"PG"}'
+
+# 에이전트 스폰
+curl -X POST http://localhost:5555/api/teams/{team_id}/members -H "Content-Type: application/json" -d '{"role":"frontend","display_name":"Agent Name"}'
+
+# 티켓 생성
+curl -X POST http://localhost:5555/api/teams/{team_id}/tickets -H "Content-Type: application/json" -d '{"title":"제목","priority":"medium"}'
+
+# 티켓 클레임
+curl -X PUT http://localhost:5555/api/tickets/{ticket_id}/claim -H "Content-Type: application/json" -d '{"member_id":"agent-xxx"}'
+
+# 상태 변경 ★
+curl -X PUT http://localhost:5555/api/tickets/{ticket_id}/status -H "Content-Type: application/json" -d '{"status":"InProgress"}'
+
+# progress_note 업데이트 ★
+curl -X PUT http://localhost:5555/api/tickets/{ticket_id}/progress -H "Content-Type: application/json" -d '{"note":"진행 중"}'
+
+# 산출물 등록 ★
+curl -X POST http://localhost:5555/api/tickets/{ticket_id}/artifacts -H "Content-Type: application/json" -d '{"creator_member_id":"agent-xxx","title":"결과","content":"내용","artifact_type":"code"}'
+
+# 팀 아카이브
+curl -X POST http://localhost:5555/api/teams/{team_id}/archive -H "Content-Type: application/json"
+```
+

@@ -68,3 +68,26 @@ npx playwright test --ui
 - 베이스 URL: `http://localhost:3000`
 - 헤드리스 모드 기본
 - 서버 자동 시작: `node server.js`
+
+
+## 칸반 연동 (필수)
+
+> 이 스킬 실행 시 반드시 칸반보드에 기록한다.
+
+**실행 전:**
+```bash
+# 1. 팀/티켓이 없으면 생성
+curl -X POST http://localhost:5555/api/teams/{team_id}/tickets -H "Content-Type: application/json" -d '{"title":"스킬 실행: e2e.md","priority":"medium"}'
+# 2. 클레임
+curl -X PUT http://localhost:5555/api/tickets/{ticket_id}/claim -H "Content-Type: application/json" -d '{"member_id":"agent-xxx"}'
+# 3. progress_note
+curl -X PUT http://localhost:5555/api/tickets/{ticket_id}/progress -H "Content-Type: application/json" -d '{"note":"스킬 실행 시작"}'
+```
+
+**실행 후:**
+```bash
+# 4. 산출물 등록
+curl -X POST http://localhost:5555/api/tickets/{ticket_id}/artifacts -H "Content-Type: application/json" -d '{"creator_member_id":"agent-xxx","title":"결과","content":"...","artifact_type":"result"}'
+# 5. Review 전환
+curl -X PUT http://localhost:5555/api/tickets/{ticket_id}/status -H "Content-Type: application/json" -d '{"status":"Review"}'
+```

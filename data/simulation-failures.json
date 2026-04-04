@@ -1,0 +1,410 @@
+[
+  {
+    "index": 27,
+    "scenario": "다이아몬드 결정: sp3 혼성 정사면체 구조",
+    "error": "fetch failed",
+    "domain": "chemistry"
+  },
+  {
+    "index": 28,
+    "scenario": "그래핀: 탄소 육각형 격자 시트",
+    "error": "fetch failed",
+    "domain": "chemistry"
+  },
+  {
+    "index": 29,
+    "scenario": "DNA 이중나선: 염기쌍 수소결합",
+    "error": "fetch failed",
+    "domain": "chemistry"
+  },
+  {
+    "index": 30,
+    "scenario": "벤젠 분자: 공명 구조의 탄소 6각형",
+    "error": "fetch failed",
+    "domain": "chemistry"
+  },
+  {
+    "index": 31,
+    "scenario": "단백질 알파 헬릭스: 아미노산 나선 구조",
+    "error": "fetch failed",
+    "domain": "chemistry"
+  },
+  {
+    "index": 32,
+    "scenario": "촉매 반응: 효소 활성 부위에서의 기질 결합",
+    "error": "fetch failed",
+    "domain": "chemistry"
+  },
+  {
+    "index": 33,
+    "scenario": "브라운 운동: 용액 속 입자의 랜덤 워크",
+    "error": "fetch failed",
+    "domain": "chemistry"
+  },
+  {
+    "index": 34,
+    "scenario": "삼투압: 반투막을 통한 용매 이동",
+    "error": "fetch failed",
+    "domain": "chemistry"
+  },
+  {
+    "index": 35,
+    "scenario": "세포 분열 (유사분열): 염색체가 양극으로 이동",
+    "error": "fetch failed",
+    "domain": "biology"
+  },
+  {
+    "index": 36,
+    "scenario": "뉴런 시냅스: 신경전달물질 확산",
+    "error": "fetch failed",
+    "domain": "biology"
+  },
+  {
+    "index": 37,
+    "scenario": "적혈구 흐름: 모세혈관 속 혈액 순환",
+    "error": "fetch failed",
+    "domain": "biology"
+  },
+  {
+    "index": 38,
+    "scenario": "근육 수축: 액틴-미오신 활주설",
+    "error": "fetch failed",
+    "domain": "biology"
+  },
+  {
+    "index": 39,
+    "scenario": "바이러스 구조: 정이십면체 캡시드",
+    "error": "fetch failed",
+    "domain": "biology"
+  },
+  {
+    "index": 40,
+    "scenario": "항체-항원 결합: Y자형 항체의 특이적 결합",
+    "error": "fetch failed",
+    "domain": "biology"
+  },
+  {
+    "index": 41,
+    "scenario": "광합성: 틸라코이드 막의 전자전달계",
+    "error": "fetch failed",
+    "domain": "biology"
+  },
+  {
+    "index": 42,
+    "scenario": "멘델 유전: 완두콩 교배 세대별 형질 분포",
+    "error": "fetch failed",
+    "domain": "biology"
+  },
+  {
+    "index": 43,
+    "scenario": "생태계 먹이사슬: 포식자-피식자 개체군 동태",
+    "error": "fetch failed",
+    "domain": "biology"
+  },
+  {
+    "index": 44,
+    "scenario": "효소 기질 복합체: 유도적합 모델",
+    "error": "fetch failed",
+    "domain": "biology"
+  },
+  {
+    "index": 45,
+    "scenario": "판 구조론: 수렴/발산 경계에서의 지각 운동",
+    "error": "fetch failed",
+    "domain": "earth_science"
+  },
+  {
+    "index": 46,
+    "scenario": "화산 폭발: 마그마 분출과 화산재 확산",
+    "error": "fetch failed",
+    "domain": "earth_science"
+  },
+  {
+    "index": 47,
+    "scenario": "지진파: P파와 S파의 전파 패턴",
+    "error": "fetch failed",
+    "domain": "earth_science"
+  },
+  {
+    "index": 48,
+    "scenario": "토네이도: 상승 기류의 회전 구조",
+    "error": "fetch failed",
+    "domain": "earth_science"
+  },
+  {
+    "index": 49,
+    "scenario": "해류: 열염순환과 대서양 컨베이어 벨트",
+    "error": "fetch failed",
+    "domain": "earth_science"
+  },
+  {
+    "index": 50,
+    "scenario": "빙하 이동: 중력에 의한 빙하 흐름",
+    "error": "fetch failed",
+    "domain": "earth_science"
+  },
+  {
+    "index": 51,
+    "scenario": "침식과 퇴적: 강물에 의한 삼각주 형성",
+    "error": "fetch failed",
+    "domain": "earth_science"
+  },
+  {
+    "index": 52,
+    "scenario": "대기 순환: 해들리 셀, 페렐 셀, 극지방 셀",
+    "error": "fetch failed",
+    "domain": "earth_science"
+  },
+  {
+    "index": 53,
+    "scenario": "오로라: 태양풍 입자와 자기장 상호작용",
+    "error": "fetch failed",
+    "domain": "earth_science"
+  },
+  {
+    "index": 54,
+    "scenario": "쓰나미: 해저 지진에 의한 파동 전파",
+    "error": "fetch failed",
+    "domain": "earth_science"
+  },
+  {
+    "index": 55,
+    "scenario": "트러스 다리: 하중에 따른 부재별 응력 분포",
+    "error": "fetch failed",
+    "domain": "engineering"
+  },
+  {
+    "index": 56,
+    "scenario": "내진 설계: 지진 시 면진 장치의 작동",
+    "error": "fetch failed",
+    "domain": "engineering"
+  },
+  {
+    "index": 57,
+    "scenario": "바람에 흔들리는 초고층 빌딩: 동적 응답",
+    "error": "fetch failed",
+    "domain": "engineering"
+  },
+  {
+    "index": 58,
+    "scenario": "댐의 수압: 수심에 따른 압력 분포",
+    "error": "fetch failed",
+    "domain": "engineering"
+  },
+  {
+    "index": 59,
+    "scenario": "비행기 날개: 양력 발생 원리 (에어포일)",
+    "error": "fetch failed",
+    "domain": "engineering"
+  },
+  {
+    "index": 60,
+    "scenario": "자동차 충돌 테스트: 크럼플 존의 에너지 흡수",
+    "error": "fetch failed",
+    "domain": "engineering"
+  },
+  {
+    "index": 61,
+    "scenario": "열교환기: 대류와 전도에 의한 열전달",
+    "error": "fetch failed",
+    "domain": "engineering"
+  },
+  {
+    "index": 62,
+    "scenario": "풍력 터빈: 블레이드의 회전과 풍속 관계",
+    "error": "fetch failed",
+    "domain": "engineering"
+  },
+  {
+    "index": 63,
+    "scenario": "우주 엘리베이터: 원심력과 인장 응력",
+    "error": "fetch failed",
+    "domain": "engineering"
+  },
+  {
+    "index": 64,
+    "scenario": "3D 프린팅 구조: 레이어별 적층 패턴",
+    "error": "fetch failed",
+    "domain": "engineering"
+  },
+  {
+    "index": 65,
+    "scenario": "로렌츠 어트랙터: 카오스 이론의 나비 효과",
+    "error": "fetch failed",
+    "domain": "mathematics"
+  },
+  {
+    "index": 66,
+    "scenario": "만델브로 프랙탈: 자기유사 구조의 파티클 표현",
+    "error": "fetch failed",
+    "domain": "mathematics"
+  },
+  {
+    "index": 67,
+    "scenario": "피보나치 나선: 자연의 황금비 패턴",
+    "error": "fetch failed",
+    "domain": "mathematics"
+  },
+  {
+    "index": 68,
+    "scenario": "뫼비우스 띠: 비방향성 단면 곡면",
+    "error": "fetch failed",
+    "domain": "mathematics"
+  },
+  {
+    "index": 69,
+    "scenario": "클라인 병: 4차원 곡면의 3D 투영",
+    "error": "fetch failed",
+    "domain": "mathematics"
+  },
+  {
+    "index": 70,
+    "scenario": "정다면체: 5가지 플라톤 입체 동시 표시",
+    "error": "fetch failed",
+    "domain": "mathematics"
+  },
+  {
+    "index": 71,
+    "scenario": "프랙탈 나무: L-System 기반 분기 구조",
+    "error": "fetch failed",
+    "domain": "mathematics"
+  },
+  {
+    "index": 72,
+    "scenario": "보로노이 다이어그램: 평면 분할의 파티클 표현",
+    "error": "fetch failed",
+    "domain": "mathematics"
+  },
+  {
+    "index": 73,
+    "scenario": "리사주 곡선: 두 주파수의 합성 진동",
+    "error": "fetch failed",
+    "domain": "mathematics"
+  },
+  {
+    "index": 74,
+    "scenario": "사인-코사인 파동 중첩: 푸리에 급수 시각화",
+    "error": "fetch failed",
+    "domain": "mathematics"
+  },
+  {
+    "index": 75,
+    "scenario": "BCC/FCC/HCP 결정 구조 비교",
+    "error": "fetch failed",
+    "domain": "materials"
+  },
+  {
+    "index": 76,
+    "scenario": "전위(dislocation): 결정의 슬립 메커니즘",
+    "error": "fetch failed",
+    "domain": "materials"
+  },
+  {
+    "index": 77,
+    "scenario": "상전이: 고체→액체→기체 온도 변화",
+    "error": "fetch failed",
+    "domain": "materials"
+  },
+  {
+    "index": 78,
+    "scenario": "합금 냉각: 공정 반응에서의 미세구조 형성",
+    "error": "fetch failed",
+    "domain": "materials"
+  },
+  {
+    "index": 79,
+    "scenario": "금속 피로: 반복 하중에 의한 균열 전파",
+    "error": "fetch failed",
+    "domain": "materials"
+  },
+  {
+    "index": 80,
+    "scenario": "수소 원자 오비탈: 1s, 2s, 2p 전자 구름",
+    "error": "fetch failed",
+    "domain": "quantum"
+  },
+  {
+    "index": 81,
+    "scenario": "양자 터널링: 포텐셜 장벽을 통과하는 입자",
+    "error": "fetch failed",
+    "domain": "quantum"
+  },
+  {
+    "index": 82,
+    "scenario": "쿼크 모델: 양성자 내부의 업-업-다운 쿼크",
+    "error": "fetch failed",
+    "domain": "quantum"
+  },
+  {
+    "index": 83,
+    "scenario": "핵분열: 우라늄 원자핵의 분열 과정",
+    "error": "fetch failed",
+    "domain": "quantum"
+  },
+  {
+    "index": 84,
+    "scenario": "핵융합: 수소 핵의 플라즈마 상태 융합",
+    "error": "fetch failed",
+    "domain": "quantum"
+  },
+  {
+    "index": 85,
+    "scenario": "전기장 시각화: 양전하-음전하 쌍극자",
+    "error": "fetch failed",
+    "domain": "electromagnetism"
+  },
+  {
+    "index": 86,
+    "scenario": "자기장 시각화: 막대자석 주위의 자기력선",
+    "error": "fetch failed",
+    "domain": "electromagnetism"
+  },
+  {
+    "index": 87,
+    "scenario": "전자기 유도: 코일 내 자속 변화와 기전력",
+    "error": "fetch failed",
+    "domain": "electromagnetism"
+  },
+  {
+    "index": 88,
+    "scenario": "LC 회로 진동: 전기 에너지와 자기 에너지 교환",
+    "error": "fetch failed",
+    "domain": "electromagnetism"
+  },
+  {
+    "index": 89,
+    "scenario": "맥스웰 방정식: 전자기파의 전파",
+    "error": "fetch failed",
+    "domain": "electromagnetism"
+  },
+  {
+    "index": 90,
+    "scenario": "이상 기체: PV=nRT, 온도 변화에 따른 분자 운동",
+    "error": "fetch failed",
+    "domain": "thermodynamics"
+  },
+  {
+    "index": 91,
+    "scenario": "엔트로피 증가: 잉크 방울이 물에 퍼지는 확산",
+    "error": "fetch failed",
+    "domain": "thermodynamics"
+  },
+  {
+    "index": 92,
+    "scenario": "카르노 엔진: 열역학적 사이클의 4단계",
+    "error": "fetch failed",
+    "domain": "thermodynamics"
+  },
+  {
+    "index": 93,
+    "scenario": "블랙바디 복사: 온도별 스펙트럼 변화",
+    "error": "fetch failed",
+    "domain": "thermodynamics"
+  },
+  {
+    "index": 94,
+    "scenario": "열전도: 금속 막대의 온도 구배 전파",
+    "error": "fetch failed",
+    "domain": "thermodynamics"
+  }
+]

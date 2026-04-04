@@ -58,3 +58,26 @@ description: gemma4-particle-edu 프로젝트의 핵심 워크플로우. Ollama 
 - [ ] GitHub 공개 저장소
 - [ ] 라이브 데모 URL
 - [ ] 커버 이미지
+
+
+## 칸반 연동 (필수)
+
+> 이 스킬 실행 시 반드시 칸반보드에 기록한다.
+
+**실행 전:**
+```bash
+# 1. 팀/티켓이 없으면 생성
+curl -X POST http://localhost:5555/api/teams/{team_id}/tickets -H "Content-Type: application/json" -d '{"title":"스킬 실행: gemma4-edu.md","priority":"medium"}'
+# 2. 클레임
+curl -X PUT http://localhost:5555/api/tickets/{ticket_id}/claim -H "Content-Type: application/json" -d '{"member_id":"agent-xxx"}'
+# 3. progress_note
+curl -X PUT http://localhost:5555/api/tickets/{ticket_id}/progress -H "Content-Type: application/json" -d '{"note":"스킬 실행 시작"}'
+```
+
+**실행 후:**
+```bash
+# 4. 산출물 등록
+curl -X POST http://localhost:5555/api/tickets/{ticket_id}/artifacts -H "Content-Type: application/json" -d '{"creator_member_id":"agent-xxx","title":"결과","content":"...","artifact_type":"result"}'
+# 5. Review 전환
+curl -X PUT http://localhost:5555/api/tickets/{ticket_id}/status -H "Content-Type: application/json" -d '{"status":"Review"}'
+```
