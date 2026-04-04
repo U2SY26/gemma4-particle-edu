@@ -13,6 +13,9 @@ export default class ParticleSystem {
   constructor(physicsEngine) {
     this._engine = physicsEngine;
 
+    /** Public accessor for the underlying physics engine. */
+    this.engine = physicsEngine;
+
     /** @type {Map<number, { material: string, radius: number }>} */
     this._particleMeta = new Map();
 

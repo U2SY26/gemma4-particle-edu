@@ -22,7 +22,7 @@ export default class ArchitectureGenerator {
    */
   constructor(particleSystem) {
     this._particleSystem = particleSystem;
-    this._engine = particleSystem._engine;
+    this._engine = particleSystem.engine;
   }
 
   /**

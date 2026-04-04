@@ -93,7 +93,7 @@ Gemma 4 Particle Edu separates concerns. The physics engine is deterministic and
 
 ## Testing and Quality
 
-The project includes 291 unit tests across 10 modules and 327 end-to-end tests covering 8 categories: functionality, design quality, accessibility, API integration, legal compliance, internationalization, performance/security, and responsive layout. All modules follow strict interface contracts documented in a shared interfaces file.
+The project includes 266 unit tests across 10 modules and 298 end-to-end tests covering 8 categories: functionality, design quality, accessibility, API integration, legal compliance, internationalization, performance/security, and responsive layout. All modules follow strict interface contracts documented in a shared interfaces file.
 
 ---
 
