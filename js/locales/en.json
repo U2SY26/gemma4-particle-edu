@@ -1,0 +1,53 @@
+{
+  "app": {
+    "title": "Gemma 4 Particle Edu",
+    "subtitle": "Interactive 3D Physics Simulation"
+  },
+  "chat": {
+    "title": "AI Chat",
+    "placeholder": "Ask a physics question...",
+    "send": "Send",
+    "thinking": "Thinking...",
+    "offline": "AI offline — Ollama connection required",
+    "welcome": "Hello! Ask me about physics simulations.",
+    "error": "An error occurred. Please try again."
+  },
+  "sim": {
+    "particles": "{{count}} particles",
+    "fps": "{{value}} FPS",
+    "time": "{{value}}s",
+    "play": "Play",
+    "pause": "Pause",
+    "reset": "Reset",
+    "vr": "VR Mode"
+  },
+  "params": {
+    "title": "Simulation Parameters",
+    "gravity": "Gravity (m/s²)",
+    "damping": "Damping",
+    "stiffness": "Stiffness (GPa)",
+    "density": "Density (×1000 kg/m³)",
+    "yieldStrength": "Yield Strength (MPa)",
+    "temperature": "Temperature (K)",
+    "seismic": "Seismic Accel. (m/s²)",
+    "foundation": "Foundation Depth (m)",
+    "wind": "Wind (m/s²)",
+    "friction": "Friction Coefficient",
+    "bounciness": "Bounciness"
+  },
+  "preset": {
+    "title": "Presets",
+    "earthquake": "Earthquake Simulation",
+    "bridge": "Bridge Load Test",
+    "freefall": "Free Fall"
+  },
+  "status": {
+    "connected": "Ollama connected",
+    "disconnected": "Ollama disconnected",
+    "model": "Model: {{name}}"
+  },
+  "locale": {
+    "ko": "한국어",
+    "en": "English"
+  }
+}
