@@ -553,14 +553,20 @@ export class SimulationManager {
         this._clearWorkflowContainer();
 
         try {
-            // Step 1: Planning
-            this._showWorkflowStep(1, '\uD83D\uDCCB', 'Planning', '\uC2DC\uB098\uB9AC\uC624 \uBD84\uC11D \uC911...', 'running');
-
-            // Try Ollama SSE first, fall back to keyword NLP
-            const ollamaResponse = await this._sendToOllama(content);
+            // Try DAG agent workflow (5-step chain) for higher accuracy
+            // Falls back to single-call _sendToOllama if DAG fails
+            let ollamaResponse = null;
+            if (this._ollamaAvailable) {
+                ollamaResponse = await this._dagAgentWorkflow(content);
+            }
+            if (!ollamaResponse) {
+                // Fallback to single-call
+                this._showWorkflowStep(1, '📋', 'Planning', '단일 호출 모드...', 'running');
+                ollamaResponse = await this._sendToOllama(content);
+            }
 
             if (ollamaResponse) {
-                this._showWorkflowStep(1, '\uD83D\uDCCB', 'Planning', 'Gemma 4 \uBD84\uC11D \uC644\uB8CC', 'done');
+                this._showWorkflowStep(5, '✨', 'Complete', '시뮬레이션 준비 완료', 'done');
 
                 // Finalize streaming message into a permanent chat message
                 this._finalizeStreamingMessage();
@@ -723,6 +729,95 @@ Correct? Reply ONLY \`\`\`json: {"qa":"pass","reason":"..."} or corrected simula
                     try { const j = JSON.parse(line.slice(6)); if (j.message?.content) full += j.message.content; } catch {} } }
             return full || null;
         } catch { return null; }
+    }
+
+    // ==================== GEMMA 4 DAG AGENT WORKFLOW ====================
+
+    /**
+     * Multi-step agent chain for higher quality simulations.
+     * DAG: Analyze → Research → Design → Generate → Validate
+     * Each step's output feeds the next step's input.
+     * Falls back to single-call if any step fails.
+     */
+    async _dagAgentWorkflow(userMessage) {
+        // Step 1: ANALYZE — What is the user asking for?
+        this._showWorkflowStep(1, '🔍', 'Analyze', '요청 분석 중...', 'running');
+        const step1 = await this._callOllamaSync(
+            `[STEP 1: ANALYZE]\nUser request: "${userMessage}"\n\n` +
+            `Identify:\n1. What object/phenomenon to simulate\n2. Key physical properties needed\n3. Relevant science domain\n4. Scale (nano/human/planetary)\n\nRespond in 3-4 bullet points. Korean OK.`
+        );
+        if (!step1) return null;
+        this._showWorkflowStep(1, '🔍', 'Analyze', step1.slice(0, 60), 'done');
+        this._updateStreamingMessage(step1);
+
+        // Step 2: RESEARCH — Get accurate physical values
+        this._showWorkflowStep(2, '📚', 'Research', '물성치 조사 중...', 'running');
+        const step2 = await this._callOllamaSync(
+            `[STEP 2: RESEARCH PHYSICAL PROPERTIES]\n` +
+            `Based on this analysis:\n${step1}\n\n` +
+            `List the EXACT SI physical values needed:\n` +
+            `- gravity (m/s²): Earth=-9.81, Moon=-1.62, Mars=-3.72, Jupiter=-24.79, space=0\n` +
+            `- density (kg/m³ ÷ 1000 for sim): iron=7.8, concrete=2.4, water=1.0, diamond=3.5\n` +
+            `- springStiffness (sim scale 1-100): soft=5, medium=20, rigid=50, diamond=150\n` +
+            `- temperature (K): room=293, boiling=373, lava=1500, sun=5778\n` +
+            `- viscosity (sim scale): air=0, water=1, honey=10\n` +
+            `- seismic, windX, turbulence as needed\n\n` +
+            `List each value with justification. Be PRECISE.`
+        );
+        if (!step2) return null;
+        this._showWorkflowStep(2, '📚', 'Research', step2.slice(0, 60), 'done');
+
+        // Step 3: DESIGN — Plan particle layout
+        this._showWorkflowStep(3, '📐', 'Design', '파티클 배치 설계 중...', 'running');
+        const step3 = await this._callOllamaSync(
+            `[STEP 3: DESIGN PARTICLE LAYOUT]\n` +
+            `Physical properties:\n${step2}\n\n` +
+            `Design the particle simulation:\n` +
+            `- How many particles? (20000-50000)\n` +
+            `- What shape/arrangement?\n` +
+            `- What connections between particles?\n` +
+            `- Which parts are structural vs ambient?\n\n` +
+            `Describe the layout plan briefly.`
+        );
+        if (!step3) return null;
+        this._showWorkflowStep(3, '📐', 'Design', step3.slice(0, 60), 'done');
+
+        // Step 4: GENERATE — Create the final JSON
+        this._showWorkflowStep(4, '🔧', 'Generate', 'JSON 생성 중...', 'running');
+        const step4 = await this._callOllamaSync(
+            `[STEP 4: GENERATE SIMULATION JSON]\n` +
+            `Analysis: ${step1.slice(0, 200)}\n` +
+            `Physical values: ${step2.slice(0, 300)}\n` +
+            `Layout plan: ${step3.slice(0, 200)}\n\n` +
+            `Now generate the FINAL simulation JSON. Use the EXACT values from Step 2.\n` +
+            `MANDATORY format:\n` +
+            '```json\n{"simulation":{"prompt":"keyword","title":"...","domain":"...","physics":{"gravity":-9.81,"damping":0.97,"springStiffness":20,"particleCount":25000,"temperature":293,"density":2.4,"viscosity":0,"friction":0.8,"bounciness":0.3,"windX":0,"turbulence":0,"seismic":0}}}\n```'
+        );
+        if (!step4) return null;
+        this._showWorkflowStep(4, '🔧', 'Generate', 'JSON 생성 완료', 'done');
+
+        // Step 5: VALIDATE — Self-check
+        this._showWorkflowStep(5, '✅', 'Validate', '검증 중...', 'running');
+        const step5 = await this._callOllamaSync(
+            `[STEP 5: VALIDATE]\n` +
+            `Original request: "${userMessage}"\n` +
+            `Generated JSON:\n${step4}\n\n` +
+            `Check:\n1. Does gravity match the environment? (space=0, moon=-1.62, earth=-9.81)\n` +
+            `2. Does density match the material?\n` +
+            `3. Does temperature match the scenario?\n` +
+            `4. Are all physics values physically reasonable?\n\n` +
+            `If ALL correct: respond with the same JSON.\n` +
+            `If ANY wrong: respond with CORRECTED JSON.\n` +
+            `ALWAYS include \`\`\`json block.`
+        );
+        this._showWorkflowStep(5, '✅', 'Validate', '검증 완료', 'done');
+
+        // Use step5 (validated) or step4 (if step5 failed)
+        const finalResponse = step5 || step4;
+
+        // Compose a full response for chat display
+        const fullResponse = `${step1}\n\n📚 **물성치:**\n${step2}\n\n📐 **설계:**\n${step3}\n\n${finalResponse}`;
+        return fullResponse;
     }
 
     // ==================== WORKFLOW VISUALIZATION ====================
