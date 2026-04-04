@@ -79,6 +79,8 @@ export class SimulationManager {
         this.cards = [];
         this.activeCardId = null;
         this.serverOnline = false;
+        this._ollamaAvailable = false;
+        this._chatHistory = [];
         this.onCardSelect = onCardSelect;       // callback(card)
         this.onPhysicsChange = onPhysicsChange; // callback(physicsParams)
 
@@ -99,6 +101,20 @@ export class SimulationManager {
             }
         } catch {
             this.serverOnline = false;
+        }
+
+        // Check Ollama availability separately
+        try {
+            const res = await fetch(`${API_BASE}/api/ollama/status`);
+            if (res.ok) {
+                const data = await res.json();
+                this._ollamaAvailable = data.ollama === true && data.model !== null;
+                if (this._ollamaAvailable) {
+                    document.getElementById('server-label').textContent = `ONLINE (Gemma)`;
+                }
+            }
+        } catch {
+            this._ollamaAvailable = false;
         }
     }
 
@@ -412,19 +428,180 @@ export class SimulationManager {
         return msg;
     }
 
-    _handleChatSubmit() {
+    async _handleChatSubmit() {
         const input = document.getElementById('chat-input');
         const content = input.value.trim();
         if (!content) return;
 
         input.value = '';
         this.addChatMessage('user', content);
+        this._chatHistory.push({ role: 'user', content });
 
-        // AI response placeholder - parse natural language physics commands
-        const response = this._processNaturalLanguage(content);
-        setTimeout(() => {
+        // Try Ollama SSE first, fall back to keyword NLP
+        const ollamaResponse = await this._sendToOllama(content);
+
+        if (ollamaResponse) {
+            // Finalize streaming message into a permanent chat message
+            this._finalizeStreamingMessage();
+            this.addChatMessage('assistant', ollamaResponse);
+            this._chatHistory.push({ role: 'assistant', content: ollamaResponse });
+
+            // Extract simulation parameters from Gemma response
+            const simParams = this._extractSimParams(ollamaResponse);
+            if (simParams) {
+                const card = this.getActiveCard();
+                if (card) {
+                    if (simParams.physics) {
+                        Object.assign(card.physics, simParams.physics);
+                        this._syncPhysicsUI(card.physics);
+                        if (this.onPhysicsChange) this.onPhysicsChange(card.physics);
+                    }
+                    if (simParams.prompt) {
+                        card.prompt = simParams.prompt;
+                        document.getElementById('prompt-input').value = simParams.prompt;
+                        if (this.onCardSelect) this.onCardSelect(card);
+                    }
+                }
+            }
+        } else {
+            // Fallback to keyword NLP
+            const response = this._processNaturalLanguage(content);
             this.addChatMessage('assistant', response);
-        }, 300);
+            this._chatHistory.push({ role: 'assistant', content: response });
+        }
+    }
+
+    // ==================== OLLAMA SSE CHAT ====================
+
+    async _sendToOllama(userMessage) {
+        const SYSTEM_PROMPT = `You are a universal particle simulation AI. You can simulate ANYTHING the user imagines using particles in a 3D space.
+
+Your capabilities include:
+- Architecture: buildings, bridges, towers, cathedrals, pyramids, stadiums
+- Molecular: proteins, DNA, molecular structures, crystal lattices
+- Space: solar systems, galaxies, asteroid fields, planetary orbits
+- Weather: clouds, tornadoes, rain, storms, atmospheric phenomena
+- Fluid: water drops, rivers, ocean waves, viscous flows
+- Electromagnetic: magnetic fields, electron clouds, plasma
+- Abstract: any shape or pattern the user can imagine
+
+When the user describes a scenario, respond with:
+1. A brief explanation of what you'll simulate
+2. A JSON block with simulation parameters:
+
+\`\`\`json
+{
+  "simulation": {
+    "prompt": "<structure_type>",
+    "physics": {
+      "gravity": -9.81,
+      "damping": 0.97,
+      "springStiffness": 20,
+      "particleCount": 25000,
+      "timeScale": 1.0,
+      "friction": 0.8,
+      "bounciness": 0.3,
+      "windX": 0, "windY": 0, "windZ": 0,
+      "turbulence": 0,
+      "viscosity": 0,
+      "temperature": 293,
+      "foundation": 5.0,
+      "density": 2.4,
+      "seismic": 0, "seismicFreq": 2.0
+    }
+  }
+}
+\`\`\`
+
+Available prompt types: house, tower, bridge, dome, pyramid, cathedral, temple, castle, wall, stadium, arch, sphere, cube,
+molecule, dna, protein, solar_system, galaxy, asteroid_field, cloud, tornado, rain, water_drop, river, ocean_wave, magnet, electron_cloud
+
+Respond in the same language as the user (Korean or English).
+Always suggest a follow-up experiment.`;
+
+        // Build message history
+        const messages = [
+            { role: 'system', content: SYSTEM_PROMPT },
+            ...this._chatHistory.slice(-10), // Keep last 10 messages for context
+            { role: 'user', content: userMessage }
+        ];
+
+        try {
+            const response = await fetch(`${API_BASE}/api/ollama/chat`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ messages }),
+            });
+
+            if (!response.ok) throw new Error('Ollama unavailable');
+
+            // SSE streaming
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let fullText = '';
+            let buffer = '';
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+
+                buffer += decoder.decode(value, { stream: true });
+                const lines = buffer.split('\n');
+                buffer = lines.pop() || '';
+
+                for (const line of lines) {
+                    if (!line.startsWith('data: ')) continue;
+                    try {
+                        const json = JSON.parse(line.slice(6));
+                        if (json.message?.content) {
+                            fullText += json.message.content;
+                            // Update chat UI with streaming text
+                            this._updateStreamingMessage(fullText);
+                        }
+                    } catch {
+                        // ignore unparseable SSE frames
+                    }
+                }
+            }
+
+            return fullText;
+        } catch {
+            return null; // Will trigger fallback NLP
+        }
+    }
+
+    _extractSimParams(response) {
+        // Find ```json ... ``` block
+        const match = response.match(/```json\s*([\s\S]*?)```/);
+        if (!match) return null;
+        try {
+            const parsed = JSON.parse(match[1]);
+            return parsed.simulation || null;
+        } catch {
+            return null;
+        }
+    }
+
+    _updateStreamingMessage(text) {
+        // Find or create the streaming message element
+        const chatBox = document.getElementById('chat-messages');
+        if (!chatBox) return;
+        let streamEl = chatBox.querySelector('.streaming-message');
+        if (!streamEl) {
+            streamEl = document.createElement('div');
+            streamEl.className = 'chat-msg assistant streaming-message';
+            chatBox.appendChild(streamEl);
+        }
+        streamEl.textContent = text;
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    _finalizeStreamingMessage() {
+        // Remove the temporary streaming element before adding the permanent message
+        const chatBox = document.getElementById('chat-messages');
+        if (!chatBox) return;
+        const streamEl = chatBox.querySelector('.streaming-message');
+        if (streamEl) streamEl.remove();
     }
 
     _processNaturalLanguage(input) {
