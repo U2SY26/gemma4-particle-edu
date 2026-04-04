@@ -233,8 +233,8 @@ class App {
             if (!mat) return;
             this.physics.applyMaterial(mat);
             this._showMaterialInfo(key);
-            // Update particle color to material color
-            if (mat.color) {
+            // Update particle color — keep neon if that's the current mode
+            if (mat.color && this.particleSystem.colorMode !== 'neon') {
                 document.getElementById('color-primary').value = mat.color;
                 this.particleSystem.setColorMode('single', mat.color, null);
             }
@@ -464,6 +464,12 @@ class App {
             this.physics.setSprings(structure.connections);
             this.physics.setLoadBearing(structure.loads);
             this.particleSystem.setParticleColors(structure.roles, structure.loads);
+
+            // Re-apply neon mode after structure colors if that's the user's preference
+            const colorModeSelect = document.getElementById('color-mode');
+            if (colorModeSelect && colorModeSelect.value === 'neon') {
+                this.particleSystem.setColorMode('neon');
+            }
 
             const info = `${structure.metadata.type} | ${structure.metadata.structuralParticles} structural + ${structure.metadata.ambientParticles} ambient`;
             document.getElementById('structure-info').textContent = info;
