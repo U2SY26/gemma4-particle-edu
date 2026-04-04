@@ -26,13 +26,15 @@
     "url": "https://github.com/U2SY26/gemma4-particle-edu.git"
   },
   "dependencies": {
+    "cors": "^2.8.6",
     "express": "^4.21.0",
-    "three": "^0.170.0"
+    "three": "^0.170.0",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
-    "vitest": "^3.1.0",
     "@playwright/test": "^1.50.0",
     "jsdom": "^25.0.0",
-    "supertest": "^7.0.0"
+    "supertest": "^7.0.0",
+    "vitest": "^3.1.0"
   }
 }

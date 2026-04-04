@@ -1,144 +1,78 @@
-/**
- * XRController — WebXR VR support on top of NeonRenderer.
- *
- * Provides a thin event-driven wrapper around the WebXR Device API.
- * Falls back gracefully when the browser does not support WebXR.
- */
+import * as THREE from 'three';
+import { VRButton } from 'three/addons/webxr/VRButton.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-const VALID_EVENTS = ['select', 'squeeze', 'enter', 'exit'];
+export class XRController {
+    constructor(renderer, scene, camera) {
+        this.renderer = renderer;
+        this.scene = scene;
+        this.camera = camera;
 
-export default class XRController {
-  /**
-   * @param {import('./NeonRenderer.js').default} renderer — NeonRenderer instance
-   */
-  constructor(renderer) {
-    /** @type {import('./NeonRenderer.js').default} */
-    this._renderer = renderer;
+        // Enable WebXR
+        renderer.xr.enabled = true;
 
-    /** @type {XRSession | null} */
-    this._session = null;
+        // Create VR button — positioned above bottom panel
+        const vrButton = VRButton.createButton(renderer);
+        vrButton.style.fontFamily = "'Courier New', monospace";
+        vrButton.style.borderColor = '#00ffff';
+        vrButton.style.color = '#00ffff';
+        vrButton.style.background = 'rgba(0, 20, 30, 0.8)';
+        vrButton.style.bottom = '90px';
+        vrButton.style.zIndex = '100';
+        document.body.appendChild(vrButton);
 
-    /** @type {Map<string, Set<Function>>} */
-    this._listeners = new Map(VALID_EVENTS.map((e) => [e, new Set()]));
+        // Orbit controls for non-XR mode
+        this.controls = new OrbitControls(camera, renderer.domElement);
+        this.controls.enableDamping = true;
+        this.controls.dampingFactor = 0.08;
+        this.controls.minDistance = 3;
+        this.controls.maxDistance = 80;
+        this.controls.maxPolarAngle = Math.PI * 0.85;
+        this.controls.target.set(0, 3, 0);
 
-    // Bound handlers so we can add/remove them from the session.
-    this._onSelect = () => this._emit('select');
-    this._onSqueeze = () => this._emit('squeeze');
-  }
+        // XR Controllers
+        this.controller1 = renderer.xr.getController(0);
+        this.controller2 = renderer.xr.getController(1);
+        scene.add(this.controller1);
+        scene.add(this.controller2);
 
-  // ---------------------------------------------------------------------------
-  // Public API
-  // ---------------------------------------------------------------------------
+        // Controller ray visualisation
+        const rayGeometry = new THREE.BufferGeometry().setFromPoints([
+            new THREE.Vector3(0, 0, 0),
+            new THREE.Vector3(0, 0, -5)
+        ]);
+        const rayMaterial = new THREE.LineBasicMaterial({
+            color: 0x00ffff,
+            transparent: true,
+            opacity: 0.5,
+        });
 
-  /**
-   * Check whether the current browser exposes the WebXR API.
-   * @returns {boolean}
-   */
-  isSupported() {
-    return typeof navigator !== 'undefined' && navigator.xr != null;
-  }
+        const ray1 = new THREE.Line(rayGeometry, rayMaterial);
+        const ray2 = new THREE.Line(rayGeometry.clone(), rayMaterial.clone());
+        this.controller1.add(ray1);
+        this.controller2.add(ray2);
 
-  /**
-   * Request an immersive-vr session and wire up the renderer.
-   * Rejects with a descriptive error if WebXR is not available.
-   * @returns {Promise<void>}
-   */
-  async enterVR() {
-    if (!this.isSupported()) {
-      throw new Error('WebXR is not supported in this browser');
+        // XR session events
+        renderer.xr.addEventListener('sessionstart', () => {
+            const overlay = document.getElementById('ui-overlay');
+            if (overlay) overlay.style.display = 'none';
+            this.controls.enabled = false;
+        });
+
+        renderer.xr.addEventListener('sessionend', () => {
+            const overlay = document.getElementById('ui-overlay');
+            if (overlay) overlay.style.display = 'flex';
+            this.controls.enabled = true;
+        });
     }
 
-    const glRenderer = this._renderer.getRenderer();
-    if (!glRenderer) {
-      throw new Error('WebGLRenderer is not available — call NeonRenderer.init() first');
+    update() {
+        if (!this.renderer.xr.isPresenting) {
+            this.controls.update();
+        }
     }
 
-    const session = await navigator.xr.requestSession('immersive-vr');
-    this._session = session;
-
-    glRenderer.xr.enabled = true;
-
-    await session.requestReferenceSpace('local-floor');
-
-    // Controller input events
-    session.addEventListener('select', this._onSelect);
-    session.addEventListener('squeeze', this._onSqueeze);
-
-    // Clean-up when the session ends externally (e.g. user removes headset)
-    session.addEventListener('end', () => {
-      this._teardownSession();
-    });
-
-    this._emit('enter');
-  }
-
-  /**
-   * End the current XR session (no-op if no session is active).
-   */
-  exitVR() {
-    if (this._session) {
-      this._session.end();
-      this._teardownSession();
+    dispose() {
+        this.controls.dispose();
     }
-  }
-
-  /**
-   * Register an event listener.
-   * @param {'select' | 'squeeze' | 'enter' | 'exit'} event
-   * @param {Function} callback
-   */
-  on(event, callback) {
-    const set = this._listeners.get(event);
-    if (set) {
-      set.add(callback);
-    }
-  }
-
-  /**
-   * Remove a previously registered event listener.
-   * @param {'select' | 'squeeze' | 'enter' | 'exit'} event
-   * @param {Function} callback
-   */
-  off(event, callback) {
-    const set = this._listeners.get(event);
-    if (set) {
-      set.delete(callback);
-    }
-  }
-
-  // ---------------------------------------------------------------------------
-  // Internal helpers
-  // ---------------------------------------------------------------------------
-
-  /**
-   * Emit an event to all registered listeners.
-   * @param {string} event
-   */
-  _emit(event) {
-    const set = this._listeners.get(event);
-    if (set) {
-      for (const cb of set) {
-        cb();
-      }
-    }
-  }
-
-  /**
-   * Clean-up after a session ends (called by exitVR and the session 'end' listener).
-   * @private
-   */
-  _teardownSession() {
-    if (this._session) {
-      this._session.removeEventListener('select', this._onSelect);
-      this._session.removeEventListener('squeeze', this._onSqueeze);
-      this._session = null;
-    }
-
-    const glRenderer = this._renderer.getRenderer();
-    if (glRenderer) {
-      glRenderer.xr.enabled = false;
-    }
-
-    this._emit('exit');
-  }
 }

@@ -36,3 +36,25 @@ JavaScript, Express.js, Three.js, WebGL, Ollama, Gemma 4
 ## 저장소
 - **GitHub**: https://github.com/U2SY26/gemma4-particle-edu
 - **원본**: https://github.com/U2SY26/3d_particle_simulator (u2dia_particlemodel)
+
+## 전문 에이전트 운영 규정 (v4.1)
+
+> 모든 에이전트는 전문 역할이 지정되며, 역할 범위 내에서만 작업한다.
+
+### 등록 전문가 — Gemma 파티클 교육
+
+| 역할 | 전문 분야 | 클레임 가능 티켓 |
+|------|----------|----------------|
+| ai-expert | AI ��델 전문가 | Gemma, 파인튜닝 |
+| physics-expert | 입자물리 전문가 | 시뮬레이션, 교육 콘텐츠 |
+| frontend-expert | UI 전문가 | 시각화, 인터랙티브 |
+| data-expert | 데이터 전문가 | Kaggle, 데이터셋 |
+
+### 규칙
+1. **역할 밖 작업 금지** — 전문 분야 외 티켓 클레임 불가
+2. **범위 밖 작업 필요 시** → supervisor 호출 (칸반 메시지)
+3. **에이전트 간 회의** → supervisor 경유, 칸반에 기록
+4. **티켓 클레임 후 progress_note 필수**
+5. **산출물 없이 Review 전환 불가**
+6. **재작업 3회 초과 → Blocked 에스컬레���션**
+7. **무활동 30분 → 자동 unclaim**

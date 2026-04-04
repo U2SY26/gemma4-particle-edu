@@ -1,312 +1,219 @@
-/**
- * ParticleSystem — 파티클 라이프사이클 관리자
- *
- * PhysicsEngine 위에서 파티클 생성, 스프링 연결, 응력 모니터링,
- * 이벤트 방출을 담당한다.
- */
-import Materials from './Materials.js';
+import * as THREE from 'three';
 
-export default class ParticleSystem {
-  /**
-   * @param {import('./PhysicsEngine.js').default} physicsEngine
-   */
-  constructor(physicsEngine) {
-    this._engine = physicsEngine;
+export class ParticleSystem {
+    constructor(scene, maxCount, quality = null) {
+        this.scene = scene;
+        this.maxCount = maxCount;
+        this.activeCount = 0;
 
-    /** Public accessor for the underlying physics engine. */
-    this.engine = physicsEngine;
+        // Quality-adaptive geometry
+        const segments = quality ? quality.particleSegments : 6;
+        const rings = quality ? quality.particleRings : 4;
+        const geometry = new THREE.SphereGeometry(0.03, segments, rings);
 
-    /** @type {Map<number, { material: string, radius: number }>} */
-    this._particleMeta = new Map();
+        // Neon emissive material - disable transparency for iGPU
+        const isLowQuality = quality && quality.label === 'LOW';
+        this.material = new THREE.MeshStandardMaterial({
+            emissive: new THREE.Color(0x00ffff),
+            emissiveIntensity: isLowQuality ? 0.6 : 0.8,
+            color: 0x002222,
+            metalness: isLowQuality ? 0.2 : 0.4,
+            roughness: isLowQuality ? 0.6 : 0.4,
+            transparent: !isLowQuality,
+            opacity: isLowQuality ? 1.0 : 0.85,
+        });
+
+        this.mesh = new THREE.InstancedMesh(geometry, this.material, maxCount);
+        this.mesh.frustumCulled = false;
+        this.mesh.count = 0;
+
+        // Per-instance color
+        this.mesh.instanceColor = new THREE.InstancedBufferAttribute(
+            new Float32Array(maxCount * 3), 3
+        );
+
+        scene.add(this.mesh);
+
+        // Reusable objects
+        this.dummy = new THREE.Object3D();
+        this.color = new THREE.Color();
+
+        // Position data (shared with physics)
+        this.positions = new Float32Array(maxCount * 3);
+        this.scales = new Float32Array(maxCount).fill(1.0);
+
+        // Visual settings
+        this.colorMode = 'role';
+        this.primaryColor = new THREE.Color(0x00ffff);
+        this.secondaryColor = new THREE.Color(0xff00ff);
+        this.currentRoles = null;
+        this.currentLoads = null;
+    }
+
+    spawnOnGround(count, spread = 20) {
+        this.activeCount = count;
+        this.mesh.count = count;
+
+        for (let i = 0; i < count; i++) {
+            const idx = i * 3;
+            this.positions[idx] = (Math.random() - 0.5) * spread;
+            this.positions[idx + 1] = Math.random() * 0.3;
+            this.positions[idx + 2] = (Math.random() - 0.5) * spread;
+
+            this.color.setHSL(0.5 + (Math.random() - 0.5) * 0.05, 1.0, 0.5);
+            this.mesh.instanceColor.setXYZ(i, this.color.r, this.color.g, this.color.b);
+        }
+
+        this.updateInstanceMatrices();
+        this.mesh.instanceColor.needsUpdate = true;
+
+        return this.positions;
+    }
+
+    updateFromPhysics(physPositions, physVelocities) {
+        let velocityColorDirty = false;
+
+        for (let i = 0; i < this.activeCount; i++) {
+            const idx = i * 3;
+
+            this.dummy.position.set(
+                physPositions[idx],
+                physPositions[idx + 1],
+                physPositions[idx + 2]
+            );
+
+            if (physVelocities) {
+                const vx = physVelocities[idx];
+                const vy = physVelocities[idx + 1];
+                const vz = physVelocities[idx + 2];
+                const speed = Math.sqrt(vx * vx + vy * vy + vz * vz);
+                const s = 0.8 + Math.min(speed * 0.5, 0.6);
+                this.dummy.scale.setScalar(s);
+
+                // Velocity-based coloring
+                if (this.colorMode === 'velocity') {
+                    const t = Math.min(speed / 10, 1);
+                    this.color.copy(this.primaryColor).lerp(this.secondaryColor, t);
+                    this.mesh.instanceColor.setXYZ(i, this.color.r, this.color.g, this.color.b);
+                    velocityColorDirty = true;
+                }
+            } else {
+                this.dummy.scale.setScalar(1.0);
+            }
+
+            this.dummy.updateMatrix();
+            this.mesh.setMatrixAt(i, this.dummy.matrix);
+        }
+
+        this.mesh.instanceMatrix.needsUpdate = true;
+        if (velocityColorDirty) this.mesh.instanceColor.needsUpdate = true;
+    }
+
+    updateInstanceMatrices() {
+        for (let i = 0; i < this.activeCount; i++) {
+            const idx = i * 3;
+            this.dummy.position.set(
+                this.positions[idx],
+                this.positions[idx + 1],
+                this.positions[idx + 2]
+            );
+            this.dummy.scale.setScalar(1.0);
+            this.dummy.updateMatrix();
+            this.mesh.setMatrixAt(i, this.dummy.matrix);
+        }
+        this.mesh.instanceMatrix.needsUpdate = true;
+    }
 
     /**
-     * 스프링별 메타데이터 (재료 정보 포함).
-     * 키: "idA:idB" (작은 id가 항상 앞)
-     * @type {Map<string, { material: string, crossArea: number, yieldStrength: number }>}
+     * Set particle colors based on structural roles
+     * roles: 0=ambient, 1=foundation, 2=column, 3=beam, 4=brace, 5=arch
      */
-    this._springMeta = new Map();
-
-    /** @type {Map<string, Set<Function>>} */
-    this._listeners = new Map([
-      ['collision', new Set()],
-      ['yield', new Set()],
-      ['break', new Set()],
-    ]);
-  }
-
-  // ---------------------------------------------------------------------------
-  // Helpers
-  // ---------------------------------------------------------------------------
-
-  /** 스프링 키를 항상 정렬된 순서로 생성한다. */
-  static _springKey(idA, idB) {
-    return idA < idB ? `${idA}:${idB}` : `${idB}:${idA}`;
-  }
-
-  // ---------------------------------------------------------------------------
-  // spawn
-  // ---------------------------------------------------------------------------
-
-  /**
-   * 파티클을 생성하고 인접한 것들을 스프링으로 연결한다.
-   *
-   * @param {Object} config
-   * @param {number}  config.count    - 생성할 파티클 수
-   * @param {string}  config.material - Materials 데이터베이스 키
-   * @param {{x:number, y:number, z:number}} config.position - 시작 위치
-   * @param {{x:number, y:number, z:number}} config.velocity - 초기 속도
-   * @param {boolean} [config.fixed=false]
-   * @returns {Object[]} 생성된 파티클 배열
-   */
-  spawn(config) {
-    const {
-      count = 1,
-      material: matName = 'iron',
-      position = { x: 0, y: 0, z: 0 },
-      velocity = { x: 0, y: 0, z: 0 },
-      fixed = false,
-    } = config;
-
-    const mat = Materials.getMaterial(matName);
-    if (!mat) {
-      throw new Error(`Unknown material: ${matName}`);
+    setParticleColors(roles, loads) {
+        this.currentRoles = roles;
+        this.currentLoads = loads;
+        this.applyColorMode();
     }
 
-    const radius = 0.1; // 기본 반지름 (m)
-    const volume = (4 / 3) * Math.PI * radius * radius * radius;
-    const mass = mat.density * volume;
+    applyColorMode() {
+        const roles = this.currentRoles;
+        const loads = this.currentLoads;
 
-    const dt = this._engine.dt;
-    const created = [];
+        if (this.colorMode === 'single') {
+            for (let i = 0; i < this.activeCount; i++) {
+                this.mesh.instanceColor.setXYZ(i, this.primaryColor.r, this.primaryColor.g, this.primaryColor.b);
+            }
+        } else if (this.colorMode === 'random') {
+            for (let i = 0; i < this.activeCount; i++) {
+                this.color.setHSL(Math.random(), 0.9, 0.5);
+                this.mesh.instanceColor.setXYZ(i, this.color.r, this.color.g, this.color.b);
+            }
+        } else if (this.colorMode === 'gradient') {
+            for (let i = 0; i < this.activeCount; i++) {
+                const t = this.activeCount > 1 ? i / (this.activeCount - 1) : 0;
+                this.color.copy(this.primaryColor).lerp(this.secondaryColor, t);
+                this.mesh.instanceColor.setXYZ(i, this.color.r, this.color.g, this.color.b);
+            }
+        } else if (this.colorMode === 'velocity') {
+            // Will be updated each frame in updateFromPhysics
+            for (let i = 0; i < this.activeCount; i++) {
+                this.mesh.instanceColor.setXYZ(i, this.primaryColor.r, this.primaryColor.g, this.primaryColor.b);
+            }
+        } else {
+            // 'role' mode (default)
+            const ROLE_COLORS = [
+                [0.50, 1.0, 0.5],   // 0: ambient - cyan
+                [0.08, 1.0, 0.6],   // 1: foundation - warm orange
+                [0.55, 1.0, 0.55],  // 2: column - cyan-blue
+                [0.83, 1.0, 0.55],  // 3: beam - magenta
+                [0.15, 1.0, 0.55],  // 4: brace - yellow
+                [0.70, 1.0, 0.55],  // 5: arch - purple
+            ];
 
-    for (let i = 0; i < count; i++) {
-      // 여러 파티클일 때 x축으로 나란히 배치 (간격 = 2 * radius)
-      const offsetX = i * radius * 2;
+            for (let i = 0; i < this.activeCount; i++) {
+                const role = roles ? (roles[i] || 0) : 0;
+                const load = loads ? loads[i] : 0;
+                const [h, s, l] = ROLE_COLORS[Math.min(role, 5)];
+                const hShift = load * 0.15;
+                this.color.setHSL(h - hShift, s, l + load * 0.1);
+                this.mesh.instanceColor.setXYZ(i, this.color.r, this.color.g, this.color.b);
+            }
+        }
 
-      const px = position.x + offsetX;
-      const py = position.y;
-      const pz = position.z;
-
-      // Verlet: prevPos = pos - velocity * dt  →  초기 속도 부여
-      const prevX = px - velocity.x * dt;
-      const prevY = py - velocity.y * dt;
-      const prevZ = pz - velocity.z * dt;
-
-      const id = this._engine.addParticle({
-        x: px,
-        y: py,
-        z: pz,
-        prevX,
-        prevY,
-        prevZ,
-        mass,
-        radius,
-        fixed,
-        material: matName,
-      });
-
-      this._particleMeta.set(id, { material: matName, radius });
-      created.push(this._engine.getParticles().find((p) => p.id === id));
+        this.mesh.instanceColor.needsUpdate = true;
     }
 
-    // 인접 파티클을 스프링으로 연결
-    if (created.length > 1) {
-      // 시뮬레이션 스케일로 환산한 스프링 강성
-      // elasticModulus (Pa) * 단면적 / restLength  → 스프링 상수 (N/m)
-      const crossArea = Math.PI * radius * radius;
-      const restLength = radius * 2;
-      const stiffness = (mat.elasticModulus * crossArea) / restLength;
-
-      for (let i = 0; i < created.length - 1; i++) {
-        const idA = created[i].id;
-        const idB = created[i + 1].id;
-
-        this._engine.addSpring({
-          idA,
-          idB,
-          restLength,
-          stiffness,
-          damping: 0.5,
-        });
-
-        this._springMeta.set(ParticleSystem._springKey(idA, idB), {
-          material: matName,
-          crossArea,
-          yieldStrength: mat.yieldStrength,
-        });
-      }
+    setColorMode(mode, primary, secondary) {
+        this.colorMode = mode;
+        if (primary) this.primaryColor.set(primary);
+        if (secondary) this.secondaryColor.set(secondary);
+        this.applyColorMode();
     }
 
-    return created;
-  }
-
-  // ---------------------------------------------------------------------------
-  // update
-  // ---------------------------------------------------------------------------
-
-  /**
-   * 물리 시뮬레이션을 한 스텝 진행하고 응력을 검사한다.
-   * @param {number} dt - 타임스텝 (초)
-   */
-  update(dt) {
-    this._engine.integrate(dt);
-    this._checkStress();
-  }
-
-  /**
-   * 모든 스프링의 응력을 검사하고 yield/break 이벤트를 방출한다.
-   * @private
-   */
-  _checkStress() {
-    const springs = this._engine.getSprings();
-    const particles = this._engine.getParticles();
-    const pMap = new Map(particles.map((p) => [p.id, p]));
-
-    // break 대상을 모아서 루프 이후 제거 (순회 중 변이 방지)
-    const toRemove = [];
-
-    for (const s of springs) {
-      const a = pMap.get(s.idA);
-      const b = pMap.get(s.idB);
-      if (!a || !b) continue;
-
-      const key = ParticleSystem._springKey(s.idA, s.idB);
-      const meta = this._springMeta.get(key);
-      if (!meta) continue;
-
-      // 현재 길이
-      const dx = b.x - a.x;
-      const dy = b.y - a.y;
-      const dz = b.z - a.z;
-      const currentLength = Math.sqrt(dx * dx + dy * dy + dz * dz);
-
-      // 힘 = 강성 * |변형|
-      const forceMag = Math.abs(s.stiffness * (currentLength - s.restLength));
-
-      // 응력 = 힘 / 단면적
-      const stress = forceMag / meta.crossArea;
-
-      if (stress > 1.5 * meta.yieldStrength) {
-        this._emit('break', { idA: s.idA, idB: s.idB, stress, yieldStrength: meta.yieldStrength });
-        toRemove.push({ idA: s.idA, idB: s.idB, key });
-      } else if (stress > meta.yieldStrength) {
-        this._emit('yield', { idA: s.idA, idB: s.idB, stress, yieldStrength: meta.yieldStrength });
-      }
+    setBrightness(intensity) {
+        this.material.emissiveIntensity = intensity;
     }
 
-    // 파손된 스프링 제거
-    for (const { idA, idB, key } of toRemove) {
-      this._engine.removeSpring(idA, idB);
-      this._springMeta.delete(key);
-    }
-  }
-
-  // ---------------------------------------------------------------------------
-  // reset
-  // ---------------------------------------------------------------------------
-
-  /** 모든 파티클과 스프링을 제거하고 초기 상태로 복원한다. */
-  reset() {
-    this._engine.reset();
-    this._particleMeta.clear();
-    this._springMeta.clear();
-  }
-
-  // ---------------------------------------------------------------------------
-  // getStats
-  // ---------------------------------------------------------------------------
-
-  /**
-   * 현재 시스템 통계를 반환한다.
-   * @returns {{ count: number, avgVelocity: number, maxStress: number }}
-   */
-  getStats() {
-    const particles = this._engine.getParticles();
-    const dt = this._engine.dt;
-
-    let totalSpeed = 0;
-    for (const p of particles) {
-      const vx = (p.x - p.prevX) / dt;
-      const vy = (p.y - p.prevY) / dt;
-      const vz = (p.z - p.prevZ) / dt;
-      totalSpeed += Math.sqrt(vx * vx + vy * vy + vz * vz);
+    setOpacity(opacity) {
+        this.material.opacity = opacity;
+        this.material.transparent = opacity < 1.0;
     }
 
-    const avgVelocity = particles.length > 0 ? totalSpeed / particles.length : 0;
-
-    // 최대 응력비 (stress / yieldStrength)
-    let maxStress = 0;
-    const springs = this._engine.getSprings();
-    const pMap = new Map(particles.map((p) => [p.id, p]));
-
-    for (const s of springs) {
-      const a = pMap.get(s.idA);
-      const b = pMap.get(s.idB);
-      if (!a || !b) continue;
-
-      const key = ParticleSystem._springKey(s.idA, s.idB);
-      const meta = this._springMeta.get(key);
-      if (!meta) continue;
-
-      const dx = b.x - a.x;
-      const dy = b.y - a.y;
-      const dz = b.z - a.z;
-      const currentLength = Math.sqrt(dx * dx + dy * dy + dz * dz);
-      const forceMag = Math.abs(s.stiffness * (currentLength - s.restLength));
-      const stress = forceMag / meta.crossArea;
-      const ratio = stress / meta.yieldStrength;
-
-      if (ratio > maxStress) {
-        maxStress = ratio;
-      }
+    setParticleSize(radius) {
+        const old = this.mesh.geometry;
+        const segments = old.parameters?.widthSegments || 6;
+        const rings = old.parameters?.heightSegments || 4;
+        this.mesh.geometry = new THREE.SphereGeometry(radius, segments, rings);
+        old.dispose();
     }
 
-    return {
-      count: particles.length,
-      avgVelocity,
-      maxStress,
-    };
-  }
-
-  // ---------------------------------------------------------------------------
-  // Event system
-  // ---------------------------------------------------------------------------
-
-  /**
-   * 이벤트 리스너를 등록한다.
-   * @param {'collision'|'yield'|'break'} event
-   * @param {Function} callback
-   */
-  on(event, callback) {
-    const set = this._listeners.get(event);
-    if (set) {
-      set.add(callback);
+    setActiveCount(count) {
+        this.activeCount = Math.min(count, this.maxCount);
+        this.mesh.count = this.activeCount;
     }
-  }
 
-  /**
-   * 이벤트 리스너를 제거한다.
-   * @param {'collision'|'yield'|'break'} event
-   * @param {Function} callback
-   */
-  off(event, callback) {
-    const set = this._listeners.get(event);
-    if (set) {
-      set.delete(callback);
+    dispose() {
+        this.mesh.geometry.dispose();
+        this.material.dispose();
+        this.scene.remove(this.mesh);
     }
-  }
-
-  /**
-   * 이벤트를 방출한다.
-   * @param {string} event
-   * @param {*} data
-   * @private
-   */
-  _emit(event, data) {
-    const set = this._listeners.get(event);
-    if (!set) return;
-    for (const cb of set) {
-      cb(data);
-    }
-  }
 }
