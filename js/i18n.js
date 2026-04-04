@@ -68,6 +68,7 @@ const LANG = {
         randomMix: '랜덤 혼합',
         gradient: '그라데이션',
         byVelocity: '속도별',
+        neonRandom: '네온 랜덤',
         // Chat
         chatPlaceholder: '물리법칙을 자연어로 설명해보세요...',
         chatWelcome: 'AI와 대화하며 물리 파라미터를 조정하세요',
@@ -172,6 +173,7 @@ const LANG = {
         randomMix: 'Random Mix',
         gradient: 'Gradient',
         byVelocity: 'By Velocity',
+        neonRandom: 'Neon Random',
         chatPlaceholder: 'Describe physics in natural language...',
         chatWelcome: 'Chat with AI to adjust physics parameters',
         promptPlaceholder: 'Enter structure: tower, dome, bridge, pyramid...',

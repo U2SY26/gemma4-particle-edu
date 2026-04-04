@@ -1,5 +1,18 @@
 import * as THREE from 'three';
 
+const NEON_PALETTE = [
+    [0.50, 1.0, 0.55],  // Cyan #00FFFF
+    [0.83, 1.0, 0.55],  // Magenta #FF00FF
+    [0.33, 1.0, 0.55],  // Lime #00FF00
+    [0.08, 1.0, 0.60],  // Orange #FF6600
+    [0.75, 1.0, 0.55],  // Purple #9900FF
+    [0.58, 1.0, 0.55],  // Blue #0066FF
+    [0.95, 1.0, 0.55],  // Pink #FF0066
+    [0.17, 1.0, 0.55],  // Yellow #FFFF00
+    [0.42, 1.0, 0.55],  // Teal #00FF99
+    [0.67, 1.0, 0.55],  // Indigo #6600FF
+];
+
 export class ParticleSystem {
     constructor(scene, maxCount, quality = null) {
         this.scene = scene;
@@ -15,7 +28,7 @@ export class ParticleSystem {
         const isLowQuality = quality && quality.label === 'LOW';
         this.material = new THREE.MeshStandardMaterial({
             emissive: new THREE.Color(0x00ffff),
-            emissiveIntensity: isLowQuality ? 0.6 : 0.8,
+            emissiveIntensity: isLowQuality ? 0.6 : 1.0,
             color: 0x002222,
             metalness: isLowQuality ? 0.2 : 0.4,
             roughness: isLowQuality ? 0.6 : 0.4,
@@ -43,7 +56,7 @@ export class ParticleSystem {
         this.scales = new Float32Array(maxCount).fill(1.0);
 
         // Visual settings
-        this.colorMode = 'role';
+        this.colorMode = 'neon';
         this.primaryColor = new THREE.Color(0x00ffff);
         this.secondaryColor = new THREE.Color(0xff00ff);
         this.currentRoles = null;
@@ -60,7 +73,8 @@ export class ParticleSystem {
             this.positions[idx + 1] = Math.random() * 0.3;
             this.positions[idx + 2] = (Math.random() - 0.5) * spread;
 
-            this.color.setHSL(0.5 + (Math.random() - 0.5) * 0.05, 1.0, 0.5);
+            const neon = NEON_PALETTE[Math.floor(Math.random() * NEON_PALETTE.length)];
+            this.color.setHSL(neon[0] + (Math.random() - 0.5) * 0.03, neon[1], neon[2]);
             this.mesh.instanceColor.setXYZ(i, this.color.r, this.color.g, this.color.b);
         }
 
@@ -151,6 +165,12 @@ export class ParticleSystem {
             for (let i = 0; i < this.activeCount; i++) {
                 const t = this.activeCount > 1 ? i / (this.activeCount - 1) : 0;
                 this.color.copy(this.primaryColor).lerp(this.secondaryColor, t);
+                this.mesh.instanceColor.setXYZ(i, this.color.r, this.color.g, this.color.b);
+            }
+        } else if (this.colorMode === 'neon') {
+            for (let i = 0; i < this.activeCount; i++) {
+                const neon = NEON_PALETTE[Math.floor(Math.random() * NEON_PALETTE.length)];
+                this.color.setHSL(neon[0] + (Math.random() - 0.5) * 0.03, neon[1], neon[2]);
                 this.mesh.instanceColor.setXYZ(i, this.color.r, this.color.g, this.color.b);
             }
         } else if (this.colorMode === 'velocity') {
