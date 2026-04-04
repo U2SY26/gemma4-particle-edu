@@ -109,6 +109,7 @@ export class SimulationManager {
                 this.serverOnline = true;
                 document.getElementById('server-dot').classList.add('online');
                 document.getElementById('server-label').textContent = 'ONLINE';
+                this._loadHistory();
             }
         } catch {
             this.serverOnline = false;
@@ -482,6 +483,19 @@ export class SimulationManager {
                         document.getElementById('prompt-input').value = simParams.prompt;
                         if (this.onCardSelect) this.onCardSelect(card);
                     }
+
+                    // Save to history
+                    this._saveToHistory({
+                        query: content,
+                        title: simParams.title || simParams.prompt || 'Simulation',
+                        domain: simParams.domain || 'general',
+                        description: simParams.description || '',
+                        prompt: simParams.prompt,
+                        physics: card.physics,
+                        particleSpec: simParams.particles || null,
+                        aiResponse: ollamaResponse,
+                        particleCount: card.physics.particleCount || 25000,
+                    });
                 }
             }
         } else {
@@ -692,6 +706,84 @@ When the \`domain\` field is set, appropriate physics defaults are auto-applied 
         if (!chatBox) return;
         const streamEl = chatBox.querySelector('.streaming-message');
         if (streamEl) streamEl.remove();
+    }
+
+    // ==================== HISTORY ====================
+
+    async _saveToHistory(entry) {
+        try {
+            await fetch('/api/history', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(entry),
+            });
+            // Refresh history list after saving
+            this._loadHistory();
+        } catch (err) {
+            console.warn('Failed to save history:', err.message);
+        }
+    }
+
+    async _loadHistory(page = 0) {
+        try {
+            const res = await fetch(`/api/history?page=${page}&limit=20`);
+            const data = await res.json();
+            this._renderHistoryList(data.items, page === 0);
+            // Update count badge
+            const countEl = document.getElementById('history-count');
+            if (countEl) countEl.textContent = data.total;
+            // Show/hide load more
+            const loadMoreBtn = document.getElementById('load-more-history');
+            if (loadMoreBtn) {
+                loadMoreBtn.style.display = data.hasMore ? 'block' : 'none';
+                loadMoreBtn.onclick = () => this._loadHistory(page + 1);
+            }
+        } catch {}
+    }
+
+    _renderHistoryList(items, clear = true) {
+        const list = document.getElementById('history-list');
+        if (!list) return;
+        if (clear) list.innerHTML = '';
+
+        for (const item of items) {
+            const el = document.createElement('div');
+            el.className = 'history-item';
+            el.innerHTML = `
+                <div class="history-item-title">${this._escapeHtml(item.title)}</div>
+                <div class="history-item-meta">
+                    <span class="history-domain">${item.domain}</span>
+                    <span class="history-time">${this._timeAgo(item.timestamp)}</span>
+                </div>
+                <div class="history-item-query">${this._escapeHtml(item.query).slice(0, 80)}</div>
+            `;
+            el.addEventListener('click', () => this._loadFromHistory(item));
+            list.appendChild(el);
+        }
+    }
+
+    async _loadFromHistory(item) {
+        // Create a new card from history entry
+        const card = {
+            name: item.title,
+            prompt: item.prompt,
+            physics: item.physics,
+            particleSpec: item.particleSpec,
+        };
+        // Use existing card creation flow
+        if (this.onPhysicsChange) {
+            Object.assign(this.getActiveCard()?.physics || {}, item.physics);
+            this.onPhysicsChange(item.physics);
+        }
+        // Trigger rebuild
+        if (this.onCardSelect) {
+            this.onCardSelect({
+                ...card,
+                prompt: item.prompt,
+                physics: item.physics,
+                particleSpec: item.particleSpec,
+            });
+        }
     }
 
     _processNaturalLanguage(input) {

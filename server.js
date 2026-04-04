@@ -169,6 +169,69 @@ app.get('/api/status', async (req, res) => {
     });
 });
 
+// ==================== SIMULATION HISTORY ====================
+
+const HISTORY_FILE = join(DATA_DIR, 'history.json');
+if (!existsSync(HISTORY_FILE)) {
+    writeFileSync(HISTORY_FILE, JSON.stringify({ simulations: [], version: 1 }));
+}
+
+// Save simulation to history
+app.post('/api/history', (req, res) => {
+    const data = JSON.parse(readFileSync(HISTORY_FILE, 'utf-8'));
+    const entry = {
+        id: uuidv4(),
+        timestamp: new Date().toISOString(),
+        query: req.body.query || '',           // User's original question
+        title: req.body.title || 'Untitled',   // AI-generated title
+        domain: req.body.domain || 'general',  // Science domain
+        description: req.body.description || '',
+        prompt: req.body.prompt || '',         // Structure type
+        physics: req.body.physics || {},       // Physics params
+        particleSpec: req.body.particleSpec || null, // Universal pipeline spec
+        aiResponse: req.body.aiResponse || '', // Full AI response text
+        particleCount: req.body.particleCount || 0,
+        thumbnail: req.body.thumbnail || null, // Base64 screenshot (optional)
+    };
+    data.simulations.unshift(entry); // newest first
+    // Keep max 500 entries
+    if (data.simulations.length > 500) data.simulations = data.simulations.slice(0, 500);
+    writeFileSync(HISTORY_FILE, JSON.stringify(data, null, 2));
+    res.status(201).json(entry);
+});
+
+// List history (paginated)
+app.get('/api/history', (req, res) => {
+    const data = JSON.parse(readFileSync(HISTORY_FILE, 'utf-8'));
+    const page = parseInt(req.query.page) || 0;
+    const limit = parseInt(req.query.limit) || 20;
+    const start = page * limit;
+    const items = data.simulations.slice(start, start + limit);
+    res.json({
+        items,
+        total: data.simulations.length,
+        page,
+        limit,
+        hasMore: start + limit < data.simulations.length,
+    });
+});
+
+// Get single history entry
+app.get('/api/history/:id', (req, res) => {
+    const data = JSON.parse(readFileSync(HISTORY_FILE, 'utf-8'));
+    const entry = data.simulations.find(s => s.id === req.params.id);
+    if (!entry) return res.status(404).json({ error: 'Not found' });
+    res.json(entry);
+});
+
+// Delete history entry
+app.delete('/api/history/:id', (req, res) => {
+    const data = JSON.parse(readFileSync(HISTORY_FILE, 'utf-8'));
+    data.simulations = data.simulations.filter(s => s.id !== req.params.id);
+    writeFileSync(HISTORY_FILE, JSON.stringify(data, null, 2));
+    res.status(204).end();
+});
+
 // ==================== COMMUNITY CONTRIBUTIONS ====================
 
 const CONTRIB_FILE = join(DATA_DIR, 'contributions.json');

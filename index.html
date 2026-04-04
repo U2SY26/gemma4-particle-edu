@@ -39,6 +39,25 @@
             <!-- Cards dynamically inserted -->
         </div>
 
+        <!-- History Section -->
+        <div id="history-section">
+            <h3 class="section-title" data-toggle="history-list-container">
+                <svg class="chevron" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M4 2L8 6L4 10" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+                <span data-i18n="historyTitle">SIMULATION HISTORY</span>
+                <span id="history-count" class="badge">0</span>
+            </h3>
+            <div id="history-list-container" class="collapsed">
+                <div id="history-list">
+                    <!-- Dynamically populated -->
+                </div>
+                <button id="load-more-history" class="btn-secondary" style="display:none">
+                    <span data-i18n="loadMore">Load More</span>
+                </button>
+            </div>
+        </div>
+
         <!-- Active Card Detail -->
         <div id="card-detail" class="hidden">
             <div id="detail-divider">

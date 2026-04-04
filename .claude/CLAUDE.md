@@ -58,3 +58,8 @@ JavaScript, Express.js, Three.js, WebGL, Ollama, Gemma 4
 5. **산출물 없이 Review 전환 불가**
 6. **재작업 3회 초과 → Blocked 에스컬레���션**
 7. **무활동 30분 → 자동 unclaim**
+
+### 칸반 오프라인 대응 (v4.1)
+- MCP 실패 시 curl REST API로 재시도 (3회, 10초 간격)
+- 완전 오프라인 시 로컬 기록 후 복구 시 일괄 등록
+- "오프라인이니 규칙 무시" = 헌법 위반

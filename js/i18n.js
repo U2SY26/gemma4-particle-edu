@@ -113,6 +113,9 @@ const LANG = {
         contributeType: '기여 유형',
         contributeContent: '내용',
         contributeSubmit: '기여 제출',
+        // History
+        historyTitle: '시뮬레이션 히스토리',
+        loadMore: '더 보기',
         // Language
         langLabel: '한국어',
     },
@@ -212,6 +215,9 @@ const LANG = {
         contributeType: 'Type',
         contributeContent: 'Content',
         contributeSubmit: 'SUBMIT CONTRIBUTION',
+        // History
+        historyTitle: 'SIMULATION HISTORY',
+        loadMore: 'Load More',
         langLabel: 'English',
     },
 };
