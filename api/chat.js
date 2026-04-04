@@ -16,22 +16,22 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'messages array is required' });
   }
 
-  // Try providers in order: Ollama -> Gemini -> Claude
+  // Try providers in order: Ollama → Claude (best) → Gemini
 
-  // 1. Try Ollama (local dev)
+  // 1. Try Ollama (local dev with Gemma 4)
   const ollamaResult = await tryOllama(messages);
   if (ollamaResult) return streamSSE(res, ollamaResult);
 
-  // 2. Try Gemini Pro
-  if (GEMINI_API_KEY) {
-    const geminiResult = await tryGemini(messages);
-    if (geminiResult) return sendJSON(res, geminiResult);
-  }
-
-  // 3. Try Claude
+  // 2. Try Claude (best quality for web demo)
   if (ANTHROPIC_API_KEY) {
     const claudeResult = await tryClaude(messages);
     if (claudeResult) return sendJSON(res, claudeResult);
+  }
+
+  // 3. Try Gemini
+  if (GEMINI_API_KEY) {
+    const geminiResult = await tryGemini(messages);
+    if (geminiResult) return sendJSON(res, geminiResult);
   }
 
   // 4. All providers failed
