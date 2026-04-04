@@ -1,0 +1,1128 @@
+{
+  "total": 30,
+  "success": 25,
+  "fail": 5,
+  "avgAccuracy": 0.8040666666666667,
+  "results": [
+    {
+      "num": 1,
+      "q": "자유낙하 10m",
+      "expect": {
+        "gravity": [
+          -10,
+          -9
+        ]
+      },
+      "domain": "physics",
+      "success": true,
+      "title": "Free Fall Simulation",
+      "avgScore": 1,
+      "scores": {
+        "gravity": {
+          "ok": true,
+          "score": 1,
+          "detail": "-9.81 ∈ [-10,-9]"
+        }
+      },
+      "physics": {
+        "gravity": -9.81,
+        "damping": 0.97,
+        "springStiffness": 20,
+        "particleCount": 25000,
+        "temperature": 293,
+        "viscosity": 0,
+        "density": 2.4,
+        "friction": 0.8,
+        "bounciness": 0.3,
+        "windX": 0,
+        "turbulence": 0,
+        "seismic": 0,
+        "seismicFreq": 0
+      }
+    },
+    {
+      "num": 2,
+      "q": "달 표면 중력 1.62",
+      "expect": {
+        "gravity": [
+          -2,
+          -1
+        ]
+      },
+      "domain": "astronomy",
+      "success": true,
+      "title": "달 표면 시뮬레이션",
+      "avgScore": 1,
+      "scores": {
+        "gravity": {
+          "ok": true,
+          "score": 1,
+          "detail": "-1.62 ∈ [-2,-1]"
+        }
+      },
+      "physics": {
+        "gravity": -1.62,
+        "damping": 0.97,
+        "springStiffness": 20,
+        "particleCount": 25000,
+        "temperature": 293,
+        "viscosity": 0,
+        "density": 2.4,
+        "friction": 0.8,
+        "bounciness": 0.3,
+        "windX": 0,
+        "turbulence": 0,
+        "seismic": 0,
+        "seismicFreq": 0
+      }
+    },
+    {
+      "num": 3,
+      "q": "목성 대기 24.79 m/s²",
+      "expect": {
+        "gravity": [
+          -26,
+          -23
+        ]
+      },
+      "domain": "astronomy",
+      "success": true,
+      "title": "Jupiter Atmosphere Simulation",
+      "avgScore": 1,
+      "scores": {
+        "gravity": {
+          "ok": true,
+          "score": 1,
+          "detail": "-24.79 ∈ [-26,-23]"
+        }
+      },
+      "physics": {
+        "gravity": -24.79,
+        "damping": 0.97,
+        "springStiffness": 20,
+        "particleCount": 25000,
+        "temperature": 293,
+        "viscosity": 0,
+        "density": 2.4,
+        "friction": 0.8,
+        "bounciness": 0.3,
+        "windX": 0,
+        "turbulence": 0,
+        "seismic": 0,
+        "seismicFreq": 0
+      }
+    },
+    {
+      "num": 4,
+      "q": "ISS 무중력 물방울",
+      "expect": {
+        "gravity": [
+          -0.1,
+          0.1
+        ]
+      },
+      "domain": "physics",
+      "success": true,
+      "title": "ISS Zero-Gravity Water Droplets Simulation",
+      "avgScore": 1,
+      "scores": {
+        "gravity": {
+          "ok": true,
+          "score": 1,
+          "detail": "0 ∈ [-0.1,0.1]"
+        }
+      },
+      "physics": {
+        "gravity": 0,
+        "damping": 0.97,
+        "springStiffness": 20,
+        "particleCount": 25000,
+        "temperature": 293,
+        "viscosity": 0.001,
+        "density": 1000,
+        "friction": 0.1,
+        "bounciness": 0.3,
+        "windX": 0,
+        "turbulence": 0,
+        "seismic": 0,
+        "seismicFreq": 0
+      }
+    },
+    {
+      "num": 5,
+      "q": "태양 코로나 5778K",
+      "expect": {
+        "temperature": [
+          5000,
+          8000
+        ]
+      },
+      "domain": "astronomy",
+      "success": true,
+      "title": "Solar Corona Simulation",
+      "avgScore": 1,
+      "scores": {
+        "temperature": {
+          "ok": true,
+          "score": 1,
+          "detail": "5778 ∈ [5000,8000]"
+        }
+      },
+      "physics": {
+        "gravity": -9.81,
+        "damping": 0.97,
+        "springStiffness": 20,
+        "particleCount": 25000,
+        "temperature": 5778,
+        "viscosity": 0.001,
+        "density": 0.1,
+        "friction": 0.8,
+        "bounciness": 0.3,
+        "windX": 0,
+        "turbulence": 0,
+        "seismic": 0,
+        "seismicFreq": 0
+      }
+    },
+    {
+      "num": 6,
+      "q": "극저온 BEC 0.001K",
+      "expect": {
+        "temperature": [
+          0,
+          1
+        ],
+        "gravity": [
+          -0.1,
+          0.1
+        ]
+      },
+      "domain": "quantum",
+      "success": true,
+      "title": "Ultra-low Temperature Bose-Einstein Condensate Simulation",
+      "avgScore": 0.5,
+      "scores": {
+        "temperature": {
+          "ok": true,
+          "score": 1,
+          "detail": "0.001 ∈ [0,1]"
+        },
+        "gravity": {
+          "ok": false,
+          "score": 0,
+          "detail": "-9.81 ∉ [-0.1,0.1]"
+        }
+      },
+      "physics": {
+        "gravity": -9.81,
+        "damping": 0.97,
+        "springStiffness": 20,
+        "particleCount": 25000,
+        "temperature": 0.001,
+        "viscosity": 0.1,
+        "density": 1,
+        "friction": 0.8,
+        "bounciness": 0.3,
+        "windX": 0,
+        "turbulence": 0,
+        "seismic": 0,
+        "seismicFreq": 0
+      }
+    },
+    {
+      "num": 7,
+      "q": "심해 11000m 수압",
+      "expect": {
+        "gravity": [
+          -10,
+          -9
+        ],
+        "viscosity": [
+          1,
+          10
+        ]
+      },
+      "domain": "earth_science",
+      "success": false,
+      "error": "Expected ',' or '}' after property value in JSON at position 378 (line 22 column 1)"
+    },
+    {
+      "num": 8,
+      "q": "다이아몬드 sp3 결정",
+      "expect": {
+        "springStiffness": [
+          40,
+          200
+        ],
+        "density": [
+          3,
+          4
+        ]
+      },
+      "domain": "materials",
+      "success": true,
+      "title": "Diamond Crystalline Structure Simulation",
+      "avgScore": 1,
+      "scores": {
+        "springStiffness": {
+          "ok": true,
+          "score": 1,
+          "detail": "40 ∈ [40,200]"
+        },
+        "density": {
+          "ok": true,
+          "score": 1,
+          "detail": "3.5 ∈ [3,4]"
+        }
+      },
+      "physics": {
+        "gravity": -9.81,
+        "damping": 0.97,
+        "springStiffness": 40,
+        "particleCount": 25000,
+        "temperature": 293,
+        "viscosity": 0.1,
+        "density": 3.5,
+        "friction": 0.8,
+        "bounciness": 0.2,
+        "windX": 0,
+        "turbulence": 0,
+        "seismic": 0,
+        "seismicFreq": 0
+      }
+    },
+    {
+      "num": 9,
+      "q": "꿀 점성 흐름",
+      "expect": {
+        "viscosity": [
+          5,
+          20
+        ]
+      },
+      "domain": "physics",
+      "success": true,
+      "title": "Honey Viscous Flow Simulation",
+      "avgScore": 1,
+      "scores": {
+        "viscosity": {
+          "ok": true,
+          "score": 1,
+          "detail": "10 ∈ [5,20]"
+        }
+      },
+      "physics": {
+        "gravity": -9.81,
+        "damping": 0.97,
+        "springStiffness": 20,
+        "particleCount": 25000,
+        "temperature": 293,
+        "viscosity": 10,
+        "density": 1.4,
+        "friction": 0.8,
+        "bounciness": 0.3,
+        "windX": 0,
+        "turbulence": 0,
+        "seismic": 0,
+        "seismicFreq": 0
+      }
+    },
+    {
+      "num": 10,
+      "q": "용암 1200℃ 흐름",
+      "expect": {
+        "temperature": [
+          1100,
+          1500
+        ],
+        "viscosity": [
+          2,
+          15
+        ]
+      },
+      "domain": "earth_science",
+      "success": true,
+      "title": "Molten Lava Flow Simulation",
+      "avgScore": 1,
+      "scores": {
+        "temperature": {
+          "ok": true,
+          "score": 1,
+          "detail": "1473 ∈ [1100,1500]"
+        },
+        "viscosity": {
+          "ok": true,
+          "score": 1,
+          "detail": "5 ∈ [2,15]"
+        }
+      },
+      "physics": {
+        "gravity": -9.81,
+        "damping": 0.97,
+        "springStiffness": 20,
+        "particleCount": 25000,
+        "temperature": 1473,
+        "viscosity": 5,
+        "density": 2.8,
+        "friction": 0.8,
+        "bounciness": 0.3,
+        "windX": 0,
+        "turbulence": 0,
+        "seismic": 0,
+        "seismicFreq": 0
+      }
+    },
+    {
+      "num": 11,
+      "q": "피라미드 석조 구조",
+      "expect": {
+        "gravity": [
+          -10,
+          -9
+        ],
+        "springStiffness": [
+          10,
+          50
+        ]
+      },
+      "domain": "architecture",
+      "success": true,
+      "title": "고대 석조 피라미드 구조 안정성 분석",
+      "avgScore": 1,
+      "scores": {
+        "gravity": {
+          "ok": true,
+          "score": 1,
+          "detail": "-9.81 ∈ [-10,-9]"
+        },
+        "springStiffness": {
+          "ok": true,
+          "score": 1,
+          "detail": "25 ∈ [10,50]"
+        }
+      },
+      "physics": {
+        "gravity": -9.81,
+        "damping": 0.97,
+        "springStiffness": 25,
+        "particleCount": 50000,
+        "temperature": 293,
+        "viscosity": 0.01,
+        "density": 2500,
+        "friction": 0.85,
+        "bounciness": 0.2,
+        "windX": 0,
+        "turbulence": 0,
+        "seismic": 0,
+        "seismicFreq": 0
+      }
+    },
+    {
+      "num": 12,
+      "q": "에펠탑 철골 트러스",
+      "expect": {
+        "density": [
+          7,
+          8
+        ],
+        "springStiffness": [
+          20,
+          60
+        ]
+      },
+      "domain": "architecture",
+      "success": true,
+      "title": "Eiffel Tower Truss Structure Simulation",
+      "avgScore": 0.5,
+      "scores": {
+        "density": {
+          "ok": false,
+          "score": 0,
+          "detail": "2.4 ∉ [7,8]"
+        },
+        "springStiffness": {
+          "ok": true,
+          "score": 1,
+          "detail": "20 ∈ [20,60]"
+        }
+      },
+      "physics": {
+        "gravity": -9.81,
+        "damping": 0.97,
+        "springStiffness": 20,
+        "particleCount": 25000,
+        "temperature": 293,
+        "viscosity": 0,
+        "density": 2.4,
+        "friction": 0.8,
+        "bounciness": 0.3,
+        "windX": 0,
+        "turbulence": 0,
+        "seismic": 0,
+        "seismicFreq": 0
+      }
+    },
+    {
+      "num": 13,
+      "q": "보잉 747 비행",
+      "expect": {
+        "gravity": [
+          -10,
+          -9
+        ],
+        "windX": [
+          -5,
+          5
+        ]
+      },
+      "domain": "engineering",
+      "success": true,
+      "title": "Boeing 747 Atmospheric Simulation",
+      "avgScore": 1,
+      "scores": {
+        "gravity": {
+          "ok": true,
+          "score": 1,
+          "detail": "-9.81 ∈ [-10,-9]"
+        },
+        "windX": {
+          "ok": true,
+          "score": 1,
+          "detail": "5 ∈ [-5,5]"
+        }
+      },
+      "physics": {
+        "gravity": -9.81,
+        "damping": 0.97,
+        "springStiffness": 20,
+        "particleCount": 25000,
+        "temperature": 293,
+        "viscosity": 0,
+        "density": 1.225,
+        "friction": 0.8,
+        "bounciness": 0.3,
+        "windX": 5,
+        "turbulence": 0.1,
+        "seismic": 0,
+        "seismicFreq": 0
+      }
+    },
+    {
+      "num": 14,
+      "q": "DNA 이중나선 수소결합",
+      "expect": {
+        "gravity": [
+          -0.1,
+          0.1
+        ],
+        "springStiffness": [
+          1,
+          15
+        ]
+      },
+      "domain": "biology",
+      "success": false,
+      "error": "Expected ',' or '}' after property value in JSON at position 381 (line 22 column 1)"
+    },
+    {
+      "num": 15,
+      "q": "태양계 8행성 궤도",
+      "expect": {
+        "gravity": [
+          -0.1,
+          0.1
+        ]
+      },
+      "domain": "astronomy",
+      "success": true,
+      "title": "태양계 8행성 궤도 시뮬레이션",
+      "avgScore": 0,
+      "scores": {
+        "gravity": {
+          "ok": false,
+          "score": 0,
+          "detail": "-9.81 ∉ [-0.1,0.1]"
+        }
+      },
+      "physics": {
+        "gravity": -9.81,
+        "damping": 0.97,
+        "springStiffness": 20,
+        "particleCount": 25000,
+        "temperature": 293,
+        "viscosity": 0,
+        "density": 2.4,
+        "friction": 0.8,
+        "bounciness": 0.3,
+        "windX": 0,
+        "turbulence": 0,
+        "seismic": 0,
+        "seismicFreq": 0
+      }
+    },
+    {
+      "num": 16,
+      "q": "토네이도 회전 구조",
+      "expect": {
+        "windX": [
+          5,
+          30
+        ],
+        "turbulence": [
+          3,
+          15
+        ]
+      },
+      "domain": "weather",
+      "success": true,
+      "title": "토네이도 회전 구조 시뮬레이션",
+      "avgScore": 0.8979166666666667,
+      "scores": {
+        "windX": {
+          "ok": false,
+          "score": 0.9,
+          "detail": "0 ∉ [5,30]"
+        },
+        "turbulence": {
+          "ok": false,
+          "score": 0.8958333333333334,
+          "detail": "0.5 ∉ [3,15]"
+        }
+      },
+      "physics": {
+        "gravity": -9.81,
+        "damping": 0.97,
+        "springStiffness": 20,
+        "particleCount": 50000,
+        "temperature": 293,
+        "viscosity": 0.01,
+        "density": 1.225,
+        "friction": 0.8,
+        "bounciness": 0.2,
+        "windX": 0,
+        "turbulence": 0.5,
+        "seismic": 0,
+        "seismicFreq": 0
+      }
+    },
+    {
+      "num": 17,
+      "q": "콘크리트 건물 진도7 지진",
+      "expect": {
+        "seismic": [
+          5,
+          10
+        ],
+        "gravity": [
+          -10,
+          -9
+        ]
+      },
+      "domain": "engineering",
+      "success": true,
+      "title": "Magnitude 7 Earthquake Impact on Concrete Structure",
+      "avgScore": 1,
+      "scores": {
+        "seismic": {
+          "ok": true,
+          "score": 1,
+          "detail": "10 ∈ [5,10]"
+        },
+        "gravity": {
+          "ok": true,
+          "score": 1,
+          "detail": "-9.81 ∈ [-10,-9]"
+        }
+      },
+      "physics": {
+        "gravity": -9.81,
+        "damping": 0.97,
+        "springStiffness": 30,
+        "particleCount": 50000,
+        "temperature": 293,
+        "viscosity": 0,
+        "density": 2.4,
+        "friction": 0.8,
+        "bounciness": 0.3,
+        "windX": 0,
+        "turbulence": 0,
+        "seismic": 10,
+        "seismicFreq": 1.5
+      }
+    },
+    {
+      "num": 18,
+      "q": "블랙홀 강착원반",
+      "expect": {
+        "gravity": [
+          -1000,
+          -1
+        ]
+      },
+      "domain": "astronomy",
+      "success": true,
+      "title": "블랙홀 강착원반 물리 시뮬레이션",
+      "avgScore": 1,
+      "scores": {
+        "gravity": {
+          "ok": true,
+          "score": 1,
+          "detail": "-100 ∈ [-1000,-1]"
+        }
+      },
+      "physics": {
+        "gravity": -100,
+        "damping": 0.95,
+        "springStiffness": 50,
+        "particleCount": 50000,
+        "temperature": 10000,
+        "viscosity": 5,
+        "density": 1000,
+        "friction": 1.2,
+        "bounciness": 0.2,
+        "windX": 0,
+        "turbulence": 0.8,
+        "seismic": 1,
+        "seismicFreq": 0
+      }
+    },
+    {
+      "num": 19,
+      "q": "물 끓는점 373K 기포",
+      "expect": {
+        "temperature": [
+          360,
+          380
+        ]
+      },
+      "domain": "chemistry",
+      "success": true,
+      "title": "끓는 물과 기포 시뮬레이션",
+      "avgScore": 1,
+      "scores": {
+        "temperature": {
+          "ok": true,
+          "score": 1,
+          "detail": "373 ∈ [360,380]"
+        }
+      },
+      "physics": {
+        "gravity": -9.81,
+        "damping": 0.97,
+        "springStiffness": 20,
+        "particleCount": 25000,
+        "temperature": 373,
+        "viscosity": 1,
+        "density": 1,
+        "friction": 0.8,
+        "bounciness": 0.3,
+        "windX": 0,
+        "turbulence": 0,
+        "seismic": 0,
+        "seismicFreq": 0
+      }
+    },
+    {
+      "num": 20,
+      "q": "화성 3.72 m/s² 먼지",
+      "expect": {
+        "gravity": [
+          -4,
+          -3
+        ],
+        "temperature": [
+          190,
+          240
+        ]
+      },
+      "domain": "astronomy",
+      "success": true,
+      "title": "Mars Dust Simulation",
+      "avgScore": 0.735,
+      "scores": {
+        "gravity": {
+          "ok": true,
+          "score": 1,
+          "detail": "-3.72 ∈ [-4,-3]"
+        },
+        "temperature": {
+          "ok": false,
+          "score": 0.47,
+          "detail": "293 ∉ [190,240]"
+        }
+      },
+      "physics": {
+        "gravity": -3.72,
+        "damping": 0.97,
+        "springStiffness": 20,
+        "particleCount": 25000,
+        "temperature": 293,
+        "viscosity": 0,
+        "density": 2.4,
+        "friction": 0.8,
+        "bounciness": 0.3,
+        "windX": 2,
+        "turbulence": 0.5,
+        "seismic": 0,
+        "seismicFreq": 0
+      }
+    },
+    {
+      "num": 21,
+      "q": "뉴턴 요람 탄성 충돌",
+      "expect": {
+        "bounciness": [
+          0.8,
+          1
+        ],
+        "friction": [
+          0,
+          0.3
+        ]
+      },
+      "domain": "physics",
+      "success": false,
+      "error": "Expected ',' or '}' after property value in JSON at position 390 (line 22 column 1)"
+    },
+    {
+      "num": 22,
+      "q": "초전도 마이스너 부양",
+      "expect": {
+        "gravity": [
+          -0.1,
+          0.1
+        ],
+        "temperature": [
+          0,
+          100
+        ]
+      },
+      "domain": "quantum",
+      "success": false,
+      "error": "Expected ',' or '}' after property value in JSON at position 441 (line 22 column 1)"
+    },
+    {
+      "num": 23,
+      "q": "NaCl 이온 결정 격자",
+      "expect": {
+        "gravity": [
+          -0.1,
+          0.1
+        ],
+        "springStiffness": [
+          20,
+          80
+        ]
+      },
+      "domain": "chemistry",
+      "success": true,
+      "title": "NaCl Ionic Crystal Lattice Simulation",
+      "avgScore": 0.5,
+      "scores": {
+        "gravity": {
+          "ok": false,
+          "score": 0,
+          "detail": "-9.81 ∉ [-0.1,0.1]"
+        },
+        "springStiffness": {
+          "ok": true,
+          "score": 1,
+          "detail": "40 ∈ [20,80]"
+        }
+      },
+      "physics": {
+        "gravity": -9.81,
+        "damping": 0.97,
+        "springStiffness": 40,
+        "particleCount": 30000,
+        "temperature": 293,
+        "viscosity": 1,
+        "density": 2.2,
+        "friction": 0.8,
+        "bounciness": 0.3,
+        "windX": 0,
+        "turbulence": 0,
+        "seismic": 0,
+        "seismicFreq": 0
+      }
+    },
+    {
+      "num": 24,
+      "q": "적혈구 모세혈관 흐름",
+      "expect": {
+        "viscosity": [
+          1,
+          5
+        ],
+        "gravity": [
+          -3,
+          0
+        ]
+      },
+      "domain": "biology",
+      "success": true,
+      "title": "적혈구 모세혈관 흐름 (RBC Capillary Flow)",
+      "avgScore": 0.46875,
+      "scores": {
+        "viscosity": {
+          "ok": false,
+          "score": 0.9375,
+          "detail": "0.5 ∉ [1,5]"
+        },
+        "gravity": {
+          "ok": false,
+          "score": 0,
+          "detail": "-9.81 ∉ [-3,0]"
+        }
+      },
+      "physics": {
+        "gravity": -9.81,
+        "damping": 0.97,
+        "springStiffness": 20,
+        "particleCount": 25000,
+        "temperature": 310,
+        "viscosity": 0.5,
+        "density": 2.4,
+        "friction": 0.8,
+        "bounciness": 0.3,
+        "windX": 0,
+        "turbulence": 0,
+        "seismic": 0,
+        "seismicFreq": 0
+      }
+    },
+    {
+      "num": 25,
+      "q": "핵융합 1억도 플라즈마",
+      "expect": {
+        "temperature": [
+          50000,
+          200000
+        ]
+      },
+      "domain": "quantum",
+      "success": true,
+      "title": "고온 플라즈마 핵융합 시뮬레이션 (100 Million K)",
+      "avgScore": 0,
+      "scores": {
+        "temperature": {
+          "ok": false,
+          "score": 0,
+          "detail": "100000000 ∉ [50000,200000]"
+        }
+      },
+      "physics": {
+        "gravity": -9.81,
+        "damping": 0.95,
+        "springStiffness": 30,
+        "particleCount": 30000,
+        "temperature": 100000000,
+        "viscosity": 0.05,
+        "density": 1,
+        "friction": 0.6,
+        "bounciness": 0.2,
+        "windX": 0,
+        "turbulence": 0.1,
+        "seismic": 0,
+        "seismicFreq": 0
+      }
+    },
+    {
+      "num": 26,
+      "q": "눈보라 -30℃ 강풍",
+      "expect": {
+        "temperature": [
+          230,
+          250
+        ],
+        "windX": [
+          5,
+          20
+        ]
+      },
+      "domain": "weather",
+      "success": true,
+      "title": "Snowstorm Simulation",
+      "avgScore": 1,
+      "scores": {
+        "temperature": {
+          "ok": true,
+          "score": 1,
+          "detail": "243.15 ∈ [230,250]"
+        },
+        "windX": {
+          "ok": true,
+          "score": 1,
+          "detail": "18 ∈ [5,20]"
+        }
+      },
+      "physics": {
+        "gravity": -9.81,
+        "damping": 0.97,
+        "springStiffness": 20,
+        "particleCount": 25000,
+        "temperature": 243.15,
+        "viscosity": 0,
+        "density": 2.4,
+        "friction": 0.8,
+        "bounciness": 0.3,
+        "windX": 18,
+        "turbulence": 1.8,
+        "seismic": 0,
+        "seismicFreq": 0
+      }
+    },
+    {
+      "num": 27,
+      "q": "수영장 파동 역학",
+      "expect": {
+        "viscosity": [
+          0.5,
+          3
+        ],
+        "gravity": [
+          -10,
+          -9
+        ]
+      },
+      "domain": "physics",
+      "success": true,
+      "title": "Swimming Pool Wave Dynamics",
+      "avgScore": 1,
+      "scores": {
+        "viscosity": {
+          "ok": true,
+          "score": 1,
+          "detail": "1 ∈ [0.5,3]"
+        },
+        "gravity": {
+          "ok": true,
+          "score": 1,
+          "detail": "-9.81 ∈ [-10,-9]"
+        }
+      },
+      "physics": {
+        "gravity": -9.81,
+        "damping": 0.97,
+        "springStiffness": 20,
+        "particleCount": 25000,
+        "temperature": 293,
+        "viscosity": 1,
+        "density": 1,
+        "friction": 0.8,
+        "bounciness": 0.3,
+        "windX": 0,
+        "turbulence": 0,
+        "seismic": 0,
+        "seismicFreq": 0
+      }
+    },
+    {
+      "num": 28,
+      "q": "풍력 터빈 블레이드",
+      "expect": {
+        "windX": [
+          5,
+          20
+        ],
+        "gravity": [
+          -10,
+          -9
+        ]
+      },
+      "domain": "engineering",
+      "success": true,
+      "title": "Wind Turbine Blade Aerodynamics",
+      "avgScore": 1,
+      "scores": {
+        "windX": {
+          "ok": true,
+          "score": 1,
+          "detail": "10 ∈ [5,20]"
+        },
+        "gravity": {
+          "ok": true,
+          "score": 1,
+          "detail": "-9.81 ∈ [-10,-9]"
+        }
+      },
+      "physics": {
+        "gravity": -9.81,
+        "damping": 0.97,
+        "springStiffness": 20,
+        "particleCount": 25000,
+        "temperature": 293,
+        "viscosity": 0,
+        "density": 1200,
+        "friction": 0.8,
+        "bounciness": 0.3,
+        "windX": 10,
+        "turbulence": 0.5,
+        "seismic": 0,
+        "seismicFreq": 0
+      }
+    },
+    {
+      "num": 29,
+      "q": "로렌츠 어트랙터 카오스",
+      "expect": {
+        "gravity": [
+          -0.1,
+          0.1
+        ],
+        "damping": [
+          0.95,
+          1
+        ]
+      },
+      "domain": "mathematics",
+      "success": true,
+      "title": "Chaotic Dynamics Simulation",
+      "avgScore": 0.5,
+      "scores": {
+        "gravity": {
+          "ok": false,
+          "score": 0,
+          "detail": "-9.81 ∉ [-0.1,0.1]"
+        },
+        "damping": {
+          "ok": true,
+          "score": 1,
+          "detail": "0.97 ∈ [0.95,1]"
+        }
+      },
+      "physics": {
+        "gravity": -9.81,
+        "damping": 0.97,
+        "springStiffness": 20,
+        "particleCount": 25000,
+        "temperature": 293,
+        "viscosity": 0,
+        "density": 2.4,
+        "friction": 0.8,
+        "bounciness": 0.3,
+        "windX": 1.5,
+        "turbulence": 0.2,
+        "seismic": 0,
+        "seismicFreq": 0
+      }
+    },
+    {
+      "num": 30,
+      "q": "지진파 P파 S파 전파",
+      "expect": {
+        "seismic": [
+          3,
+          10
+        ],
+        "gravity": [
+          -10,
+          -9
+        ]
+      },
+      "domain": "earth_science",
+      "success": false,
+      "error": "Expected ',' or '}' after property value in JSON at position 349 (line 22 column 1)"
+    }
+  ]
+}
