@@ -1,42 +1,39 @@
-#set text(font: "Noto Sans KR", size: 9pt)
+#set text(size: 9pt)
 #set page(margin: 1.5cm, height: auto)
 
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #018]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[블랙홀 강착원반 물리 시뮬레이션]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[High-Magnitude Earthquake Energy Simulation]
+  #v(2pt)
+  #text(size: 10pt)[Model: gemma4:26b]
 ]
 
 #v(8pt)
 
+=== DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [요청], [블랙홀 강착원반],
-  [도메인], [astronomy],
-  [prompt], [블랙홀 강착원반],
-  [정확도], [★★★★★ 100%],
-  [파티클], [50000],
-  [밀집도], [밀집],
+  [Step 1: 식별], [매우 강력하고 파괴적인 지진],
+  [Step 2: 재료], [Energy],
+  [Step 3: 밀도], [에너지는 물질이 아니기 때문에 고정된 kg/m³],
+  [Step 4: 중력], [-9.81 m/s²],
+  [Step 5: 온도], [지진 규모(Magnitude)는 지진 K],
+  [Step 6: 특수], [{}],
 )
 
-#v(8pt)
-=== 물리값 검증
+=== 물리 시뮬 검증 (Verlet 100프레임)
 #table(columns: (auto, auto, auto), inset: 5pt,
-  [파라미터], [결과], [판정],
-  [gravity], [-100 ∈ [-1000,-1]], [PASS],
+  [검증 항목], [결과], [판정],
+  [stability], [안정 (y=3.71)], [PASS],
+  [gravity_dir], [하강 OK (y=3.71)], [PASS],
+  [damping], [damping=0.97 OK], [PASS],
+  [temperature], [0K OK], [PASS],
+  [particle_count], [25000 OK], [PASS],
 )
 
-#v(4pt)
-=== 물리 파라미터 전체
-#table(columns: (auto, auto), inset: 4pt,
-  [gravity], [-100],
-  [damping], [0.95],
-  [springK], [50],
-  [temperature], [10000K],
-  [viscosity], [5],
-  [density], [1000],
-  [friction], [1.2],
-  [bounciness], [0.2],
-  [windX], [0],
-  [seismic], [1],
-  [particles], [50000],
-)
+=== 종합
+정확도: ★★★★★ 100%
+파티클: 25000
+중력: -9.81 m/s²
+온도: ? K
+시뮬 안정성: ✓ 안정

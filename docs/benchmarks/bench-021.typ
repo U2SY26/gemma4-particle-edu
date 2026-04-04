@@ -2,9 +2,9 @@
 #set page(margin: 1.5cm, height: auto)
 
 #align(center)[
-  #text(size: 16pt, weight: "bold")[벤치마크 #010]
+  #text(size: 16pt, weight: "bold")[벤치마크 #021]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Solar Corona Plasma Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[High-Temperature Plasma Fusion Simulation]
   #v(2pt)
   #text(size: 10pt)[Model: gemma4:26b]
 ]
@@ -13,30 +13,29 @@
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [태양 대기 가장 바깥층을 구성하는 고온의 이온화된 가스],
+  [Step 1: 식별], [핵융합 반응을 일으키는 초고온의 이온화된 기체 상태],
   [Step 2: 재료], [plasma],
-  [Step 3: 밀도], [플라스마는 특정 물질의 이름이 아니라 kg/m³],
-  [Step 4: 중력], [-274 m/s²],
-  [Step 5: 온도], [1000000 K],
+  [Step 3: 밀도], [1025 kg/m³],
+  [Step 4: 중력], [9.81 m/s²],
+  [Step 5: 온도], [100000000 K],
   [Step 6: 특수], [```json
 {
-  "temperature_K": 1000000,
-  ],
+  "temperature_celsius": 15000],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)
 #table(columns: (auto, auto, auto), inset: 5pt,
   [검증 항목], [결과], [판정],
-  [stability], [안정 (y=-165.57)], [PASS],
-  [gravity_dir], [하강 OK (y=-165.57)], [PASS],
+  [stability], [안정 (y=16.29)], [PASS],
+  [gravity_dir], [상승 OK], [PASS],
   [damping], [damping=0.97 OK], [PASS],
-  [temperature], [1000000K OK], [PASS],
+  [temperature], [100000000K OK], [PASS],
   [particle_count], [25000 OK], [PASS],
 )
 
 === 종합
 정확도: ★★★★★ 100%
 파티클: 25000
-중력: -274 m/s²
-온도: 1000000 K
+중력: 9.81 m/s²
+온도: 100000000 K
 시뮬 안정성: ✓ 안정

@@ -2,9 +2,9 @@
 #set page(margin: 1.5cm, height: auto)
 
 #align(center)[
-  #text(size: 16pt, weight: "bold")[벤치마크 #028]
+  #text(size: 16pt, weight: "bold")[벤치마크 #022]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Dark Matter Galaxy Merger Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[Superconductor Magnetic Field Expulsion Simulation]
   #v(2pt)
   #text(size: 10pt)[Model: gemma4:26b]
 ]
@@ -13,15 +13,14 @@
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [중력적 상호작용으로 은하들이 서로 충돌하고 병합되는 현상],
-  [Step 2: 재료], [dark matter],
-  [Step 3: 밀도], [5 \times 10^{-22} kg/m³],
+  [Step 1: 식별], [초전도체가 내부의 자기장을 외부로 밀어내는 현상],
+  [Step 2: 재료], [superconductor],
+  [Step 3: 밀도], [2500-7200 kg/m³],
   [Step 4: 중력], [0 m/s²],
-  [Step 5: 온도], [1000000 K],
+  [Step 5: 온도], [77 K],
   [Step 6: 특수], [```json
 {
-  "massRatio": 1.0,
-  "relativ],
+  "critical_temperature": "T <],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)
@@ -30,7 +29,7 @@
   [stability], [안정 (y=10.00)], [PASS],
   [gravity_dir], [무중력 OK (drift=0.000)], [PASS],
   [damping], [damping=0.97 OK], [PASS],
-  [temperature], [1000000K OK], [PASS],
+  [temperature], [77K OK], [PASS],
   [particle_count], [25000 OK], [PASS],
 )
 
@@ -38,5 +37,5 @@
 정확도: ★★★★★ 100%
 파티클: 25000
 중력: ? m/s²
-온도: 1000000 K
+온도: 77 K
 시뮬 안정성: ✓ 안정

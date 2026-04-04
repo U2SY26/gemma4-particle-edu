@@ -1,43 +1,41 @@
-#set text(font: "Noto Sans KR", size: 9pt)
+#set text(size: 9pt)
 #set page(margin: 1.5cm, height: auto)
 
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #008]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Diamond Crystalline Structure Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[Lunar Regolith Jump Simulation]
+  #v(2pt)
+  #text(size: 10pt)[Model: gemma4:26b]
 ]
 
 #v(8pt)
 
+=== DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [요청], [다이아몬드 sp3 결정],
-  [도메인], [materials],
-  [prompt], [diamond sp3 crystal],
-  [정확도], [★★★★★ 100%],
-  [파티클], [25000],
-  [밀집도], [밀집],
+  [Step 1: 식별], [달 표면에서 도약하는 우주인의 모습],
+  [Step 2: 재료], [regolith],
+  [Step 3: 밀도], [1500 kg/m³],
+  [Step 4: 중력], [-1.62 m/s²],
+  [Step 5: 온도], [390 K],
+  [Step 6: 특수], [```json
+{
+  "gravity_relative_to_earth":],
 )
 
-#v(8pt)
-=== 물리값 검증
+=== 물리 시뮬 검증 (Verlet 100프레임)
 #table(columns: (auto, auto, auto), inset: 5pt,
-  [파라미터], [결과], [판정],
-  [springStiffness], [40 ∈ [40,200]], [PASS],
-  [density], [3.5 ∈ [3,4]], [PASS],
+  [검증 항목], [결과], [판정],
+  [stability], [안정 (y=8.96)], [PASS],
+  [gravity_dir], [하강 OK (y=8.96)], [PASS],
+  [damping], [damping=0.97 OK], [PASS],
+  [temperature], [390K OK], [PASS],
+  [particle_count], [25000 OK], [PASS],
 )
 
-#v(4pt)
-=== 물리 파라미터 전체
-#table(columns: (auto, auto), inset: 4pt,
-  [gravity], [-9.81],
-  [damping], [0.97],
-  [springK], [40],
-  [temperature], [293K],
-  [viscosity], [0.1],
-  [density], [3.5],
-  [friction], [0.8],
-  [bounciness], [0.2],
-  [windX], [0],
-  [seismic], [0],
-  [particles], [25000],
-)
+=== 종합
+정확도: ★★★★★ 100%
+파티클: 25000
+중력: -1.62 m/s²
+온도: 390 K
+시뮬 안정성: ✓ 안정

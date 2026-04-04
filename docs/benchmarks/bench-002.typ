@@ -1,42 +1,42 @@
-#set text(font: "Noto Sans KR", size: 9pt)
+#set text(size: 9pt)
 #set page(margin: 1.5cm, height: auto)
 
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #002]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[달 표면 시뮬레이션]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[Eiffel Tower Iron Structure Load Simulation]
+  #v(2pt)
+  #text(size: 10pt)[Model: gemma4:26b]
 ]
 
 #v(8pt)
 
+=== DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [요청], [달 표면 중력 1.62],
-  [도메인], [astronomy],
-  [prompt], [달 표면],
-  [정확도], [★★★★★ 100%],
-  [파티클], [25000],
-  [밀집도], [밀집],
+  [Step 1: 식별], [에펠탑의 하중을 지탱하는 삼각형 형태의 철제 구조물],
+  [Step 2: 재료], [iron],
+  [Step 3: 밀도], [7874 kg/m³],
+  [Step 4: 중력], [-9.81 m/s²],
+  [Step 5: 온도], [293 K],
+  [Step 6: 특수], [```json
+{
+  "wind_load": "high",
+  "ther],
 )
 
-#v(8pt)
-=== 물리값 검증
+=== 물리 시뮬 검증 (Verlet 100프레임)
 #table(columns: (auto, auto, auto), inset: 5pt,
-  [파라미터], [결과], [판정],
-  [gravity], [-1.62 ∈ [-2,-1]], [PASS],
+  [검증 항목], [결과], [판정],
+  [stability], [안정 (y=3.71)], [PASS],
+  [gravity_dir], [하강 OK (y=3.71)], [PASS],
+  [damping], [damping=0.97 OK], [PASS],
+  [temperature], [293K OK], [PASS],
+  [particle_count], [25000 OK], [PASS],
 )
 
-#v(4pt)
-=== 물리 파라미터 전체
-#table(columns: (auto, auto), inset: 4pt,
-  [gravity], [-1.62],
-  [damping], [0.97],
-  [springK], [20],
-  [temperature], [293K],
-  [viscosity], [0],
-  [density], [2.4],
-  [friction], [0.8],
-  [bounciness], [0.3],
-  [windX], [0],
-  [seismic], [0],
-  [particles], [25000],
-)
+=== 종합
+정확도: ★★★★★ 100%
+파티클: 25000
+중력: -9.81 m/s²
+온도: 293 K
+시뮬 안정성: ✓ 안정

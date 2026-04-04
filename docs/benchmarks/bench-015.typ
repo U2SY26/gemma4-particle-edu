@@ -1,42 +1,42 @@
-#set text(font: "Noto Sans KR", size: 9pt)
+#set text(size: 9pt)
 #set page(margin: 1.5cm, height: auto)
 
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #015]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[태양계 8행성 궤도 시뮬레이션]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[Black Hole Accretion Disk Plasma Simulation]
+  #v(2pt)
+  #text(size: 10pt)[Model: gemma4:26b]
 ]
 
 #v(8pt)
 
+=== DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [요청], [태양계 8행성 궤도],
-  [도메인], [astronomy],
-  [prompt], [solar system orbits],
-  [정확도], [☆☆☆☆☆ 0%],
-  [파티클], [25000],
-  [밀집도], [밀집],
+  [Step 1: 식별], [블랙홀 주위를 회전하며 강력한 빛을 내뿜는 뜨거운 가스 원반],
+  [Step 2: 재료], [plasma],
+  [Step 3: 밀도], [플라스마의 밀도는 고정된 값이 아니며 kg/m³],
+  [Step 4: 중력], [1000000000000 m/s²],
+  [Step 5: 온도], [10000000 K],
+  [Step 6: 특수], [```json
+{
+  "gravity": "extreme",
+  "ang],
 )
 
-#v(8pt)
-=== 물리값 검증
+=== 물리 시뮬 검증 (Verlet 100프레임)
 #table(columns: (auto, auto, auto), inset: 5pt,
-  [파라미터], [결과], [판정],
-  [gravity], [-9.81 ∉ [-0.1,0.1]], [MISS],
+  [검증 항목], [결과], [판정],
+  [stability], [폭발 (y=277777787.8)], [FAIL],
+  [gravity_dir], [상승 OK], [PASS],
+  [damping], [damping=0.97 OK], [PASS],
+  [temperature], [10000000K OK], [PASS],
+  [particle_count], [25000 OK], [PASS],
 )
 
-#v(4pt)
-=== 물리 파라미터 전체
-#table(columns: (auto, auto), inset: 4pt,
-  [gravity], [-9.81],
-  [damping], [0.97],
-  [springK], [20],
-  [temperature], [293K],
-  [viscosity], [0],
-  [density], [2.4],
-  [friction], [0.8],
-  [bounciness], [0.3],
-  [windX], [0],
-  [seismic], [0],
-  [particles], [25000],
-)
+=== 종합
+정확도: ★★★★☆ 80%
+파티클: 25000
+중력: 1000000000000 m/s²
+온도: 10000000 K
+시뮬 안정성: ✗ 폭발
