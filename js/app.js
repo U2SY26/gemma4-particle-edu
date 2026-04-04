@@ -83,8 +83,148 @@ class App {
         const overlay = document.getElementById('loading-overlay');
         if (overlay) overlay.style.display = 'none';
 
+        // Landing page logic
+        this._initLandingPage();
+
         // Mobile sidebar toggle
         this._initMobileToggle();
+    }
+
+    _initLandingPage() {
+        const landing = document.getElementById('landing-page');
+        const landingInput = document.getElementById('landing-input');
+        const landingStart = document.getElementById('landing-start');
+        const landingCanvas = document.getElementById('landing-canvas');
+
+        if (!landing) return;
+
+        // --- Landing canvas particle animation ---
+        if (landingCanvas) {
+            const ctx = landingCanvas.getContext('2d');
+            let animId = null;
+            const particles = [];
+            const PARTICLE_COUNT = 120;
+
+            const resizeCanvas = () => {
+                landingCanvas.width = window.innerWidth;
+                landingCanvas.height = window.innerHeight;
+            };
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            for (let i = 0; i < PARTICLE_COUNT; i++) {
+                particles.push({
+                    x: Math.random() * landingCanvas.width,
+                    y: Math.random() * landingCanvas.height,
+                    vx: (Math.random() - 0.5) * 0.4,
+                    vy: (Math.random() - 0.5) * 0.4,
+                    r: Math.random() * 2 + 1,
+                    alpha: Math.random() * 0.5 + 0.1,
+                    hue: Math.random() * 60 + 200, // blue-purple range
+                });
+            }
+
+            const drawLanding = () => {
+                ctx.clearRect(0, 0, landingCanvas.width, landingCanvas.height);
+
+                // Draw connections
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 150) {
+                            const a = (1 - dist / 150) * 0.12;
+                            ctx.strokeStyle = `rgba(88, 166, 255, ${a})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                // Draw particles
+                for (const p of particles) {
+                    p.x += p.vx;
+                    p.y += p.vy;
+
+                    // Wrap around edges
+                    if (p.x < 0) p.x = landingCanvas.width;
+                    if (p.x > landingCanvas.width) p.x = 0;
+                    if (p.y < 0) p.y = landingCanvas.height;
+                    if (p.y > landingCanvas.height) p.y = 0;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `hsla(${p.hue}, 80%, 70%, ${p.alpha})`;
+                    ctx.fill();
+
+                    // Glow effect
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r * 3, 0, Math.PI * 2);
+                    ctx.fillStyle = `hsla(${p.hue}, 80%, 70%, ${p.alpha * 0.15})`;
+                    ctx.fill();
+                }
+
+                animId = requestAnimationFrame(drawLanding);
+            };
+            drawLanding();
+
+            // Stop animation when landing page hides
+            const stopLandingAnim = () => {
+                if (animId) cancelAnimationFrame(animId);
+                animId = null;
+            };
+
+            // Store cleanup function
+            this._stopLandingAnimation = stopLandingAnim;
+        }
+
+        // --- Transition logic ---
+        const enterSimPage = (prompt) => {
+            landing.classList.add('hidden');
+            if (this._stopLandingAnimation) {
+                setTimeout(() => this._stopLandingAnimation(), 600);
+            }
+            setTimeout(() => {
+                landing.style.display = 'none';
+            }, 700);
+
+            // If prompt provided, trigger simulation via chat
+            if (prompt && prompt.trim()) {
+                const chatInput = document.getElementById('chat-input');
+                if (chatInput) {
+                    chatInput.value = prompt.trim();
+                    // Auto-submit after a brief delay for the transition
+                    setTimeout(() => {
+                        this.simManager._handleChatSubmit();
+                    }, 300);
+                }
+            }
+        };
+
+        if (landingStart) {
+            landingStart.addEventListener('click', () => {
+                enterSimPage(landingInput ? landingInput.value : '');
+            });
+        }
+
+        if (landingInput) {
+            landingInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    enterSimPage(landingInput.value);
+                }
+            });
+        }
+
+        // Landing page chips
+        for (const chip of document.querySelectorAll('.landing-chip')) {
+            chip.addEventListener('click', () => {
+                enterSimPage(chip.dataset.prompt);
+            });
+        }
     }
 
     _initMobileToggle() {

@@ -21,6 +21,27 @@
     </script>
 </head>
 <body>
+    <!-- ========== LANDING PAGE ========== -->
+    <div id="landing-page">
+        <canvas id="landing-canvas"></canvas>
+        <div id="landing-content">
+            <h1 class="landing-title">GEMMA 4<br/>PARTICLE EDU</h1>
+            <p class="landing-subtitle">AI-powered 3D particle physics simulation</p>
+            <div class="landing-input-wrapper">
+                <input id="landing-input" type="text" placeholder="무엇을 시뮬레이션할까요?" autofocus autocomplete="off" />
+                <button id="landing-start">Start &rarr;</button>
+            </div>
+            <div class="landing-chips">
+                <button class="landing-chip" data-prompt="피라미드를 만들어줘">&#127963;&#65039; 피라미드</button>
+                <button class="landing-chip" data-prompt="토네이도 시뮬레이션 해줘">&#127744; 토네이도</button>
+                <button class="landing-chip" data-prompt="DNA 이중나선 보여줘">&#129516; DNA</button>
+                <button class="landing-chip" data-prompt="태양계 궤도 시뮬레이션">&#127757; 태양계</button>
+                <button class="landing-chip" data-prompt="블랙홀 시뮬레이션">&#128299; 블랙홀</button>
+                <button class="landing-chip" data-prompt="콘크리트 건물 지진 테스트">&#127959;&#65039; 지진</button>
+            </div>
+        </div>
+    </div>
+
     <!-- ========== LOADING OVERLAY ========== -->
     <div id="loading-overlay">
         <div class="loading-spinner"></div>
@@ -35,7 +56,7 @@
     </button>
     <div id="sidebar-backdrop"></div>
 
-    <!-- ========== LEFT SIDEBAR ========== -->
+    <!-- ========== LEFT SIDEBAR (Chat Only) ========== -->
     <aside id="sidebar">
         <div id="sidebar-header">
             <h1 data-i18n="appTitle">PARTICLE<br/>ARCHITECT</h1>
@@ -54,32 +75,13 @@
             <!-- Cards dynamically inserted -->
         </div>
 
-        <!-- History Section -->
-        <div id="history-section">
-            <h3 class="section-title" data-toggle="history-list-container">
-                <svg class="chevron" width="12" height="12" viewBox="0 0 12 12" fill="none">
-                    <path d="M4 2L8 6L4 10" stroke="currentColor" stroke-width="1.5"/>
-                </svg>
-                <span data-i18n="historyTitle">SIMULATION HISTORY</span>
-                <span id="history-count" class="badge">0</span>
-            </h3>
-            <div id="history-list-container" class="collapsed">
-                <div id="history-list">
-                    <!-- Dynamically populated -->
-                </div>
-                <button id="load-more-history" class="btn-secondary" style="display:none">
-                    <span data-i18n="loadMore">Load More</span>
-                </button>
-            </div>
-        </div>
-
         <!-- Active Card Detail -->
         <div id="card-detail" class="hidden">
             <div id="detail-divider">
                 <span data-i18n="activeSim">ACTIVE SIMULATION</span>
             </div>
 
-            <!-- AI Chat -->
+            <!-- AI Chat (full height) -->
             <div id="chat-section">
                 <h3 class="section-title" data-toggle="chat-container" role="button" aria-expanded="true" tabindex="0">
                     <span class="toggle-icon" aria-hidden="true">
@@ -110,53 +112,6 @@
                             </svg>
                         </button>
                     </div>
-                </div>
-            </div>
-
-            <!-- Community Contribution -->
-            <div id="contribute-section">
-                <h3 class="section-title" data-toggle="contribute-params" role="button" aria-expanded="false" tabindex="0">
-                    <span class="toggle-icon" aria-hidden="true">
-                        <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><path d="M2 3.5L5 7l3-3.5H2z"/></svg>
-                    </span>
-                    <span data-i18n="contribute">CONTRIBUTE</span>
-                </h3>
-                <div id="contribute-params" class="collapsed">
-                    <p class="contribute-desc" data-i18n="contributeDesc">
-                        Share your domain expertise! Submit materials, presets, or parameter corrections.
-                    </p>
-                    <div class="param-group">
-                        <label for="contrib-name" data-i18n="contributeName">Your Name</label>
-                        <input type="text" id="contrib-name" placeholder="Anonymous" class="text-input"/>
-                    </div>
-                    <div class="param-group">
-                        <label for="contrib-domain" data-i18n="contributeDomain">Domain</label>
-                        <select id="contrib-domain">
-                            <option value="architecture">Architecture</option>
-                            <option value="civil">Civil Engineering</option>
-                            <option value="mechanical">Mechanical Eng.</option>
-                            <option value="materials">Materials Science</option>
-                            <option value="semiconductor">Semiconductor</option>
-                            <option value="biomechanics">Biomechanics</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    <div class="param-group">
-                        <label for="contrib-type" data-i18n="contributeType">Type</label>
-                        <select id="contrib-type">
-                            <option value="material">New Material</option>
-                            <option value="preset">New Preset</option>
-                            <option value="correction">Parameter Correction</option>
-                            <option value="formula">Physics Formula</option>
-                        </select>
-                    </div>
-                    <div class="param-group">
-                        <label for="contrib-content" data-i18n="contributeContent">Content</label>
-                        <textarea id="contrib-content" rows="4" class="text-input"
-                                  placeholder="Material name, properties (density, Young's modulus, etc.), references..."></textarea>
-                    </div>
-                    <button id="contrib-submit-btn" data-i18n="contributeSubmit">SUBMIT CONTRIBUTION</button>
-                    <div id="contrib-status" role="status" aria-live="polite"></div>
                 </div>
             </div>
         </div>
@@ -420,6 +375,72 @@
                 </div>
             </div>
         </div>
+
+        <!-- Community Contribution (moved from left sidebar) -->
+        <div id="contribute-section">
+            <h3 class="section-title" data-toggle="contribute-params" role="button" aria-expanded="false" tabindex="0">
+                <span class="toggle-icon" aria-hidden="true">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><path d="M2 3.5L5 7l3-3.5H2z"/></svg>
+                </span>
+                <span data-i18n="contribute">CONTRIBUTE</span>
+            </h3>
+            <div id="contribute-params" class="collapsed">
+                <p class="contribute-desc" data-i18n="contributeDesc">
+                    Share your domain expertise! Submit materials, presets, or parameter corrections.
+                </p>
+                <div class="param-group">
+                    <label for="contrib-name" data-i18n="contributeName">Your Name</label>
+                    <input type="text" id="contrib-name" placeholder="Anonymous" class="text-input"/>
+                </div>
+                <div class="param-group">
+                    <label for="contrib-domain" data-i18n="contributeDomain">Domain</label>
+                    <select id="contrib-domain">
+                        <option value="architecture">Architecture</option>
+                        <option value="civil">Civil Engineering</option>
+                        <option value="mechanical">Mechanical Eng.</option>
+                        <option value="materials">Materials Science</option>
+                        <option value="semiconductor">Semiconductor</option>
+                        <option value="biomechanics">Biomechanics</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="param-group">
+                    <label for="contrib-type" data-i18n="contributeType">Type</label>
+                    <select id="contrib-type">
+                        <option value="material">New Material</option>
+                        <option value="preset">New Preset</option>
+                        <option value="correction">Parameter Correction</option>
+                        <option value="formula">Physics Formula</option>
+                    </select>
+                </div>
+                <div class="param-group">
+                    <label for="contrib-content" data-i18n="contributeContent">Content</label>
+                    <textarea id="contrib-content" rows="4" class="text-input"
+                              placeholder="Material name, properties (density, Young's modulus, etc.), references..."></textarea>
+                </div>
+                <button id="contrib-submit-btn" data-i18n="contributeSubmit">SUBMIT CONTRIBUTION</button>
+                <div id="contrib-status" role="status" aria-live="polite"></div>
+            </div>
+        </div>
+
+        <!-- History Section (moved from left sidebar) -->
+        <div id="history-section">
+            <h3 class="section-title" data-toggle="history-list-container">
+                <svg class="chevron" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M4 2L8 6L4 10" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+                <span data-i18n="historyTitle">SIMULATION HISTORY</span>
+                <span id="history-count" class="badge">0</span>
+            </h3>
+            <div id="history-list-container" class="collapsed">
+                <div id="history-list">
+                    <!-- Dynamically populated -->
+                </div>
+                <button id="load-more-history" class="btn-secondary" style="display:none">
+                    <span data-i18n="loadMore">Load More</span>
+                </button>
+            </div>
+        </div>
     </aside>
     <button id="right-drawer-toggle" aria-label="Toggle parameters panel">&#9664;</button>
 
@@ -439,16 +460,17 @@
 
         <div id="canvas-container"></div>
 
-        <div id="bottom-panel">
+        <!-- Hidden prompt elements (used internally by JS, not shown to user) -->
+        <div id="bottom-panel" style="display:none;">
             <div id="prompt-panel">
                 <input type="text" id="prompt-input"
                        placeholder="구조를 입력하세요: 타워, 돔, 다리, 피라미드..." data-i18n-placeholder="promptPlaceholder"
                        autocomplete="off" aria-label="Structure prompt input" />
                 <button id="generate-btn" data-i18n="build" aria-label="Build structure">BUILD</button>
             </div>
-            <div id="controls-hint">
-                <span data-i18n="controlsHint">Orbit: drag &nbsp;|&nbsp; Zoom: scroll &nbsp;|&nbsp; Pan: right-drag</span>
-            </div>
+        </div>
+        <div id="controls-hint">
+            <span data-i18n="controlsHint">Orbit: drag &nbsp;|&nbsp; Zoom: scroll &nbsp;|&nbsp; Pan: right-drag</span>
         </div>
     </main>
 
