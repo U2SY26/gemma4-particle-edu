@@ -78,6 +78,34 @@ class App {
         this._updateStatus('Ready');
         this._updateParticleCount(this.activeParticleCount);
         this._updateQualityBadge();
+
+        // Hide loading overlay after Three.js init completes
+        const overlay = document.getElementById('loading-overlay');
+        if (overlay) overlay.style.display = 'none';
+
+        // Mobile sidebar toggle
+        this._initMobileToggle();
+    }
+
+    _initMobileToggle() {
+        const toggle = document.getElementById('mobile-toggle');
+        const sidebar = document.getElementById('sidebar');
+        const backdrop = document.getElementById('sidebar-backdrop');
+        if (!toggle || !sidebar) return;
+
+        const closeSidebar = () => {
+            sidebar.classList.remove('open');
+            if (backdrop) backdrop.classList.remove('visible');
+        };
+
+        toggle.addEventListener('click', () => {
+            const isOpen = sidebar.classList.toggle('open');
+            if (backdrop) backdrop.classList.toggle('visible', isOpen);
+        });
+
+        if (backdrop) {
+            backdrop.addEventListener('click', closeSidebar);
+        }
     }
 
     _setupUI() {

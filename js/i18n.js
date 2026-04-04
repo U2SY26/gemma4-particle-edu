@@ -123,6 +123,11 @@ const LANG = {
         // History
         historyTitle: '시뮬레이션 히스토리',
         loadMore: '더 보기',
+        // Loading & errors
+        loading: '시뮬레이션 로딩 중...',
+        aiOffline: 'AI 오프라인 — 프리셋과 키워드를 사용하세요',
+        chatError: '메시지 전송 실패',
+        presetLoadError: '프리셋 로드 실패',
         // Language
         langLabel: '한국어',
     },
@@ -232,6 +237,12 @@ const LANG = {
         // History
         historyTitle: 'SIMULATION HISTORY',
         loadMore: 'Load More',
+        // Loading & errors
+        loading: 'Loading simulation...',
+        aiOffline: 'AI offline — use presets and keywords',
+        chatError: 'Failed to send message',
+        presetLoadError: 'Failed to load preset',
+        // Language
         langLabel: 'English',
     },
 };

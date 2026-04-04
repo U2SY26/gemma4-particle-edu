@@ -177,17 +177,24 @@ export class SimulationManager {
                 const res = await fetch(`${API_BASE}/api/cards`);
                 if (!res.ok) throw new Error('Server returned ' + res.status);
                 this.cards = await res.json();
-            } catch {
+            } catch (err) {
+                console.warn('[Cards] Failed to load cards from server, trying localStorage:', err.message || err);
                 // localStorage fallback for Vercel static deploy
                 try {
                     this.cards = JSON.parse(localStorage.getItem('sim-cards') || '[]');
-                } catch { this.cards = []; }
+                } catch (e) {
+                    console.warn('[Cards] localStorage fallback failed:', e.message || e);
+                    this.cards = [];
+                }
             }
         } else {
-            // Offline — try localStorage
+            // Offline -- try localStorage
             try {
                 this.cards = JSON.parse(localStorage.getItem('sim-cards') || '[]');
-            } catch { this.cards = []; }
+            } catch (err) {
+                console.warn('[Cards] localStorage load failed:', err.message || err);
+                this.cards = [];
+            }
         }
 
         // If no cards (first run or offline), create from presets
@@ -237,7 +244,10 @@ export class SimulationManager {
     _saveCardsLocal() {
         try {
             localStorage.setItem('sim-cards', JSON.stringify(this.cards));
-        } catch {}
+        } catch (err) {
+            // localStorage save failure is non-critical
+            console.warn('[Cards] localStorage save failed:', err.message || err);
+        }
     }
 
     async createCard(name, prompt, physics) {
@@ -260,10 +270,12 @@ export class SimulationManager {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(card),
                 });
-                if (!res.ok) throw new Error();
+                if (!res.ok) throw new Error('Server returned ' + res.status);
                 const saved = await res.json();
                 card.id = saved.id;
-            } catch {}
+            } catch (err) {
+                console.warn('[Cards] Failed to create card on server:', err.message || err);
+            }
         }
 
         this.cards.unshift(card);
@@ -276,7 +288,9 @@ export class SimulationManager {
     async deleteCard(id) {
         this.cards = this.cards.filter(c => c.id !== id);
         if (this.serverOnline) {
-            try { await fetch(`${API_BASE}/api/cards/${id}`, { method: 'DELETE' }); } catch {}
+            try { await fetch(`${API_BASE}/api/cards/${id}`, { method: 'DELETE' }); } catch (err) {
+                console.warn('[Cards] Failed to delete card on server:', err.message || err);
+            }
         }
         this._saveCardsLocal();
 
@@ -310,7 +324,9 @@ export class SimulationManager {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(card),
                 });
-            } catch {}
+            } catch (err) {
+                console.warn('[Cards] Failed to update card on server:', err.message || err);
+            }
         }
         this._saveCardsLocal();
     }
@@ -504,7 +520,10 @@ export class SimulationManager {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(msg),
                 });
-            } catch {}
+            } catch (err) {
+                // Chat save failure is non-critical; log silently
+                console.warn('[Chat] Failed to save message to server:', err.message || err);
+            }
         }
         // Always persist cards to localStorage as fallback
         this._saveCardsLocal();
@@ -521,61 +540,79 @@ export class SimulationManager {
         this.addChatMessage('user', content);
         this._chatHistory.push({ role: 'user', content });
 
-        // Try Ollama SSE first, fall back to keyword NLP
-        const ollamaResponse = await this._sendToOllama(content);
+        try {
+            // Try Ollama SSE first, fall back to keyword NLP
+            const ollamaResponse = await this._sendToOllama(content);
 
-        if (ollamaResponse) {
-            // Finalize streaming message into a permanent chat message
-            this._finalizeStreamingMessage();
-            this.addChatMessage('assistant', ollamaResponse);
-            this._chatHistory.push({ role: 'assistant', content: ollamaResponse });
+            if (ollamaResponse) {
+                // Finalize streaming message into a permanent chat message
+                this._finalizeStreamingMessage();
+                this.addChatMessage('assistant', ollamaResponse);
+                this._chatHistory.push({ role: 'assistant', content: ollamaResponse });
 
-            // Extract simulation parameters from Gemma response
-            const simParams = this._extractSimParams(ollamaResponse);
-            if (simParams) {
-                const card = this.getActiveCard();
-                if (card) {
-                    if (simParams.physics) {
-                        Object.assign(card.physics, simParams.physics);
-                        this._syncPhysicsUI(card.physics);
-                        if (this.onPhysicsChange) this.onPhysicsChange(card.physics);
+                // Extract simulation parameters from Gemma response
+                const simParams = this._extractSimParams(ollamaResponse);
+                if (simParams) {
+                    const card = this.getActiveCard();
+                    if (card) {
+                        if (simParams.physics) {
+                            Object.assign(card.physics, simParams.physics);
+                            this._syncPhysicsUI(card.physics);
+                            if (this.onPhysicsChange) this.onPhysicsChange(card.physics);
+                        }
+
+                        // Store particle spec on card for universal pipeline
+                        if (simParams.particles) {
+                            card.particleSpec = simParams.particles;
+                            card.prompt = simParams.prompt || 'custom';
+                            if (simParams.title) card.name = simParams.title;
+                            document.getElementById('prompt-input').value = card.prompt;
+                            if (this.onCardSelect) this.onCardSelect(card);
+                        } else if (simParams.prompt) {
+                            // Clear any previous particle spec — fall back to template
+                            card.particleSpec = null;
+                            card.prompt = simParams.prompt;
+                            document.getElementById('prompt-input').value = simParams.prompt;
+                            if (this.onCardSelect) this.onCardSelect(card);
+                        }
+
+                        // Save to history
+                        this._saveToHistory({
+                            query: content,
+                            title: simParams.title || simParams.prompt || 'Simulation',
+                            domain: simParams.domain || 'general',
+                            description: simParams.description || '',
+                            prompt: simParams.prompt,
+                            physics: card.physics,
+                            particleSpec: simParams.particles || null,
+                            aiResponse: ollamaResponse,
+                            particleCount: card.physics.particleCount || 25000,
+                        });
                     }
-
-                    // Store particle spec on card for universal pipeline
-                    if (simParams.particles) {
-                        card.particleSpec = simParams.particles;
-                        card.prompt = simParams.prompt || 'custom';
-                        if (simParams.title) card.name = simParams.title;
-                        document.getElementById('prompt-input').value = card.prompt;
-                        if (this.onCardSelect) this.onCardSelect(card);
-                    } else if (simParams.prompt) {
-                        // Clear any previous particle spec — fall back to template
-                        card.particleSpec = null;
-                        card.prompt = simParams.prompt;
-                        document.getElementById('prompt-input').value = simParams.prompt;
-                        if (this.onCardSelect) this.onCardSelect(card);
-                    }
-
-                    // Save to history
-                    this._saveToHistory({
-                        query: content,
-                        title: simParams.title || simParams.prompt || 'Simulation',
-                        domain: simParams.domain || 'general',
-                        description: simParams.description || '',
-                        prompt: simParams.prompt,
-                        physics: card.physics,
-                        particleSpec: simParams.particles || null,
-                        aiResponse: ollamaResponse,
-                        particleCount: card.physics.particleCount || 25000,
-                    });
                 }
+            } else {
+                // Fallback to keyword NLP
+                const response = this._processNaturalLanguage(content);
+                this.addChatMessage('assistant', response);
+                this._chatHistory.push({ role: 'assistant', content: response });
             }
-        } else {
-            // Fallback to keyword NLP
-            const response = this._processNaturalLanguage(content);
-            this.addChatMessage('assistant', response);
-            this._chatHistory.push({ role: 'assistant', content: response });
+        } catch (err) {
+            console.warn('[Chat] Chat submit failed:', err.message || err);
+            // Clean up any lingering streaming cursor
+            this._finalizeStreamingMessage();
+            // Show error message in chat
+            this._showChatError(t('chatError'));
         }
+    }
+
+    _showChatError(message) {
+        const chatBox = document.getElementById('chat-messages');
+        if (!chatBox) return;
+        const el = document.createElement('div');
+        el.className = 'chat-msg error';
+        el.textContent = message;
+        chatBox.appendChild(el);
+        chatBox.scrollTop = chatBox.scrollHeight;
     }
 
     // ==================== OLLAMA SSE CHAT ====================
@@ -831,7 +868,10 @@ I'll create two intertwined helices for the backbones, with small connecting par
             }
 
             return fullText;
-        } catch {
+        } catch (err) {
+            console.warn('[Ollama] Streaming request failed:', err.message || err);
+            // Clean up the blinking cursor on fetch failure
+            this._finalizeStreamingMessage();
             return null; // Will trigger fallback NLP
         }
     }
@@ -851,7 +891,8 @@ I'll create two intertwined helices for the backbones, with small connecting par
             }
 
             return sim;
-        } catch {
+        } catch (err) {
+            console.warn('[Ollama] Failed to parse simulation JSON from response:', err.message || err);
             return null;
         }
     }
@@ -890,7 +931,8 @@ I'll create two intertwined helices for the backbones, with small connecting par
             if (!res.ok) throw new Error('Server returned ' + res.status);
             // Refresh history list after saving
             this._loadHistory();
-        } catch {
+        } catch (err) {
+            console.warn('[History] Server save failed, using localStorage:', err.message || err);
             // localStorage fallback for Vercel static deploy
             try {
                 const history = JSON.parse(localStorage.getItem('sim-history') || '[]');
@@ -902,7 +944,9 @@ I'll create two intertwined helices for the backbones, with small connecting par
                 if (history.length > 100) history.length = 100;
                 localStorage.setItem('sim-history', JSON.stringify(history));
                 this._loadHistory();
-            } catch {}
+            } catch (err) {
+                console.warn('[History] localStorage fallback save failed:', err.message || err);
+            }
         }
     }
 
@@ -921,7 +965,8 @@ I'll create two intertwined helices for the backbones, with small connecting par
                 loadMoreBtn.style.display = data.hasMore ? 'block' : 'none';
                 loadMoreBtn.onclick = () => this._loadHistory(page + 1);
             }
-        } catch {
+        } catch (err) {
+            console.warn('[History] Server load failed, using localStorage:', err.message || err);
             // localStorage fallback for Vercel static deploy
             try {
                 const history = JSON.parse(localStorage.getItem('sim-history') || '[]');
@@ -935,7 +980,9 @@ I'll create two intertwined helices for the backbones, with small connecting par
                     loadMoreBtn.style.display = start + 20 < history.length ? 'block' : 'none';
                     loadMoreBtn.onclick = () => this._loadHistory(page + 1);
                 }
-            } catch {}
+            } catch (err) {
+                console.warn('[History] localStorage fallback load failed:', err.message || err);
+            }
         }
     }
 
