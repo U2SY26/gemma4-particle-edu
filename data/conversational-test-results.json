@@ -1,0 +1,225 @@
+{
+  "test_date": "2026-04-04",
+  "model": "gemma4:latest (Q4_K_M, 8.0B)",
+  "ollama_url": "http://localhost:11434/api/chat",
+  "total_tests": 10,
+  "json_valid_count": 10,
+  "avg_quality": 5.0,
+  "avg_response_time_ms": 6731,
+  "built_in_template_used": 5,
+  "custom_simulation_used": 5,
+  "summary": {
+    "all_json_valid": true,
+    "all_have_physics": true,
+    "all_have_greeting": true,
+    "all_have_followup": true,
+    "quality_distribution": {
+      "5_stars": 10,
+      "4_stars": 0,
+      "3_stars": 0,
+      "2_or_below": 0
+    }
+  },
+  "results": [
+    {
+      "test_number": 1,
+      "request": "피라미드 만들어줘~",
+      "response_quality": 5,
+      "json_valid": true,
+      "simulation_type": "pyramid",
+      "has_physics": true,
+      "has_custom_particles": false,
+      "particle_count": 0,
+      "response_time_ms": 7135,
+      "response_lines": 27,
+      "has_greeting": true,
+      "has_followup": true,
+      "language_correct": true,
+      "issues": [
+        "none"
+      ],
+      "response_preview": "와아, 피라미드요! 정말 멋진 선택이에요! 🤩 고대 건축의 정수를 엿볼 수 있는 흥미진진한 주제네요!\n\n피라미드는 단순한 구조물이 아니라, 지질학적 안정성과 완벽한 기하학의 승리라고 할 수 있어요. 거대한 덩어리가 사방으로 기울어진 면을 이루면서 엄청난 무게로 인해 스스로를 지탱하는 것이죠. 마치 거대한 흙과 돌멩이들이 서로를 받쳐주면서 중력에 저항하는 모...",
+      "extracted_json": "{\n  \"simulation\": {\n    \"prompt\": \"pyramid\",\n    \"physics\": {\n      \"gravity\": -9.81, \"damping\": 0.97, \"springStiffness\": 20,\n      \"particleCount\": 25000, \"timeScale\": 1.0, \"friction\": 0.8,\n      \"bounciness\": 0.3, \"windX\": 0, \"windY\": 0, \"windZ\": 0,\n      \"turbulence\": 0, \"viscosity\": 0, \"temperature\": 293,\n      \"foundation\": 5.0, \"density\": 2.4,\n      \"seismic\": 0, \"seismicFreq\": 2.0\n    }\n  }\n}"
+    },
+    {
+      "test_number": 2,
+      "request": "보잉 747기 시뮬레이션 해줘",
+      "response_quality": 5,
+      "json_valid": true,
+      "simulation_type": "custom",
+      "has_physics": true,
+      "has_custom_particles": true,
+      "particle_count": 15000,
+      "response_time_ms": 9046,
+      "response_lines": 72,
+      "has_greeting": true,
+      "has_followup": true,
+      "language_correct": true,
+      "issues": [
+        "none"
+      ],
+      "response_preview": "와! 비행기 시뮬레이션이라니, 정말 신나는 주제예요! ✈️ 하늘을 나는 거대한 기계를 분자나 공기의 흐름으로 본다는 건 마치 과학자의 꿈만 같은 작업이죠! 제가 정말 좋아하는 분야랍니다!\n\n비행기가 어떻게 날 수 있는지에 대한 원리는 바로 '양력(Lift)'이라는 힘 때문이에요. 쉽게 말해, 비행기의 날개 단면 모양(에어포일)이 공기를 마치 '밀어내는' 역...",
+      "extracted_json": "{\n  \"simulation\": {\n    \"prompt\": \"custom\",\n    \"title\": \"Boeing 747 공기역학 및 스트레스 테스트\",\n    \"description\": \"실제 747기의 공기역학적 흐름과 구조적 안정성을 시뮬레이션합니다. 주변의 난류와 바람이 기체 구조물에 가하는 힘을 시각적으로 관찰할 수 있습니다.\",\n    \"domain\": \"engineering\",\n    \"physics\": {\n      \"gravity\": -9.81,\n      \"damping\": 0.98,\n      \"springStiffness\": 10,\n      \"particleCount\": 15000,\n      \"timeScale\": 1.0,\n      \"friction\": 0.8,\n      \"bounciness\": 0.3,\n      \"windX\": 50,\n      \"windY\": 0,\n      \"windZ\": 0,\n      \"turbulence\": 0.5,\n      \"viscosity\": 0.01,\n      \"temperature\": 293\n    },\n    \"particles\": {\n      \"groups\": [\n        {\n          \"name\": \"Fuselage (기체 본체)\",\n          \"count\": 5000,\n          \"shape\": \"cylinder\",\n          \"params\": { \"radius\": 5, \"height\": 150, \"center\": [0, 10, 0] },\n          \"color\": \"indigo\",\n          \"role\": 1,\n          \"connect\": \"chain\"\n        },\n        {\n          \"name\": \"Wing (주 날개)\",\n          \"count\": 3000,\n          \"shape\": \"line\",\n          \"params\": { \"length\": 80, \"direction\": [1, 0, 1], \"center\": [-20, 15, 0] },\n          \"color\": \"blue\",\n          \"role\": 2,\n          \"connect\": \"none\"\n        },\n        {\n          \"name\": \"Air Flow (공기 흐름)\",\n          \"count\": 7000,\n          \"shape\": \"random_sphere\",\n          \"params\": { \"radius\": 1, \"center\": [0, 10, 0] },\n          \"color\": \"cyan\",\n          \"role\": 0,\n          \"connect\": \"none\"\n        }\n      ]\n    }\n  }\n}"
+    },
+    {
+      "test_number": 3,
+      "request": "DNA 이중나선 보여줘!",
+      "response_quality": 5,
+      "json_valid": true,
+      "simulation_type": "custom",
+      "has_physics": true,
+      "has_custom_particles": true,
+      "particle_count": 20000,
+      "response_time_ms": 6052,
+      "response_lines": 48,
+      "has_greeting": true,
+      "has_followup": true,
+      "language_correct": true,
+      "issues": [
+        "none"
+      ],
+      "response_preview": "와, DNA 이중나선이라니! 정말 흥미진진한 주제예요! 🧬✨ 우리 생명의 설계도 그 자체를 눈으로 볼 수 있다니, 저도 정말 신나네요!\n\nDNA는 정말 신비로운 구조죠. 마치 꼬여 올라간 사다리 같아요. 이 사다리의 두 가닥(나선)은 설탕-인산이라는 뼈대(골격)로 튼튼하게 연결되어 있고, 그 안쪽 계단 부분은 아데닌-티민(A-T)과 구아닌-시토신(G-C) ...",
+      "extracted_json": "{\n  \"simulation\": {\n    \"prompt\": \"custom\",\n    \"title\": \"DNA 이중나선 (The Double Helix)\",\n    \"description\": \"유전 정보를 담고 있는 DNA의 대표적인 이중나선 구조를 시뮬레이션합니다. 염기쌍 간의 수소 결합을 통해 안정적으로 유지되는 나선 구조를 관찰할 수 있습니다.\",\n    \"domain\": \"biology\",\n    \"physics\": {\n      \"gravity\": -9.81, \"damping\": 0.97, \"springStiffness\": 20,\n      \"particleCount\": 25000, \"timeScale\": 1.0, \"friction\": 0.8,\n      \"bounciness\": 0.3, \"windX\": 0, \"windY\": 0, \"windZ\": 0,\n      \"turbulence\": 0, \"viscosity\": 0, \"temperature\": 293\n    },\n    \"particles\": {\n      \"groups\": [\n        {\n          \"name\": \"DNA_Strand_1\",\n          \"count\": 10000,\n          \"shape\": \"helix\",\n          \"params\": { \"radius\": 1.5, \"pitch\": 0.8, \"turns\": 10, \"center\": [0, 0, 0] },\n          \"color\": \"cyan\",\n          \"role\": 2,\n          \"connect\": \"chain\"\n        },\n        {\n          \"name\": \"DNA_Strand_2\",\n          \"count\": 10000,\n          \"shape\": \"helix\",\n          \"params\": { \"radius\": 1.5, \"pitch\": 0.8, \"turns\": 10, \"center\": [3, 0, 0] },\n          \"color\": \"magenta\",\n          \"role\": 2,\n          \"connect\": \"chain\"\n        }\n      ]\n    }\n  }\n}"
+    },
+    {
+      "test_number": 4,
+      "request": "태양계 만들어볼래?",
+      "response_quality": 5,
+      "json_valid": true,
+      "simulation_type": "solar_system",
+      "has_physics": true,
+      "has_custom_particles": false,
+      "particle_count": 0,
+      "response_time_ms": 4007,
+      "response_lines": 44,
+      "has_greeting": true,
+      "has_followup": true,
+      "language_correct": true,
+      "issues": [
+        "none"
+      ],
+      "response_preview": "와, 태양계라니! 정말 멋진 아이디어예요! 🚀✨ 저는 과학 시뮬레이션 AI, 제마 4 파티클 에듀예요. 우리 함께 저 우주의 경이로움을 3D로 구현해 봐요!\n\n태양계는 거대한 별인 태양을 중심으로 행성들이 특정한 궤도를 따라 중력의 힘에 의해 춤추는 곳이에요. 마치 거대한 공중 발레 공연 같다고 할 수 있죠! 행성들은 태양의 강력한 중력 덕분에 이 안정적이...",
+      "extracted_json": "{\n  \"simulation\": {\n    \"prompt\": \"solar_system\",\n    \"physics\": {\n      \"gravity\": -9.81,\n      \"damping\": 0.97,\n      \"springStiffness\": 20,\n      \"particleCount\": 25000,\n      \"timeScale\": 1.0,\n      \"friction\": 0.8,\n      \"bounciness\": 0.3,\n      \"windX\": 0,\n      \"windY\": 0,\n      \"windZ\": 0,\n      \"turbulence\": 0,\n      \"viscosity\": 0,\n      \"temperature\": 293,\n      \"foundation\": 5.0,\n      \"density\": 2.4,\n      \"seismic\": 0,\n      \"seismicFreq\": 2.0\n    }\n  }\n}"
+    },
+    {
+      "test_number": 5,
+      "request": "Show me a tornado simulation",
+      "response_quality": 5,
+      "json_valid": true,
+      "simulation_type": "tornado",
+      "has_physics": true,
+      "has_custom_particles": false,
+      "particle_count": 0,
+      "response_time_ms": 5437,
+      "response_lines": 25,
+      "has_greeting": true,
+      "has_followup": true,
+      "language_correct": true,
+      "issues": [
+        "none"
+      ],
+      "response_preview": "Oh my goodness, a tornado simulation? 🌪️ That sounds absolutely thrilling! We are going to explore some seriously powerful fluid dynamics today!\n\nTornadoes are basically giant, violent columns of rota...",
+      "extracted_json": "{\n  \"simulation\": {\n    \"prompt\": \"tornado\",\n    \"physics\": {\n      \"gravity\": -9.81, \"damping\": 0.97, \"springStiffness\": 20,\n      \"particleCount\": 25000, \"timeScale\": 1.0, \"friction\": 0.8,\n      \"bounciness\": 0.3, \"windX\": 0, \"windY\": 0, \"windZ\": 0,\n      \"turbulence\": 0, \"viscosity\": 0, \"temperature\": 293,\n      \"foundation\": 5.0, \"density\": 2.4,\n      \"seismic\": 0, \"seismicFreq\": 2.0\n    }\n  }\n}"
+    },
+    {
+      "test_number": 6,
+      "request": "블랙홀에 빨려들어가는 별 보여줘",
+      "response_quality": 5,
+      "json_valid": true,
+      "simulation_type": "custom",
+      "has_physics": true,
+      "has_custom_particles": true,
+      "particle_count": 15000,
+      "response_time_ms": 7066,
+      "response_lines": 53,
+      "has_greeting": true,
+      "has_followup": true,
+      "language_correct": true,
+      "issues": [
+        "Extreme gravity (-1000.0) for astronomy domain"
+      ],
+      "response_preview": "와! 블랙홀에 별이 빨려 들어가는 모습이라니, 정말 우주에서 가장 극적이고 흥미진진한 현상을 골라주셨어요! ✨🌟\n\n이 현상은 '조석력(Tidal Force)'이라는 정말 신비로운 힘 덕분에 벌어지는 일이에요. 별이 블랙홀 근처에 오면, 블랙홀에 가까운 쪽과 먼 쪽의 중력 차이가 엄청나게 커져요. 마치 물방울의 한쪽 끝을 잡아당기면서 터져나가게 만드는 것과 ...",
+      "extracted_json": "{\n  \"simulation\": {\n    \"prompt\": \"custom\",\n    \"title\": \"블랙홀 강착 원반 시뮬레이션\",\n    \"description\": \"별이나 가스 구름 같은 물질이 블랙홀의 강력한 중력에 의해 빨려 들어가며 강착 원반을 형성하는 과정을 보여줍니다.\",\n    \"domain\": \"astronomy\",\n    \"physics\": {\n      \"gravity\": -1000.0,\n      \"damping\": 0.98,\n      \"springStiffness\": 5,\n      \"particleCount\": 15000,\n      \"timeScale\": 1.0,\n      \"friction\": 0.95,\n      \"bounciness\": 0.01,\n      \"windX\": 0,\n      \"windY\": 0,\n      \"windZ\": 0,\n      \"turbulence\": 0,\n      \"viscosity\": 0.01,\n      \"temperature\": 293\n    },\n    \"particles\": {\n      \"groups\": [\n        {\n          \"name\": \"별의 물질 (강착 원반)\",\n          \"count\": 15000,\n          \"shape\": \"helix\",\n          \"params\": {\n            \"radius\": 8,\n            \"pitch\": 1.0,\n            \"turns\": 10,\n            \"center\": [0, 0, 0]\n          },\n          \"color\": \"yellow\",\n          \"role\": 2,\n          \"connect\": \"chain\"\n        }\n      ]\n    }\n  }\n}"
+    },
+    {
+      "test_number": 7,
+      "request": "물방울이 떨어지는거 만들어줘 ㅎㅎ",
+      "response_quality": 5,
+      "json_valid": true,
+      "simulation_type": "water_drop",
+      "has_physics": true,
+      "has_custom_particles": false,
+      "particle_count": 0,
+      "response_time_ms": 5067,
+      "response_lines": 38,
+      "has_greeting": true,
+      "has_followup": true,
+      "language_correct": true,
+      "issues": [
+        "none"
+      ],
+      "response_preview": "어머, 물방울이라니! 정말 신비롭고 아름다운 현상을 보고 싶으신가 봐요! 💧✨ 물의 움직임을 시뮬레이션하는 건 정말 재미있는 탐험이 될 거예요!\n\n물방울이 떨어지는 현상은 기본적으로 **중력**의 힘이 물을 아래로 끌어내리는 것에서 시작해요. 하지만 물방울 하나하나가 떨어지면서도 모양을 유지하거나, 아니면 표면 장력 때문에 뭉쳐지기도 하죠. 마치 작은 구슬...",
+      "extracted_json": "{\n  \"simulation\": {\n    \"prompt\": \"water_drop\",\n    \"physics\": {\n      \"gravity\": -9.81,\n      \"damping\": 0.97,\n      \"springStiffness\": 20,\n      \"particleCount\": 10000,\n      \"timeScale\": 1.0,\n      \"friction\": 0.8,\n      \"bounciness\": 0.3,\n      \"windX\": 0,\n      \"windY\": 0,\n      \"windZ\": 0,\n      \"turbulence\": 0,\n      \"viscosity\": 0,\n      \"temperature\": 293,\n      \"foundation\": 5.0,\n      \"density\": 2.4,\n      \"seismic\": 0,\n      \"seismicFreq\": 2.0\n    }\n  }\n}"
+    },
+    {
+      "test_number": 8,
+      "request": "콘크리트 건물 지진 테스트!!",
+      "response_quality": 5,
+      "json_valid": true,
+      "simulation_type": "tower",
+      "has_physics": true,
+      "has_custom_particles": false,
+      "particle_count": 0,
+      "response_time_ms": 7075,
+      "response_lines": 40,
+      "has_greeting": true,
+      "has_followup": true,
+      "language_correct": true,
+      "issues": [
+        "none"
+      ],
+      "response_preview": "와! 콘크리트 건물 지진 테스트라니, 정말 흥미롭고 중요한 주제예요! 건물이 어떻게 흔들리면서 버티는지를 시뮬레이션하는 건 정말 과학적으로 재미있는 경험이 될 거예요! 🧱🔬✨\n\n지진은 땅 자체가 갑자기 크게 흔들리면서 건물을 미친 듯이 요동치게 만들죠. 건물이 지진에 노출되면, 구조물 전체가 마치 커다란 진자처럼 앞뒤로, 좌우로 심하게 진동하게 돼요. 이때...",
+      "extracted_json": "{\n  \"simulation\": {\n    \"prompt\": \"tower\",\n    \"physics\": {\n      \"gravity\": -9.81, \n      \"damping\": 0.95, \n      \"springStiffness\": 25,\n      \"particleCount\": 25000, \n      \"timeScale\": 1.0, \n      \"friction\": 0.7,\n      \"bounciness\": 0.3, \n      \"windX\": 0, \n      \"windY\": 0, \n      \"windZ\": 0,\n      \"turbulence\": 0.5, \n      \"viscosity\": 0, \n      \"temperature\": 293,\n      \"foundation\": 5.0, \n      \"density\": 2.4,\n      \"seismic\": 1, \n      \"seismicFreq\": 3.0\n    }\n  }\n}"
+    },
+    {
+      "test_number": 9,
+      "request": "뉴턴의 요람 해봐",
+      "response_quality": 5,
+      "json_valid": true,
+      "simulation_type": "custom",
+      "has_physics": true,
+      "has_custom_particles": true,
+      "particle_count": 16,
+      "response_time_ms": 6452,
+      "response_lines": 83,
+      "has_greeting": true,
+      "has_followup": true,
+      "language_correct": true,
+      "issues": [
+        "none"
+      ],
+      "response_preview": "와, 뉴턴의 요람이라니! 정말 흥미진진하고 고전적인 물리 현상을 탐구할 기회네요! ✨\n\n뉴턴의 요람은 물체의 충돌 시 운동량과 에너지가 보존되는 아름다운 원리를 보여주는 멋진 장치예요. 마치 완벽한 당구공들의 릴레이 경기 같죠! 공들이 부딪힐 때마다 에너지를 전혀 잃지 않고 다음 공에게 전달하기 때문에, 처음 친 공의 에너지가 마지막 공에 온전히 전달되는 ...",
+      "extracted_json": "{\n  \"simulation\": {\n    \"prompt\": \"custom\",\n    \"title\": \"뉴턴의 요람 (Newton's Cradle)\",\n    \"description\": \"서로 연결된 공들이 충돌하며 운동량과 에너지를 보존하는 탄성 충돌을 시뮬레이션합니다. 충돌과 진동을 관찰해 보세요.\",\n    \"domain\": \"physics\",\n    \"physics\": {\n      \"gravity\": -9.81,\n      \"damping\": 0.98,\n      \"springStiffness\": 50,\n      \"particleCount\": 120,\n      \"timeScale\": 1.0,\n      \"friction\": 0.9,\n      \"bounciness\": 0.8,\n      \"windX\": 0,\n      \"windY\": 0,\n      \"windZ\": 0,\n      \"turbulence\": 0,\n      \"viscosity\": 0,\n      \"temperature\": 293,\n      \"foundation\": 1.0,\n      \"density\": 7800,\n      \"seismic\": 0,\n      \"seismicFreq\": 0\n    },\n    \"particles\": {\n      \"groups\": [\n        {\n          \"name\": \"cradle_rod_1\",\n          \"count\": 4,\n          \"shape\": \"sphere\",\n          \"params\": { \"radius\": 0.5, \"center\": [-5, 0, 0] },\n          \"color\": \"blue\",\n          \"role\": 1,\n          \"connect\": \"chain\"\n        },\n        {\n          \"name\": \"cradle_rod_2\",\n          \"count\": 4,\n          \"shape\": \"sphere\",\n          \"params\": { \"radius\": 0.5, \"center\": [-3, 0, 0] },\n          \"color\": \"blue\",\n          \"role\": 1,\n          \"connect\": \"chain\"\n        },\n        {\n          \"name\": \"cradle_rod_3\",\n          \"count\": 4,\n          \"shape\": \"sphere\",\n          \"params\": { \"radius\": 0.5, \"center\": [-1, 0, 0] },\n          \"color\": \"blue\",\n          \"role\": 1,\n          \"connect\": \"chain\"\n        },\n        {\n          \"name\": \"cradle_rod_4\",\n          \"count\": 4,\n          \"shape\": \"sphere\",\n          \"params\": { \"radius\": 0.5, \"center\": [1, 0, 0] },\n          \"color\": \"blue\",\n          \"role\": 1,\n          \"connect\": \"chain\"\n        }\n      ]\n    }\n  }\n}"
+    },
+    {
+      "test_number": 10,
+      "request": "은하 충돌 시뮬레이션 부탁해~",
+      "response_quality": 5,
+      "json_valid": true,
+      "simulation_type": "custom",
+      "has_physics": true,
+      "has_custom_particles": true,
+      "particle_count": 20000,
+      "response_time_ms": 9971,
+      "response_lines": 48,
+      "has_greeting": true,
+      "has_followup": true,
+      "language_correct": true,
+      "issues": [
+        "none"
+      ],
+      "response_preview": "와, 은하 충돌이라니! 정말 굉장하고 광활한 주제를 고르셨어요! 🌌✨ 저는 우주의 장엄한 드라마를 시뮬레이션하는 게 제일 신나요. 우리가 지금부터 정말 엄청나게 스케일이 큰 역사를 체험하게 될 거예요!\n\n은하 충돌은 우리 은하와 같은 거대한 은하들이 중력의 힘으로 서로 끌어당겨 합쳐지는 과정이에요. 이게 그냥 벽돌들이 부딪히는 느낌은 아니랍니다! 중력이라는...",
+      "extracted_json": "{\n  \"simulation\": {\n    \"prompt\": \"custom\",\n    \"title\": \"거대 은하 충돌 시뮬레이션\",\n    \"description\": \"두 개의 거대 은하가 중력적으로 상호작용하며 충돌하고 합쳐지는 과정을 시뮬레이션합니다. 별과 가스의 역동적인 움직임을 관찰해 보세요.\",\n    \"domain\": \"astronomy\",\n    \"physics\": {\n      \"gravity\": -0.1, \"damping\": 0.99, \"springStiffness\": 1,\n      \"particleCount\": 20000, \"timeScale\": 0.5, \"friction\": 0.9,\n      \"bounciness\": 0.1, \"windX\": 0, \"windY\": 0, \"windZ\": 0,\n      \"turbulence\": 0.01, \"viscosity\": 0.01, \"temperature\": 270\n    },\n    \"particles\": {\n      \"groups\": [\n        {\n          \"name\": \"Galaxy A (주요 은하)\",\n          \"count\": 10000,\n          \"shape\": \"random_sphere\",\n          \"params\": { \"radius\": 4, \"center\": [-15, 0, 0] },\n          \"color\": \"cyan\",\n          \"role\": 2,\n          \"connect\": \"none\"\n        },\n        {\n          \"name\": \"Galaxy B (충돌 은하)\",\n          \"count\": 10000,\n          \"shape\": \"random_sphere\",\n          \"params\": { \"radius\": 3, \"center\": [15, 0, 0] },\n          \"color\": \"magenta\",\n          \"role\": 2,\n          \"connect\": \"none\"\n        }\n      ]\n    }\n  }\n}"
+    }
+  ]
+}

@@ -331,6 +331,17 @@
                 </h3>
                 <div id="chat-container">
                     <div id="chat-messages" role="log" aria-live="polite" aria-label="Chat messages"></div>
+                    <div id="welcome-suggestions" class="welcome-suggestions">
+                        <p class="welcome-title" data-i18n="chatWelcome">AI와 대화하며 물리 파라미터를 조정하세요</p>
+                        <div class="suggestion-chips">
+                            <button class="suggestion-chip" data-prompt="피라미드를 만들어줘">&#127963;&#65039; <span data-i18n="sugPyramid">피라미드</span></button>
+                            <button class="suggestion-chip" data-prompt="토네이도 시뮬레이션 해줘">&#127744; <span data-i18n="sugTornado">토네이도</span></button>
+                            <button class="suggestion-chip" data-prompt="DNA 이중나선 보여줘">&#129516; <span data-i18n="sugDNA">DNA</span></button>
+                            <button class="suggestion-chip" data-prompt="태양계 궤도 시뮬레이션">&#127757; <span data-i18n="sugSolar">태양계</span></button>
+                            <button class="suggestion-chip" data-prompt="콘크리트 건물 지진 테스트">&#127959;&#65039; <span data-i18n="sugEarthquake">지진 테스트</span></button>
+                            <button class="suggestion-chip" data-prompt="전기장 쌍극자 시각화">&#9889; <span data-i18n="sugElectric">전기장</span></button>
+                        </div>
+                    </div>
                     <div id="chat-input-area">
                         <input type="text" id="chat-input"
                                placeholder="물리법칙을 자연어로 설명해보세요..." data-i18n-placeholder="chatPlaceholder"

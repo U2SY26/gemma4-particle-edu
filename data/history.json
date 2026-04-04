@@ -1,6 +1,619 @@
 {
   "simulations": [
     {
+      "id": "6e92dba9-1fd1-420b-a026-37f2a03e06a0",
+      "timestamp": "2026-04-04T11:44:47.248Z",
+      "query": "로마 수도교 아치 연속",
+      "title": "로마 수도교 아치 연결 구조",
+      "domain": "architecture",
+      "description": "연속적인 아치 구조가 중력과 장력에 의해 지탱되는 과정을 시뮬레이션합니다.",
+      "prompt": "custom",
+      "physics": {
+        "gravity": -9.81,
+        "damping": 0.97,
+        "springStiffness": 50,
+        "particleCount": 18000,
+        "timeScale": 1,
+        "friction": 0.8,
+        "bounciness": 0.2,
+        "windX": 0,
+        "windY": 0,
+        "windZ": 0,
+        "turbulence": 0,
+        "viscosity": 0,
+        "temperature": 293
+      },
+      "particleSpec": {
+        "groups": [
+          {
+            "name": "수도교 아치 구조",
+            "count": 18000,
+            "shape": "line",
+            "params": {
+              "radius": 0.15,
+              "lengthScale": 1
+            },
+            "color": "teal",
+            "role": 0,
+            "connect": "chain"
+          }
+        ]
+      },
+      "aiResponse": "로마 수도교의 연속적인 아치 구조를 표현합니다. 이 시뮬레이션은 연결된 선(line) 형태의 입자들을 사용하여, 중력 하에서 아치 구조가 어떻게 안정성을 유지하며 반복되는지를 보여줍니다.\n\n```json\n{\n  \"simulation\": {\n    \"prompt\": \"custom\",\n    \"title\": \"로마 수도교 아치 연결 구조\",\n    \"description\": \"연속적인 아치 구조가 중력과 장력에 의해 지탱되는 과정을 시뮬레이션합니다.\",\n    \"domain\": \"architecture\",\n    \"physics\": {\n      \"gravity\": -9.81,\n      \"damping\": 0.97,\n      \"springStiffness\": 50,\n      \"particleCount\": 18000,\n      \"timeScale\": 1.0,\n      \"friction\": 0.8,\n      \"bounciness\": 0.2,\n      \"windX\": 0,\n      \"windY\": 0,\n      \"windZ\": 0,\n      \"turbulence\": 0,\n      \"viscosity\": 0,\n      \"temperature\": 293\n    },\n    \"particles\": {\n      \"groups\": [\n        {\n          \"name\": \"수도교 아치 구조\",\n          \"count\": 18000,\n          \"shape\": \"line\",\n          \"params\": {\n            \"radius\": 0.15,\n            \"lengthScale\": 1.0\n          },\n          \"color\": \"teal\",\n          \"role\": 0,\n          \"connect\": \"chain\"\n        }\n      ]\n    }\n  }\n}\n```",
+      "particleCount": 18000,
+      "thumbnail": null
+    },
+    {
+      "id": "1d1c5e7d-f15b-43e8-9cc5-d03d548a364d",
+      "timestamp": "2026-04-04T11:44:42.139Z",
+      "query": "일본 오층탑 목조 내진 구조",
+      "title": "오층 목탑 내진 구조 시뮬레이션",
+      "domain": "architecture",
+      "description": "목재의 유연성과 전통 건축의 내진 원리를 입자 기반으로 모델링합니다.",
+      "prompt": "custom",
+      "physics": {
+        "gravity": -9.81,
+        "damping": 0.9,
+        "springStiffness": 15,
+        "particleCount": 18000,
+        "timeScale": 1,
+        "friction": 0.7,
+        "bounciness": 0.2,
+        "windX": 0.5,
+        "windY": 0,
+        "windZ": 0.5,
+        "turbulence": 0.1,
+        "viscosity": 0,
+        "temperature": 293
+      },
+      "particleSpec": {
+        "groups": [
+          {
+            "name": "기초 및 층 구조",
+            "count": 18000,
+            "shape": "line",
+            "params": {
+              "thickness": 1.5,
+              "spacing": 0.8
+            },
+            "color": "orange",
+            "role": 0,
+            "connect": "grid"
+          }
+        ]
+      },
+      "aiResponse": "일본 전통 오층 목탑의 구조적 안정성과 유연성을 시뮬레이션하기 위해, 계단식으로 배열된 격자 구조의 입자들을 사용했습니다. 적절한 탄성과 감쇠를 설정하여, 외부 충격이나 진동에 대한 건물의 동적 거동(내진 구조의 원리)을 시뮬레이션합니다.\n\n```json\n{\n  \"simulation\": {\n    \"prompt\": \"custom\",\n    \"title\": \"오층 목탑 내진 구조 시뮬레이션\",\n    \"description\": \"목재의 유연성과 전통 건축의 내진 원리를 입자 기반으로 모델링합니다.\",\n    \"domain\": \"architecture\",\n    \"physics\": {\n      \"gravity\": -9.81,\n      \"damping\": 0.90,\n      \"springStiffness\": 15,\n      \"particleCount\": 18000,\n      \"timeScale\": 1.0,\n      \"friction\": 0.7,\n      \"bounciness\": 0.2,\n      \"windX\": 0.5,\n      \"windY\": 0,\n      \"windZ\": 0.5,\n      \"turbulence\": 0.1,\n      \"viscosity\": 0,\n      \"temperature\": 293\n    },\n    \"particles\": {\n      \"groups\": [\n        {\n          \"name\": \"기초 및 층 구조\",\n          \"count\": 18000,\n          \"shape\": \"line\",\n          \"params\": {\n            \"thickness\": 1.5,\n            \"spacing\": 0.8\n          },\n          \"color\": \"orange\",\n          \"role\": 0,\n          \"connect\": \"grid\"\n        }\n      ]\n    }\n  }\n}\n```",
+      "particleCount": 18000,
+      "thumbnail": null
+    },
+    {
+      "id": "36c45855-d924-49f6-a52f-598935d543a5",
+      "timestamp": "2026-04-04T11:44:30.536Z",
+      "query": "돔 성당: 피렌체 두오모",
+      "title": "피렌체 두오모 돔 구조 시뮬레이션",
+      "domain": "architecture",
+      "description": "르네상스 건축의 웅장한 돔과 아치 구조를 입자로 표현",
+      "prompt": "custom",
+      "physics": {
+        "gravity": -9.81,
+        "damping": 0.95,
+        "springStiffness": 30,
+        "particleCount": 22000,
+        "timeScale": 1,
+        "friction": 0.6,
+        "bounciness": 0.1,
+        "windX": 0,
+        "windY": 0,
+        "windZ": 0,
+        "turbulence": 0.1,
+        "viscosity": 0,
+        "temperature": 293
+      },
+      "particleSpec": {
+        "groups": [
+          {
+            "name": "돔 외벽 구조",
+            "count": 10000,
+            "shape": "shell",
+            "params": {
+              "radius": 30,
+              "thickness": 2
+            },
+            "color": "cyan",
+            "role": 1,
+            "connect": "surface"
+          },
+          {
+            "name": "지지 기둥 및 아치",
+            "count": 8000,
+            "shape": "cylinder",
+            "params": {
+              "radius": 1.5,
+              "height": 15
+            },
+            "color": "indigo",
+            "role": 2,
+            "connect": "chain"
+          },
+          {
+            "name": "내부 장식/반복 패턴",
+            "count": 4000,
+            "shape": "random_box",
+            "params": {
+              "size": [
+                1,
+                1,
+                1
+              ]
+            },
+            "color": "teal",
+            "role": 0,
+            "connect": "nearest:5"
+          }
+        ]
+      },
+      "aiResponse": "피렌체 두오모의 웅장한 돔 구조와 내부의 아치형 지지대들을 입자 시뮬레이션을 통해 구현합니다. 돔의 곡선미와 건축적 요소를 강조하여, 르네상스 건축의 아름다움을 입체적으로 표현합니다.\n\n```json\n{\n  \"simulation\": {\n    \"prompt\": \"custom\",\n    \"title\": \"피렌체 두오모 돔 구조 시뮬레이션\",\n    \"description\": \"르네상스 건축의 웅장한 돔과 아치 구조를 입자로 표현\",\n    \"domain\": \"architecture\",\n    \"physics\": {\n      \"gravity\": -9.81,\n      \"damping\": 0.95,\n      \"springStiffness\": 30,\n      \"particleCount\": 22000,\n      \"timeScale\": 1.0,\n      \"friction\": 0.6,\n      \"bounciness\": 0.1,\n      \"windX\": 0,\n      \"windY\": 0,\n      \"windZ\": 0,\n      \"turbulence\": 0.1,\n      \"viscosity\": 0,\n      \"temperature\": 293\n    },\n    \"particles\": {\n      \"groups\": [\n        {\n          \"name\": \"돔 외벽 구조\",\n          \"count\": 10000,\n          \"shape\": \"shell\",\n          \"params\": {\n            \"radius\": 30,\n            \"thickness\": 2\n          },\n          \"color\": \"cyan\",\n          \"role\": 1,\n          \"connect\": \"surface\"\n        },\n        {\n          \"name\": \"지지 기둥 및 아치\",\n          \"count\": 8000,\n          \"shape\": \"cylinder\",\n          \"params\": {\n            \"radius\": 1.5,\n            \"height\": 15\n          },\n          \"color\": \"indigo\",\n          \"role\": 2,\n          \"connect\": \"chain\"\n        },\n        {\n          \"name\": \"내부 장식/반복 패턴\",\n          \"count\": 4000,\n          \"shape\": \"random_box\",\n          \"params\": {\n            \"size\": [\n              1,\n              1,\n              1\n            ]\n          },\n          \"color\": \"teal\",\n          \"role\": 0,\n          \"connect\": \"nearest:5\"\n        }\n      ]\n    }\n  }\n}\n```",
+      "particleCount": 22000,
+      "thumbnail": null
+    },
+    {
+      "id": "cedfdb23-a9e1-42d1-a0ce-0ee915f535e7",
+      "timestamp": "2026-04-04T11:44:25.916Z",
+      "query": "현수교: 금문교 케이블 구조",
+      "title": "현수교 케이블 구조 (Suspension Bridge Cable Structure)",
+      "domain": "architecture",
+      "description": "주탑과 메인 케이블의 곡선 장력 관계를 표현한 구조적 시뮬레이션.",
+      "prompt": "현수교의 주탑, 메인 케이블, 그리고 행거 케이블 구조를 파티클로 시각화합니다.",
+      "physics": {
+        "gravity": -9.81,
+        "damping": 0.98,
+        "springStiffness": 30,
+        "particleCount": 25000,
+        "timeScale": 1,
+        "friction": 0.8,
+        "bounciness": 0.3,
+        "windX": 0,
+        "windY": 0,
+        "windZ": 0,
+        "turbulence": 0,
+        "viscosity": 0,
+        "temperature": 293
+      },
+      "particleSpec": {
+        "groups": [
+          {
+            "name": "메인_케이블_좌",
+            "count": 10000,
+            "shape": "line",
+            "params": {
+              "length": 500,
+              "initial_curve": "parabola"
+            },
+            "color": "indigo",
+            "role": 1,
+            "connect": "chain"
+          },
+          {
+            "name": "메인_케이블_우",
+            "count": 10000,
+            "shape": "line",
+            "params": {
+              "length": 500,
+              "initial_curve": "parabola"
+            },
+            "color": "indigo",
+            "role": 1,
+            "connect": "chain"
+          },
+          {
+            "name": "지주탑_A",
+            "count": 1000,
+            "shape": "cylinder",
+            "params": {
+              "height": 100,
+              "radius": 20
+            },
+            "color": "cyan",
+            "role": 2,
+            "connect": "none"
+          },
+          {
+            "name": "지주탑_B",
+            "count": 1000,
+            "shape": "cylinder",
+            "params": {
+              "height": 100,
+              "radius": 20
+            },
+            "color": "cyan",
+            "role": 2,
+            "connect": "none"
+          },
+          {
+            "name": "행거_케이블",
+            "count": 4000,
+            "shape": "line",
+            "params": {
+              "length": 10,
+              "density": 0.05
+            },
+            "color": "magenta",
+            "role": 3,
+            "connect": "nearest:2"
+          }
+        ]
+      },
+      "aiResponse": "이 시뮬레이션은 현수교의 핵심 구조인 주탑, 주 케이블, 그리고 행거(Hanger)의 장력 관계를 파티클 시스템으로 구현합니다. 구조물의 거대한 곡선과 지지점의 팽팽한 긴장감을 표현하는 데 중점을 두었습니다.\n\n```json\n{\n  \"simulation\": {\n    \"prompt\": \"현수교의 주탑, 메인 케이블, 그리고 행거 케이블 구조를 파티클로 시각화합니다.\",\n    \"title\": \"현수교 케이블 구조 (Suspension Bridge Cable Structure)\",\n    \"description\": \"주탑과 메인 케이블의 곡선 장력 관계를 표현한 구조적 시뮬레이션.\",\n    \"domain\": \"architecture\",\n    \"physics\": {\n      \"gravity\": -9.81,\n      \"damping\": 0.98,\n      \"springStiffness\": 30,\n      \"particleCount\": 25000,\n      \"timeScale\": 1.0,\n      \"friction\": 0.8,\n      \"bounciness\": 0.3,\n      \"windX\": 0,\n      \"windY\": 0,\n      \"windZ\": 0,\n      \"turbulence\": 0,\n      \"viscosity\": 0,\n      \"temperature\": 293\n    },\n    \"particles\": {\n      \"groups\": [\n        {\n          \"name\": \"메인_케이블_좌\",\n          \"count\": 10000,\n          \"shape\": \"line\",\n          \"params\": { \"length\": 500, \"initial_curve\": \"parabola\" },\n          \"color\": \"indigo\",\n          \"role\": 1,\n          \"connect\": \"chain\"\n        },\n        {\n          \"name\": \"메인_케이블_우\",\n          \"count\": 10000,\n          \"shape\": \"line\",\n          \"params\": { \"length\": 500, \"initial_curve\": \"parabola\" },\n          \"color\": \"indigo\",\n          \"role\": 1,\n          \"connect\": \"chain\"\n        },\n        {\n          \"name\": \"지주탑_A\",\n          \"count\": 1000,\n          \"shape\": \"cylinder\",\n          \"params\": { \"height\": 100, \"radius\": 20 },\n          \"color\": \"cyan\",\n          \"role\": 2,\n          \"connect\": \"none\"\n        },\n        {\n          \"name\": \"지주탑_B\",\n          \"count\": 1000,\n          \"shape\": \"cylinder\",\n          \"params\": { \"height\": 100, \"radius\": 20 },\n          \"color\": \"cyan\",\n          \"role\": 2,\n          \"connect\": \"none\"\n        },\n        {\n          \"name\": \"행거_케이블\",\n          \"count\": 4000,\n          \"shape\": \"line\",\n          \"params\": { \"length\": 10, \"density\": 0.05 },\n          \"color\": \"magenta\",\n          \"role\": 3,\n          \"connect\": \"nearest:2\"\n        }\n      ]\n    }\n  }\n}\n```",
+      "particleCount": 25000,
+      "thumbnail": null
+    },
+    {
+      "id": "052fd19e-2bc6-454a-8579-d8a88272e2e0",
+      "timestamp": "2026-04-04T11:44:18.868Z",
+      "query": "시드니 오페라 하우스 쉘 구조",
+      "title": "시드니 오페라 하우스 쉘 구조",
+      "domain": "architecture",
+      "description": "조개껍데기 모양의 역동적인 아치형 지붕 구조를 표현하는 입자 시뮬레이션입니다.",
+      "prompt": "custom",
+      "physics": {
+        "gravity": -9.81,
+        "damping": 0.96,
+        "springStiffness": 15,
+        "particleCount": 15000,
+        "timeScale": 1,
+        "friction": 0.7,
+        "bounciness": 0.2,
+        "windX": 0.5,
+        "windY": 0,
+        "windZ": 0,
+        "turbulence": 0.1,
+        "viscosity": 0,
+        "temperature": 293
+      },
+      "particleSpec": {
+        "groups": [
+          {
+            "name": "OperaShell",
+            "count": 15000,
+            "shape": "shell",
+            "params": {
+              "radius": 10,
+              "thickness": 0.5
+            },
+            "color": "teal",
+            "role": 0,
+            "connect": "surface"
+          }
+        ]
+      },
+      "aiResponse": "시드니 오페라 하우스의 상징적인 곡선 지붕 구조를 쉘(Shell) 형태의 입자로 재현했습니다. 입자들은 곡면을 따라 연결되어 역동적인 조개껍데기 같은 형태를 연출합니다.\n\n```json\n{\n  \"simulation\": {\n    \"prompt\": \"custom\",\n    \"title\": \"시드니 오페라 하우스 쉘 구조\",\n    \"description\": \"조개껍데기 모양의 역동적인 아치형 지붕 구조를 표현하는 입자 시뮬레이션입니다.\",\n    \"domain\": \"architecture\",\n    \"physics\": {\n      \"gravity\": -9.81,\n      \"damping\": 0.96,\n      \"springStiffness\": 15,\n      \"particleCount\": 15000,\n      \"timeScale\": 1.0,\n      \"friction\": 0.7,\n      \"bounciness\": 0.2,\n      \"windX\": 0.5,\n      \"windY\": 0,\n      \"windZ\": 0,\n      \"turbulence\": 0.1,\n      \"viscosity\": 0,\n      \"temperature\": 293\n    },\n    \"particles\": {\n      \"groups\": [\n        {\n          \"name\": \"OperaShell\",\n          \"count\": 15000,\n          \"shape\": \"shell\",\n          \"params\": {\n            \"radius\": 10,\n            \"thickness\": 0.5\n          },\n          \"color\": \"teal\",\n          \"role\": 0,\n          \"connect\": \"surface\"\n        }\n      ]\n    }\n  }\n}\n```",
+      "particleCount": 15000,
+      "thumbnail": null
+    },
+    {
+      "id": "74ea500f-972a-4592-9daf-a618fc06c911",
+      "timestamp": "2026-04-04T11:44:13.969Z",
+      "query": "부르즈 칼리파 초고층 빌딩",
+      "title": "부르즈 칼리파 초고층 빌딩",
+      "domain": "architecture",
+      "description": "초고층 빌딩의 수직적인 구조와 대규모 건축물을 입자로 표현한 시뮬레이션",
+      "prompt": "Burj Khalifa skyscraper visualization",
+      "physics": {
+        "gravity": -9.81,
+        "damping": 0.97,
+        "springStiffness": 15,
+        "particleCount": 20000,
+        "timeScale": 1,
+        "friction": 0.8,
+        "bounciness": 0.2,
+        "windX": 0.1,
+        "windY": 0,
+        "windZ": 0.1,
+        "turbulence": 0.05,
+        "viscosity": 0,
+        "temperature": 293
+      },
+      "particleSpec": {
+        "groups": [
+          {
+            "name": "main_structure",
+            "count": 15000,
+            "shape": "cylinder",
+            "params": {
+              "radius": 5,
+              "height": 300
+            },
+            "color": "cyan",
+            "role": 0,
+            "connect": "nearest:10"
+          },
+          {
+            "name": "details",
+            "count": 5000,
+            "shape": "sphere",
+            "params": {
+              "radius": 0.5
+            },
+            "color": "teal",
+            "role": 1,
+            "connect": "none"
+          }
+        ]
+      },
+      "aiResponse": "부르즈 칼리파의 웅장한 초고층 빌딩 구조를 입자 시뮬레이션으로 구현했습니다. 수직적인 상승감과 건축적인 정밀함을 표현하는 데 중점을 두었습니다.\n\n```json\n{\n  \"simulation\": {\n    \"prompt\": \"Burj Khalifa skyscraper visualization\",\n    \"title\": \"부르즈 칼리파 초고층 빌딩\",\n    \"description\": \"초고층 빌딩의 수직적인 구조와 대규모 건축물을 입자로 표현한 시뮬레이션\",\n    \"domain\": \"architecture\",\n    \"physics\": {\n      \"gravity\": -9.81,\n      \"damping\": 0.97,\n      \"springStiffness\": 15,\n      \"particleCount\": 20000,\n      \"timeScale\": 1.0,\n      \"friction\": 0.8,\n      \"bounciness\": 0.2,\n      \"windX\": 0.1,\n      \"windY\": 0,\n      \"windZ\": 0.1,\n      \"turbulence\": 0.05,\n      \"viscosity\": 0,\n      \"temperature\": 293\n    },\n    \"particles\": {\n      \"groups\": [\n        {\n          \"name\": \"main_structure\",\n          \"count\": 15000,\n          \"shape\": \"cylinder\",\n          \"params\": {\n            \"radius\": 5,\n            \"height\": 300\n          },\n          \"color\": \"cyan\",\n          \"role\": 0,\n          \"connect\": \"nearest:10\"\n        },\n        {\n          \"name\": \"details\",\n          \"count\": 5000,\n          \"shape\": \"sphere\",\n          \"params\": {\n            \"radius\": 0.5\n          },\n          \"color\": \"teal\",\n          \"role\": 1,\n          \"connect\": \"none\"\n        }\n      ]\n    }\n  }\n}\n```",
+      "particleCount": 20000,
+      "thumbnail": null
+    },
+    {
+      "id": "9b7b47ad-678e-4948-874d-bc6f18a93ffd",
+      "timestamp": "2026-04-04T11:44:10.391Z",
+      "query": "만리장성 성벽 단면",
+      "title": "만리장성 성벽 단면 시뮬레이션",
+      "domain": "architecture",
+      "description": "만리장성 벽체를 구성하는 돌 블록들이 격자 구조로 지지되는 단면.",
+      "prompt": "Great Wall Cross-Section",
+      "physics": {
+        "gravity": -9.81,
+        "damping": 0.95,
+        "springStiffness": 15,
+        "particleCount": 18000,
+        "timeScale": 1,
+        "friction": 0.85,
+        "bounciness": 0.2,
+        "windX": 0.1,
+        "windY": 0,
+        "windZ": 0,
+        "turbulence": 0,
+        "viscosity": 0,
+        "temperature": 293
+      },
+      "particleSpec": {
+        "groups": [
+          {
+            "name": "Man_li_Gangseong",
+            "count": 18000,
+            "shape": "sphere",
+            "params": {
+              "initialScale": 0.8,
+              "density": 0.5
+            },
+            "color": "purple",
+            "role": 1,
+            "connect": "grid"
+          }
+        ]
+      },
+      "aiResponse": "만리장성의 견고하고 거대한 성벽 단면을 시뮬레이션합니다. 블록들이 서로 격자 형태로 연결되어 구조적인 안정성을 갖춘 모습으로, 고대 건축물의 웅장함과 지지되는 질감을 입자 상호작용으로 구현했습니다.\n\n```json\n{\n  \"simulation\": {\n    \"prompt\": \"Great Wall Cross-Section\",\n    \"title\": \"만리장성 성벽 단면 시뮬레이션\",\n    \"description\": \"만리장성 벽체를 구성하는 돌 블록들이 격자 구조로 지지되는 단면.\",\n    \"domain\": \"architecture\",\n    \"physics\": {\n      \"gravity\": -9.81,\n      \"damping\": 0.95,\n      \"springStiffness\": 15,\n      \"particleCount\": 18000,\n      \"timeScale\": 1.0,\n      \"friction\": 0.85,\n      \"bounciness\": 0.2,\n      \"windX\": 0.1,\n      \"windY\": 0,\n      \"windZ\": 0,\n      \"turbulence\": 0,\n      \"viscosity\": 0,\n      \"temperature\": 293\n    },\n    \"particles\": {\n      \"groups\": [\n        {\n          \"name\": \"Man_li_Gangseong\",\n          \"count\": 18000,\n          \"shape\": \"sphere\",\n          \"params\": {\n            \"initialScale\": 0.8,\n            \"density\": 0.5\n          },\n          \"color\": \"purple\",\n          \"role\": 1,\n          \"connect\": \"grid\"\n        }\n      ]\n    }\n  }\n}\n```",
+      "particleCount": 18000,
+      "thumbnail": null
+    },
+    {
+      "id": "fc391237-e48a-4126-9f6e-3528ef2efa2c",
+      "timestamp": "2026-04-04T11:44:05.003Z",
+      "query": "콜로세움 아치 구조",
+      "title": "콜로세움 아치 구조 시뮬레이션",
+      "domain": "architecture",
+      "description": "고대 로마 건축의 웅장한 아치 구조를 파티클 연결(grid)을 통해 재현합니다.",
+      "prompt": "custom",
+      "physics": {
+        "gravity": -9.81,
+        "damping": 0.96,
+        "springStiffness": 35,
+        "particleCount": 21000,
+        "timeScale": 1,
+        "friction": 0.85,
+        "bounciness": 0.2,
+        "windX": 0,
+        "windY": 0,
+        "windZ": 0,
+        "turbulence": 0,
+        "viscosity": 0,
+        "temperature": 293
+      },
+      "particleSpec": {
+        "groups": [
+          {
+            "name": "주요 아치 구조 블록",
+            "count": 18000,
+            "shape": "grid",
+            "params": {
+              "sizeScale": 1.5,
+              "spacing": 1.5
+            },
+            "color": "orange",
+            "role": 1,
+            "connect": "grid"
+          },
+          {
+            "name": "기단부 지지대",
+            "count": 3000,
+            "shape": "grid",
+            "params": {
+              "sizeScale": 1,
+              "spacing": 1
+            },
+            "color": "indigo",
+            "role": 2,
+            "connect": "nearest:3"
+          }
+        ]
+      },
+      "aiResponse": "이 시뮬레이션은 고대 로마 콜로세움의 반복적이고 웅장한 아치 구조를 모사합니다. 파티클들을 격자(grid) 형태로 쌓고 서로 연결하여, 마치 석조 블록이 제자리에 단단하게 결속된 것처럼 보이도록 물리적 안정성을 구현했습니다.\n\n```json\n{\n  \"simulation\": {\n    \"prompt\": \"custom\",\n    \"title\": \"콜로세움 아치 구조 시뮬레이션\",\n    \"description\": \"고대 로마 건축의 웅장한 아치 구조를 파티클 연결(grid)을 통해 재현합니다.\",\n    \"domain\": \"architecture\",\n    \"physics\": {\n      \"gravity\": -9.81,\n      \"damping\": 0.96,\n      \"springStiffness\": 35,\n      \"particleCount\": 21000,\n      \"timeScale\": 1.0,\n      \"friction\": 0.85,\n      \"bounciness\": 0.2,\n      \"windX\": 0,\n      \"windY\": 0,\n      \"windZ\": 0,\n      \"turbulence\": 0,\n      \"viscosity\": 0,\n      \"temperature\": 293\n    },\n    \"particles\": {\n      \"groups\": [\n        {\n          \"name\": \"주요 아치 구조 블록\",\n          \"count\": 18000,\n          \"shape\": \"grid\",\n          \"params\": {\n            \"sizeScale\": 1.5,\n            \"spacing\": 1.5\n          },\n          \"color\": \"orange\",\n          \"role\": 1,\n          \"connect\": \"grid\"\n        },\n        {\n          \"name\": \"기단부 지지대\",\n          \"count\": 3000,\n          \"shape\": \"grid\",\n          \"params\": {\n            \"sizeScale\": 1.0,\n            \"spacing\": 1.0\n          },\n          \"color\": \"indigo\",\n          \"role\": 2,\n          \"connect\": \"nearest:3\"\n        }\n      ]\n    }\n  }\n}\n```",
+      "particleCount": 21000,
+      "thumbnail": null
+    },
+    {
+      "id": "5b6caa62-21fb-4d1c-9408-80f65ff264b7",
+      "timestamp": "2026-04-04T11:43:58.768Z",
+      "query": "자유의 여신상 내부 구조",
+      "title": "자유의 여신상 내부 골조 구조 시뮬레이션",
+      "domain": "architecture",
+      "description": "구조적인 트러스(truss) 연결망을 이용한 자유의 여신상 내부 지지 구조의 역동적 시뮬레이션.",
+      "prompt": "custom",
+      "physics": {
+        "gravity": -9.81,
+        "damping": 0.95,
+        "springStiffness": 15,
+        "particleCount": 22000,
+        "timeScale": 1,
+        "friction": 0.7,
+        "bounciness": 0.1,
+        "windX": 0.5,
+        "windY": 0.5,
+        "windZ": 0.5,
+        "turbulence": 0.1,
+        "viscosity": 0,
+        "temperature": 293
+      },
+      "particleSpec": {
+        "groups": [
+          {
+            "name": "지지대_수직_골조",
+            "count": 10000,
+            "shape": "grid",
+            "params": {
+              "size": [
+                10,
+                1,
+                10
+              ],
+              "spacing": [
+                0.5,
+                0.5,
+                0.5
+              ]
+            },
+            "color": "cyan",
+            "role": 1,
+            "connect": "chain"
+          },
+          {
+            "name": "보강재_수평_트러스",
+            "count": 7000,
+            "shape": "grid",
+            "params": {
+              "size": [
+                10,
+                1,
+                10
+              ],
+              "spacing": [
+                0.5,
+                0.5,
+                0.5
+              ]
+            },
+            "color": "teal",
+            "role": 1,
+            "connect": "nearest:5"
+          },
+          {
+            "name": "상부_구조_연결부",
+            "count": 5000,
+            "shape": "random_box",
+            "params": {
+              "size": [
+                2,
+                2,
+                2
+              ]
+            },
+            "color": "magenta",
+            "role": 1,
+            "connect": "all"
+          }
+        ]
+      },
+      "aiResponse": "이 시뮬레이션은 자유의 여신상의 내부 골조(트러스 구조)를 연상시키는 입자 연결망을 구현합니다. 구조물의 복잡성을 표현하기 위해 격자(grid) 형태와 선(line) 연결을 사용하여 철골 구조가 서로 지지하는 모습을 시뮬레이션합니다.\n\n```json\n{\n  \"simulation\": {\n    \"prompt\": \"custom\",\n    \"title\": \"자유의 여신상 내부 골조 구조 시뮬레이션\",\n    \"description\": \"구조적인 트러스(truss) 연결망을 이용한 자유의 여신상 내부 지지 구조의 역동적 시뮬레이션.\",\n    \"domain\": \"architecture\",\n    \"physics\": {\n      \"gravity\": -9.81,\n      \"damping\": 0.95,\n      \"springStiffness\": 15,\n      \"particleCount\": 22000,\n      \"timeScale\": 1.0,\n      \"friction\": 0.7,\n      \"bounciness\": 0.1,\n      \"windX\": 0.5,\n      \"windY\": 0.5,\n      \"windZ\": 0.5,\n      \"turbulence\": 0.1,\n      \"viscosity\": 0,\n      \"temperature\": 293\n    },\n    \"particles\": {\n      \"groups\": [\n        {\n          \"name\": \"지지대_수직_골조\",\n          \"count\": 10000,\n          \"shape\": \"grid\",\n          \"params\": {\n            \"size\": [10, 1, 10],\n            \"spacing\": [0.5, 0.5, 0.5]\n          },\n          \"color\": \"cyan\",\n          \"role\": 1,\n          \"connect\": \"chain\"\n        },\n        {\n          \"name\": \"보강재_수평_트러스\",\n          \"count\": 7000,\n          \"shape\": \"grid\",\n          \"params\": {\n            \"size\": [10, 1, 10],\n            \"spacing\": [0.5, 0.5, 0.5]\n          },\n          \"color\": \"teal\",\n          \"role\": 1,\n          \"connect\": \"nearest:5\"\n        },\n        {\n          \"name\": \"상부_구조_연결부\",\n          \"count\": 5000,\n          \"shape\": \"random_box\",\n          \"params\": {\n            \"size\": [2, 2, 2]\n          },\n          \"color\": \"magenta\",\n          \"role\": 1,\n          \"connect\": \"all\"\n        }\n      ]\n    }\n  }\n}\n```",
+      "particleCount": 22000,
+      "thumbnail": null
+    },
+    {
+      "id": "b698e4d2-ec9c-4d08-997a-8a76ac87374e",
+      "timestamp": "2026-04-04T11:43:52.687Z",
+      "query": "에펠탑 철골 트러스 구조",
+      "title": "에펠탑 트러스 구조",
+      "domain": "architecture",
+      "description": "복잡하게 얽힌 철골 트러스의 격자 구조와 역학적 반응을 시뮬레이션합니다.",
+      "prompt": "Eiffel Tower Steel Truss Structure",
+      "physics": {
+        "gravity": -9.81,
+        "damping": 0.95,
+        "springStiffness": 40,
+        "particleCount": 18000,
+        "timeScale": 1,
+        "friction": 0.7,
+        "bounciness": 0.2,
+        "windX": 0.5,
+        "windY": 0,
+        "windZ": 0,
+        "turbulence": 0.1,
+        "viscosity": 0,
+        "temperature": 293
+      },
+      "particleSpec": {
+        "groups": [
+          {
+            "name": "Main Truss Nodes",
+            "count": 18000,
+            "shape": "sphere",
+            "params": {
+              "radius": 0.5
+            },
+            "color": "cyan",
+            "role": 1,
+            "connect": "grid"
+          }
+        ]
+      },
+      "aiResponse": "에펠탑의 철골 트러스 구조를 시뮬레이션하여, 복잡하게 얽힌 강철 격자 구조의 움직임과 안정성을 표현했습니다. 주요 노드들을 파티클로 배치하고, 강한 연결성을 부여하여 거대하고 정교한 건축 구조물을 구현했습니다.\n\n```json\n{\n  \"simulation\": {\n    \"prompt\": \"Eiffel Tower Steel Truss Structure\",\n    \"title\": \"에펠탑 트러스 구조\",\n    \"description\": \"복잡하게 얽힌 철골 트러스의 격자 구조와 역학적 반응을 시뮬레이션합니다.\",\n    \"domain\": \"architecture\",\n    \"physics\": {\n      \"gravity\": -9.81,\n      \"damping\": 0.95,\n      \"springStiffness\": 40,\n      \"particleCount\": 18000,\n      \"timeScale\": 1.0,\n      \"friction\": 0.7,\n      \"bounciness\": 0.2,\n      \"windX\": 0.5,\n      \"windY\": 0,\n      \"windZ\": 0,\n      \"turbulence\": 0.1,\n      \"viscosity\": 0,\n      \"temperature\": 293\n    },\n    \"particles\": {\n      \"groups\": [\n        {\n          \"name\": \"Main Truss Nodes\",\n          \"count\": 18000,\n          \"shape\": \"sphere\",\n          \"params\": {\n            \"radius\": 0.5\n          },\n          \"color\": \"cyan\",\n          \"role\": 1,\n          \"connect\": \"grid\"\n        }\n      ]\n    }\n  }\n}\n```",
+      "particleCount": 18000,
+      "thumbnail": null
+    },
+    {
+      "id": "4ff7f042-1f67-468a-be8f-67e73f7e1dbc",
+      "timestamp": "2026-04-04T11:43:47.399Z",
+      "query": "이집트 대피라미드 쿠푸왕 피라미드",
+      "title": "기자의 쿠푸 왕 피라미드",
+      "domain": "architecture",
+      "description": "고대 이집트의 상징적인 거대 건축 구조를 입자 기반으로 재현한 시뮬레이션입니다.",
+      "prompt": "Great Pyramid of Khufu",
+      "physics": {
+        "gravity": -9.81,
+        "damping": 0.98,
+        "springStiffness": 15,
+        "particleCount": 22000,
+        "timeScale": 1,
+        "friction": 0.7,
+        "bounciness": 0.2,
+        "windX": 0,
+        "windY": 0,
+        "windZ": 0,
+        "turbulence": 0.1,
+        "viscosity": 0,
+        "temperature": 293
+      },
+      "particleSpec": {
+        "groups": [
+          {
+            "name": "Pyramid_Structure",
+            "count": 22000,
+            "shape": "sphere",
+            "params": {
+              "radiusVariation": 0.05,
+              "heightVariation": 0.05
+            },
+            "color": "orange",
+            "role": 1,
+            "connect": "surface"
+          }
+        ]
+      },
+      "aiResponse": "고대 이집트의 신비로운 건축물인 쿠푸 왕의 피라미드를 입자 시뮬레이션을 통해 구현합니다. 거대하고 안정적인 구조가 시간이 지남에 따라 어떻게 유지되는지 관찰할 수 있습니다.\n\n```json\n{\n  \"simulation\": {\n    \"prompt\": \"Great Pyramid of Khufu\",\n    \"title\": \"기자의 쿠푸 왕 피라미드\",\n    \"description\": \"고대 이집트의 상징적인 거대 건축 구조를 입자 기반으로 재현한 시뮬레이션입니다.\",\n    \"domain\": \"architecture\",\n    \"physics\": {\n      \"gravity\": -9.81,\n      \"damping\": 0.98,\n      \"springStiffness\": 15,\n      \"particleCount\": 22000,\n      \"timeScale\": 1.0,\n      \"friction\": 0.7,\n      \"bounciness\": 0.2,\n      \"windX\": 0,\n      \"windY\": 0,\n      \"windZ\": 0,\n      \"turbulence\": 0.1,\n      \"viscosity\": 0,\n      \"temperature\": 293\n    },\n    \"particles\": {\n      \"groups\": [\n        { \n          \"name\": \"Pyramid_Structure\", \n          \"count\": 22000, \n          \"shape\": \"sphere\", \n          \"params\": {\n            \"radiusVariation\": 0.05,\n            \"heightVariation\": 0.05\n          }, \n          \"color\": \"orange\", \n          \"role\": 1, \n          \"connect\": \"surface\" \n        }\n      ]\n    }\n  }\n}\n```",
+      "particleCount": 22000,
+      "thumbnail": null
+    },
+    {
       "id": "48bb58c6-744c-460a-aded-5bf15e1306e4",
       "timestamp": "2026-04-04T11:33:19.220Z",
       "query": "열전도: 금속 막대의 온도 구배 전파",

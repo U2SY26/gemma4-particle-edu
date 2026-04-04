@@ -346,10 +346,16 @@ export class SimulationManager {
         const container = document.getElementById('chat-messages');
         container.innerHTML = '';
 
+        const welcome = document.getElementById('welcome-suggestions');
+
         if (!messages || messages.length === 0) {
-            container.innerHTML = `<div class="chat-msg system">AI와 대화하며 물리 파라미터를 조정하세요</div>`;
+            // Show welcome suggestions when no messages
+            if (welcome) welcome.style.display = '';
             return;
         }
+
+        // Hide welcome suggestions once chat has messages
+        if (welcome) welcome.style.display = 'none';
 
         for (const msg of messages) {
             const el = document.createElement('div');
@@ -1026,6 +1032,23 @@ I'll create two intertwined helices for the backbones, with small connecting par
         document.getElementById('chat-input').addEventListener('keydown', (e) => {
             if (e.key === 'Enter') this._handleChatSubmit();
         });
+
+        // Suggestion chips
+        const chips = document.querySelectorAll('.suggestion-chip');
+        for (const chip of chips) {
+            chip.addEventListener('click', () => {
+                const prompt = chip.getAttribute('data-prompt');
+                const chatInput = document.getElementById('chat-input');
+                if (chatInput) {
+                    chatInput.value = prompt;
+                    // Auto-submit
+                    this._handleChatSubmit();
+                    // Hide suggestions after first use
+                    const welcome = document.getElementById('welcome-suggestions');
+                    if (welcome) welcome.style.display = 'none';
+                }
+            });
+        }
     }
 
     // ==================== UTILS ====================

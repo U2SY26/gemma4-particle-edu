@@ -72,6 +72,13 @@ const LANG = {
         // Chat
         chatPlaceholder: '물리법칙을 자연어로 설명해보세요...',
         chatWelcome: 'AI와 대화하며 물리 파라미터를 조정하세요',
+        // Suggestion chips
+        sugPyramid: '피라미드',
+        sugTornado: '토네이도',
+        sugDNA: 'DNA',
+        sugSolar: '태양계',
+        sugEarthquake: '지진 테스트',
+        sugElectric: '전기장',
         // Prompt
         promptPlaceholder: '구조를 입력하세요: 타워, 돔, 다리, 피라미드...',
         // Controls
@@ -179,6 +186,13 @@ const LANG = {
         neonRandom: 'Neon Random',
         chatPlaceholder: 'Describe physics in natural language...',
         chatWelcome: 'Chat with AI to adjust physics parameters',
+        // Suggestion chips
+        sugPyramid: 'Pyramid',
+        sugTornado: 'Tornado',
+        sugDNA: 'DNA',
+        sugSolar: 'Solar System',
+        sugEarthquake: 'Earthquake',
+        sugElectric: 'Electric Field',
         promptPlaceholder: 'Enter structure: tower, dome, bridge, pyramid...',
         controlsHint: 'Orbit: drag | Zoom: scroll | Pan: right-drag',
         presets: {
