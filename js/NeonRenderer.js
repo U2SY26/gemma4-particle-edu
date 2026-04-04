@@ -20,7 +20,7 @@ export const QUALITY = {
     },
     MEDIUM: {
         label: 'MEDIUM',
-        bloomStrength: 0.6,
+        bloomStrength: 0.75,
         bloomRadius: 0.2,
         bloomThreshold: 0.3,
         bloomResScale: 0.5,
@@ -31,7 +31,7 @@ export const QUALITY = {
     },
     HIGH: {
         label: 'HIGH',
-        bloomStrength: 0.9,
+        bloomStrength: 1.1,
         bloomRadius: 0.3,
         bloomThreshold: 0.2,
         bloomResScale: 1.0,
@@ -106,6 +106,10 @@ export class NeonRenderer {
         const ambient = new THREE.AmbientLight(0x111122, 0.15);
         scene.add(ambient);
 
+        // Subtle blue atmospheric light for depth
+        const blueAmbient = new THREE.AmbientLight(0x0a1a3a, 0.12);
+        scene.add(blueAmbient);
+
         // Ground plane
         const groundGeo = new THREE.PlaneGeometry(200, 200);
         const groundMat = new THREE.MeshStandardMaterial({
@@ -120,7 +124,7 @@ export class NeonRenderer {
         scene.add(this.ground);
 
         // Grid helper for spatial reference
-        const gridHelper = new THREE.GridHelper(100, 100, 0x002222, 0x001111);
+        const gridHelper = new THREE.GridHelper(100, 100, 0x004444, 0x002222);
         gridHelper.position.y = 0.01;
         scene.add(gridHelper);
 

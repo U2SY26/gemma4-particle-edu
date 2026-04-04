@@ -86,6 +86,7 @@ export class ParticleSystem {
 
     updateFromPhysics(physPositions, physVelocities) {
         let velocityColorDirty = false;
+        let totalSpeed = 0;
 
         for (let i = 0; i < this.activeCount; i++) {
             const idx = i * 3;
@@ -101,8 +102,9 @@ export class ParticleSystem {
                 const vy = physVelocities[idx + 1];
                 const vz = physVelocities[idx + 2];
                 const speed = Math.sqrt(vx * vx + vy * vy + vz * vz);
-                const s = 0.8 + Math.min(speed * 0.5, 0.6);
+                const s = 0.8 + Math.min(speed * 0.8, 1.2);
                 this.dummy.scale.setScalar(s);
+                totalSpeed += speed;
 
                 // Velocity-based coloring
                 if (this.colorMode === 'velocity') {
@@ -121,6 +123,14 @@ export class ParticleSystem {
 
         this.mesh.instanceMatrix.needsUpdate = true;
         if (velocityColorDirty) this.mesh.instanceColor.needsUpdate = true;
+
+        // Dynamic emissive afterglow: fast-moving particles glow brighter
+        if (this.activeCount > 0 && physVelocities) {
+            const maxSpeed = 10;
+            const avgSpeed = totalSpeed / this.activeCount;
+            const intensity = 0.6 + Math.min(avgSpeed / maxSpeed, 0.6);
+            this.material.emissiveIntensity = intensity;
+        }
     }
 
     updateInstanceMatrices() {
@@ -191,10 +201,24 @@ export class ParticleSystem {
 
             for (let i = 0; i < this.activeCount; i++) {
                 const role = roles ? (roles[i] || 0) : 0;
-                const load = loads ? loads[i] : 0;
+                const load = loads ? Math.min(loads[i], 1.0) : 0;
                 const [h, s, l] = ROLE_COLORS[Math.min(role, 5)];
-                const hShift = load * 0.15;
-                this.color.setHSL(h - hShift, s, l + load * 0.1);
+
+                if (load < 0.3) {
+                    // Low load: original role color
+                    this.color.setHSL(h, s, l);
+                } else if (load < 0.7) {
+                    // Medium load: shift toward yellow/orange warning
+                    const t = (load - 0.3) / 0.4; // 0..1 within medium range
+                    const warnH = 0.10; // orange-yellow hue
+                    this.color.setHSL(h + (warnH - h) * t, s, l + t * 0.1);
+                } else {
+                    // High load: shift to red/white critical
+                    const t = (load - 0.7) / 0.3; // 0..1 within high range
+                    const critH = 0.0; // red hue
+                    this.color.setHSL(critH, s * (1.0 - t * 0.3), l + t * 0.25);
+                }
+
                 this.mesh.instanceColor.setXYZ(i, this.color.r, this.color.g, this.color.b);
             }
         }

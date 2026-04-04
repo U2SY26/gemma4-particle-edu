@@ -25,6 +25,8 @@ export class XRController {
         this.controls = new OrbitControls(camera, renderer.domElement);
         this.controls.enableDamping = true;
         this.controls.dampingFactor = 0.08;
+        this.controls.autoRotate = true;
+        this.controls.autoRotateSpeed = 0.3;
         this.controls.minDistance = 3;
         this.controls.maxDistance = 80;
         this.controls.maxPolarAngle = Math.PI * 0.85;
