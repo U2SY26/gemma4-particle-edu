@@ -71,8 +71,10 @@ app.post('/api/chat', async (req, res) => {
 
     if (!ollamaRes.ok) {
       const text = await ollamaRes.text().catch(() => '');
+      // Map Ollama errors to 503 so clients get a consistent "service unavailable"
+      // status regardless of whether Ollama is down or the model is missing.
       return res
-        .status(ollamaRes.status)
+        .status(503)
         .json({ error: `Ollama error: ${ollamaRes.status}`, detail: text });
     }
 

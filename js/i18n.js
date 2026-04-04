@@ -1,13 +1,43 @@
-import ko from './locales/ko.json' with { type: 'json' };
-import en from './locales/en.json' with { type: 'json' };
-
-const locales = { ko, en };
-
 /**
  * Lightweight i18n module for gemma4-particle-edu.
  * Supports Korean (ko) and English (en) with dot-notation keys
  * and {{param}} interpolation.
+ *
+ * Tries static import (Node/vitest), falls back to fetch (browser).
  */
+
+let locales = {};
+
+// Try static JSON import first (works in Node/vitest)
+try {
+  const ko = await import('./locales/ko.json', { with: { type: 'json' } });
+  const en = await import('./locales/en.json', { with: { type: 'json' } });
+  locales = { ko: ko.default, en: en.default };
+} catch {
+  // Fallback: fetch from server (browser environment)
+}
+
+let _loadPromise = null;
+
+function loadLocales() {
+  if (Object.keys(locales.ko || {}).length > 0) return Promise.resolve();
+  if (_loadPromise) return _loadPromise;
+  _loadPromise = (async () => {
+    try {
+      const [koRes, enRes] = await Promise.all([
+        fetch('/js/locales/ko.json'),
+        fetch('/js/locales/en.json'),
+      ]);
+      const [ko, en] = await Promise.all([koRes.json(), enRes.json()]);
+      locales = { ko, en };
+    } catch (err) {
+      console.warn('i18n: failed to load locale files via fetch', err);
+      locales = { ko: {}, en: {} };
+    }
+  })();
+  return _loadPromise;
+}
+
 export default class I18n {
   /**
    * @param {'ko'|'en'} defaultLocale
@@ -15,6 +45,15 @@ export default class I18n {
   constructor(defaultLocale = 'ko') {
     this._locale = defaultLocale;
     this._listeners = {};
+    this._ready = loadLocales();
+  }
+
+  /**
+   * Wait until locale data has been fetched.
+   * @returns {Promise<void>}
+   */
+  async ready() {
+    return this._ready;
   }
 
   /**

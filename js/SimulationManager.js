@@ -204,6 +204,8 @@ export default class SimulationManager {
     }
 
     this._emit('reset');
+    // Emit a final frame event so UI elements update to zeroed state
+    this._emit('frame', this.getState());
   }
 
   /**

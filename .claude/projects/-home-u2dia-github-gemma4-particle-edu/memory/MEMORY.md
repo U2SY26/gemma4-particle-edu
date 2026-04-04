@@ -1,0 +1,4 @@
+- [HuggingFace Token](reference_hf_token.md) — HF token in .env for model/dataset ops
+- [User Profile](user_profile.md) — Fast-paced, parallel agents, Korean, full-spec
+- [Workflow Rules](feedback_workflow.md) — ALL tasks need kanban, supervisor review mandatory
+- [Competition Deliverables](project_competition_deliverables.md) — 5 required outputs, repeat until complete

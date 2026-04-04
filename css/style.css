@@ -122,14 +122,14 @@ html, body {
   left: 0;
   right: 0;
   z-index: 100;
-  height: var(--mobile-tab-height);
+  min-height: var(--mobile-tab-height);
   background: var(--bg-panel);
   border-bottom: 1px solid var(--border);
 }
 
 .mobile-tab {
   flex: 1;
-  height: 100%;
+  min-height: 44px;
   background: none;
   border: none;
   color: var(--text-secondary);

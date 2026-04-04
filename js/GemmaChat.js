@@ -181,7 +181,8 @@ export default class GemmaChat {
       const res = await fetch(statusUrl);
       if (!res.ok) return false;
       const data = await res.json();
-      return data.ollama === true;
+      // Connected only when Ollama is running AND the required model is available
+      return data.ollama === true && data.model !== null;
     } catch {
       return false;
     }

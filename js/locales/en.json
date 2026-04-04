@@ -3,6 +3,10 @@
     "title": "Gemma 4 Particle Edu",
     "subtitle": "Interactive 3D Physics Simulation"
   },
+  "tabs": {
+    "chat": "Chat",
+    "viewport": "3D View"
+  },
   "chat": {
     "title": "AI Chat",
     "placeholder": "Ask a physics question...",
@@ -10,7 +14,8 @@
     "thinking": "Thinking...",
     "offline": "AI offline — Ollama connection required",
     "welcome": "Hello! Ask me about physics simulations.",
-    "error": "An error occurred. Please try again."
+    "error": "An error occurred. Please try again.",
+    "inputLabel": "Type a message"
   },
   "sim": {
     "particles": "{{count}} particles",
@@ -20,6 +25,13 @@
     "pause": "Pause",
     "reset": "Reset",
     "vr": "VR Mode"
+  },
+  "controls": {
+    "play": "Play simulation",
+    "pause": "Pause simulation",
+    "reset": "Reset simulation",
+    "vr": "VR",
+    "bloom": "Bloom"
   },
   "params": {
     "title": "Simulation Parameters",
@@ -32,6 +44,7 @@
     "seismic": "Seismic Accel. (m/s²)",
     "foundation": "Foundation Depth (m)",
     "wind": "Wind (m/s²)",
+    "windX": "Wind X (m/s²)",
     "friction": "Friction Coefficient",
     "bounciness": "Bounciness"
   },
@@ -41,6 +54,11 @@
     "bridge": "Bridge Load Test",
     "freefall": "Free Fall"
   },
+  "stats": {
+    "fps": "FPS",
+    "particles": "Particles",
+    "time": "Time"
+  },
   "status": {
     "connected": "Ollama connected",
     "disconnected": "Ollama disconnected",
@@ -48,6 +66,7 @@
   },
   "locale": {
     "ko": "한국어",
-    "en": "English"
+    "en": "English",
+    "label": "EN"
   }
 }

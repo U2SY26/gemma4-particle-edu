@@ -3,6 +3,10 @@
     "title": "Gemma 4 입자 교육",
     "subtitle": "대화형 3D 물리 시뮬레이션"
   },
+  "tabs": {
+    "chat": "채팅",
+    "viewport": "3D 뷰"
+  },
   "chat": {
     "title": "AI 채팅",
     "placeholder": "물리 질문을 입력하세요...",
@@ -10,7 +14,8 @@
     "thinking": "생각 중...",
     "offline": "AI 오프라인 — Ollama 연결 필요",
     "welcome": "안녕하세요! 물리 시뮬레이션에 대해 물어보세요.",
-    "error": "오류가 발생했습니다. 다시 시도해주세요."
+    "error": "오류가 발생했습니다. 다시 시도해주세요.",
+    "inputLabel": "메시지 입력"
   },
   "sim": {
     "particles": "파티클 {{count}}개",
@@ -20,6 +25,13 @@
     "pause": "일시정지",
     "reset": "초기화",
     "vr": "VR 모드"
+  },
+  "controls": {
+    "play": "시뮬레이션 재생",
+    "pause": "시뮬레이션 일시정지",
+    "reset": "시뮬레이션 초기화",
+    "vr": "VR",
+    "bloom": "블룸"
   },
   "params": {
     "title": "시뮬레이션 파라미터",
@@ -32,6 +44,7 @@
     "seismic": "지진 가속도 (m/s²)",
     "foundation": "기초 깊이 (m)",
     "wind": "바람 (m/s²)",
+    "windX": "바람 X (m/s²)",
     "friction": "마찰 계수",
     "bounciness": "반발 계수"
   },
@@ -41,6 +54,11 @@
     "bridge": "다리 하중 테스트",
     "freefall": "자유 낙하"
   },
+  "stats": {
+    "fps": "FPS",
+    "particles": "파티클",
+    "time": "시간"
+  },
   "status": {
     "connected": "Ollama 연결됨",
     "disconnected": "Ollama 미연결",
@@ -48,6 +66,7 @@
   },
   "locale": {
     "ko": "한국어",
-    "en": "English"
+    "en": "English",
+    "label": "KO"
   }
 }

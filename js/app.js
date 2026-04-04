@@ -78,8 +78,8 @@ function appendMessage(role, text) {
   wrapper.appendChild(content);
   chatMessages.appendChild(wrapper);
 
-  // Auto-scroll to bottom
-  chatMessages.scrollTop = chatMessages.scrollHeight;
+  // Auto-scroll to bottom (instant to avoid animation lag)
+  chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: 'instant' });
 
   return content;
 }
@@ -90,7 +90,7 @@ function appendMessage(role, text) {
 function scrollChatToBottom() {
   const chatMessages = $('#chat-messages');
   if (chatMessages) {
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+    chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: 'instant' });
   }
 }
 
@@ -143,20 +143,18 @@ function updateStatusIndicator(connected, i18n) {
   const dot = indicator.querySelector('.status-dot');
   const text = indicator.querySelector('.status-text');
 
-  if (connected) {
-    indicator.title = i18n.t('status.connected');
-    if (dot) {
-      dot.classList.remove('disconnected');
-      dot.classList.add('connected');
-    }
-    if (text) text.textContent = i18n.t('status.connected');
-  } else {
-    indicator.title = i18n.t('status.disconnected');
-    if (dot) {
-      dot.classList.remove('connected');
-      dot.classList.add('disconnected');
-    }
-    if (text) text.textContent = i18n.t('status.disconnected');
+  const key = connected ? 'status.connected' : 'status.disconnected';
+
+  indicator.title = i18n.t(key);
+
+  if (dot) {
+    dot.classList.toggle('connected', connected);
+    dot.classList.toggle('disconnected', !connected);
+  }
+
+  if (text) {
+    text.textContent = i18n.t(key);
+    text.setAttribute('data-i18n', key);
   }
 }
 
@@ -209,6 +207,8 @@ async function init() {
   resizeRenderer();
 
   // --- i18n ---
+  // Wait for locale data to be fetched before first DOM update
+  await i18n.ready();
   updateI18nDOM(i18n);
   i18n.on('localeChange', () => updateI18nDOM(i18n));
 
@@ -337,22 +337,26 @@ async function init() {
 
       // Send to GemmaChat
       let fullText = '';
-      const stream = gemmaChat.send(message);
-      const reader = stream.getReader();
+      try {
+        const stream = gemmaChat.send(message);
+        const reader = stream.getReader();
 
-      (async function readStream() {
-        try {
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-            fullText += value;
-            aiContent.textContent = fullText;
-            scrollChatToBottom();
+        (async function readStream() {
+          try {
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) break;
+              fullText += value;
+              aiContent.textContent = fullText;
+              scrollChatToBottom();
+            }
+          } catch {
+            // Stream read error — ignore, fallback text may already be in place
           }
-        } catch {
-          // Stream read error — ignore, fallback text may already be in place
-        }
-      })();
+        })();
+      } catch {
+        // send() or getReader() threw — ignore, events will still fire
+      }
     });
   }
 
@@ -472,11 +476,11 @@ async function init() {
   const tabViewport = $('#tab-viewport');
   const chatPanel = $('#chat-panel');
   const viewport = $('#viewport');
+  const appEl = $('#app');
 
-  if (tabChat && tabViewport && chatPanel && viewport) {
+  if (tabChat && tabViewport && chatPanel && viewport && appEl) {
     tabChat.addEventListener('click', () => {
-      chatPanel.classList.remove('hidden');
-      viewport.classList.add('hidden');
+      appEl.classList.remove('show-viewport');
       tabChat.classList.add('active');
       tabChat.setAttribute('aria-pressed', 'true');
       tabViewport.classList.remove('active');
@@ -484,8 +488,7 @@ async function init() {
     });
 
     tabViewport.addEventListener('click', () => {
-      viewport.classList.remove('hidden');
-      chatPanel.classList.add('hidden');
+      appEl.classList.add('show-viewport');
       tabViewport.classList.add('active');
       tabViewport.setAttribute('aria-pressed', 'true');
       tabChat.classList.remove('active');

@@ -1,8 +1,26 @@
-import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+// Dynamic imports for Three.js — resolved at init() time so that a missing
+// or broken import does not prevent the rest of the app from loading.
+let THREE = null;
+let OrbitControls = null;
+let EffectComposer = null;
+let RenderPass = null;
+let UnrealBloomPass = null;
+
+async function loadThreeJS() {
+  try {
+    THREE = await import('/node_modules/three/build/three.module.js');
+    const controls = await import('/node_modules/three/examples/jsm/controls/OrbitControls.js');
+    OrbitControls = controls.OrbitControls;
+    const composer = await import('/node_modules/three/examples/jsm/postprocessing/EffectComposer.js');
+    EffectComposer = composer.EffectComposer;
+    const rp = await import('/node_modules/three/examples/jsm/postprocessing/RenderPass.js');
+    RenderPass = rp.RenderPass;
+    const bloom = await import('/node_modules/three/examples/jsm/postprocessing/UnrealBloomPass.js');
+    UnrealBloomPass = bloom.UnrealBloomPass;
+  } catch (err) {
+    console.warn('Three.js loading failed:', err.message);
+  }
+}
 
 const DEFAULT_OPTIONS = {
   bloomStrength: 1.5,
@@ -69,6 +87,12 @@ export default class NeonRenderer {
    * @returns {Promise<void>}
    */
   async init() {
+    // Dynamically load Three.js (keeps the static import clean for bundler-less browsers)
+    await loadThreeJS();
+    if (!THREE) {
+      throw new Error('NeonRenderer: Three.js could not be loaded');
+    }
+
     // Renderer
     this._renderer = new THREE.WebGLRenderer({
       canvas: this._canvas,

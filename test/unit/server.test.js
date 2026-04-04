@@ -87,7 +87,7 @@ describe('POST /api/chat', () => {
     // In CI / typical test env, Ollama is not running -> 503
     if (res.status === 503) {
       expect(res.body).toHaveProperty('error');
-      expect(res.body.error).toBe('Ollama not available');
+      expect(res.body.error).toMatch(/ollama/i);
     } else {
       // Ollama is running — we just verify we got a valid response
       expect([200, 400, 404, 500]).toContain(res.status);
