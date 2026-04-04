@@ -79,263 +79,6 @@
                 <span data-i18n="activeSim">ACTIVE SIMULATION</span>
             </div>
 
-            <!-- Material & Ground Selection -->
-            <div id="material-select-section">
-                <h3 class="section-title" data-toggle="material-select-params" role="button" aria-expanded="true" tabindex="0">
-                    <span class="toggle-icon" aria-hidden="true">
-                        <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><path d="M2 3.5L5 7l3-3.5H2z"/></svg>
-                    </span>
-                    <span data-i18n="materialSelect">MATERIAL & GROUND</span>
-                </h3>
-                <div id="material-select-params">
-                    <div class="param-group">
-                        <label for="sel-category" data-i18n="category">Category</label>
-                        <select id="sel-category">
-                            <option value="architecture" data-i18n="catArchitecture">Architecture</option>
-                            <option value="semiconductor" data-i18n="catSemiconductor">Semiconductors</option>
-                            <option value="biomechanics" data-i18n="catBiomechanics">Biomechanics</option>
-                            <option value="materials" data-i18n="catMaterials">Materials Science</option>
-                        </select>
-                    </div>
-                    <div class="param-group">
-                        <label for="sel-material" data-i18n="material">Material</label>
-                        <select id="sel-material"></select>
-                    </div>
-                    <div id="material-info" class="info-box" role="region" aria-label="Material information"></div>
-                    <div class="param-group">
-                        <label for="sel-ground" data-i18n="groundType">Ground</label>
-                        <select id="sel-ground"></select>
-                    </div>
-                    <div class="param-group">
-                        <label for="param-foundationDepth" data-i18n="foundationDepth">Foundation Depth</label>
-                        <input type="range" id="param-foundationDepth" min="0" max="20" step="0.5" value="2.0"/>
-                        <span class="param-value" data-for="param-foundationDepth">2.0m</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Physics Parameters -->
-            <div id="physics-section">
-                <h3 class="section-title" data-toggle="physics-params" role="button" aria-expanded="true" tabindex="0">
-                    <span class="toggle-icon" aria-hidden="true">
-                        <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><path d="M2 3.5L5 7l3-3.5H2z"/></svg>
-                    </span>
-                    <span data-i18n="physics">PHYSICS</span>
-                </h3>
-                <div id="physics-params">
-                    <div class="param-group">
-                        <label for="param-gravity" data-i18n="gravity">Gravity</label>
-                        <input type="range" id="param-gravity" min="-30" max="30" step="0.1" value="-9.81"/>
-                        <span class="param-value" data-for="param-gravity">-9.81</span>
-                    </div>
-                    <div class="param-group">
-                        <label for="param-damping" data-i18n="damping">Damping</label>
-                        <input type="range" id="param-damping" min="0" max="1" step="0.01" value="0.97"/>
-                        <span class="param-value" data-for="param-damping">0.97</span>
-                    </div>
-                    <div class="param-group">
-                        <label for="param-springK" data-i18n="springK">Spring K</label>
-                        <input type="range" id="param-springK" min="0" max="100" step="0.5" value="20"/>
-                        <span class="param-value" data-for="param-springK">20.0</span>
-                    </div>
-                    <div class="param-group">
-                        <label for="param-timeScale" data-i18n="timeScale">Time Scale</label>
-                        <input type="range" id="param-timeScale" min="0" max="5" step="0.1" value="1.0"/>
-                        <span class="param-value" data-for="param-timeScale">1.0</span>
-                    </div>
-                    <div class="param-group">
-                        <label for="param-friction" data-i18n="friction">Friction</label>
-                        <input type="range" id="param-friction" min="0" max="1" step="0.01" value="0.8"/>
-                        <span class="param-value" data-for="param-friction">0.80</span>
-                    </div>
-                    <div class="param-group">
-                        <label for="param-bounciness" data-i18n="bounciness">Bounciness</label>
-                        <input type="range" id="param-bounciness" min="0" max="1" step="0.01" value="0.3"/>
-                        <span class="param-value" data-for="param-bounciness">0.30</span>
-                    </div>
-                    <div class="param-group">
-                        <label for="param-particles" data-i18n="particleCount">Particles</label>
-                        <input type="range" id="param-particles" min="1000" max="50000" step="1000" value="25000"/>
-                        <span class="param-value" data-for="param-particles">25000</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Foundation & Material -->
-            <div id="material-section">
-                <h3 class="section-title" data-toggle="material-params" role="button" aria-expanded="true" tabindex="0">
-                    <span class="toggle-icon" aria-hidden="true">
-                        <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><path d="M2 3.5L5 7l3-3.5H2z"/></svg>
-                    </span>
-                    <span data-i18n="foundationMaterial">FOUNDATION & MATERIAL</span>
-                </h3>
-                <div id="material-params">
-                    <div class="param-group">
-                        <label for="param-foundation" data-i18n="foundation">Foundation</label>
-                        <input type="range" id="param-foundation" min="0" max="10" step="0.1" value="5.0"/>
-                        <span class="param-value" data-for="param-foundation">5.00</span>
-                    </div>
-                    <div class="param-group">
-                        <label for="param-density" data-i18n="density">Density</label>
-                        <input type="range" id="param-density" min="0.1" max="20" step="0.1" value="2.4"/>
-                        <span class="param-value" data-for="param-density">2.40</span>
-                    </div>
-                    <div class="param-group">
-                        <label for="param-elasticity" data-i18n="elasticity">Elasticity</label>
-                        <input type="range" id="param-elasticity" min="0" max="1" step="0.01" value="0.3"/>
-                        <span class="param-value" data-for="param-elasticity">0.30</span>
-                    </div>
-                    <div class="param-group">
-                        <label for="param-yieldStrength" data-i18n="yieldStrength">Yield Str.</label>
-                        <input type="range" id="param-yieldStrength" min="0" max="100" step="1" value="50"/>
-                        <span class="param-value" data-for="param-yieldStrength">50</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Environment -->
-            <div id="environment-section">
-                <h3 class="section-title" data-toggle="env-params" role="button" aria-expanded="true" tabindex="0">
-                    <span class="toggle-icon" aria-hidden="true">
-                        <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><path d="M2 3.5L5 7l3-3.5H2z"/></svg>
-                    </span>
-                    <span data-i18n="environment">ENVIRONMENT</span>
-                </h3>
-                <div id="env-params">
-                    <div class="param-group">
-                        <label for="param-windX" data-i18n="windX">Wind X</label>
-                        <input type="range" id="param-windX" min="-20" max="20" step="0.5" value="0"/>
-                        <span class="param-value" data-for="param-windX">0.0</span>
-                    </div>
-                    <div class="param-group">
-                        <label for="param-windY" data-i18n="windY">Wind Y</label>
-                        <input type="range" id="param-windY" min="-20" max="20" step="0.5" value="0"/>
-                        <span class="param-value" data-for="param-windY">0.0</span>
-                    </div>
-                    <div class="param-group">
-                        <label for="param-windZ" data-i18n="windZ">Wind Z</label>
-                        <input type="range" id="param-windZ" min="-20" max="20" step="0.5" value="0"/>
-                        <span class="param-value" data-for="param-windZ">0.0</span>
-                    </div>
-                    <div class="param-group">
-                        <label for="param-turbulence" data-i18n="turbulence">Turbulence</label>
-                        <input type="range" id="param-turbulence" min="0" max="10" step="0.1" value="0"/>
-                        <span class="param-value" data-for="param-turbulence">0.0</span>
-                    </div>
-                    <div class="param-group">
-                        <label for="param-viscosity" data-i18n="viscosity">Viscosity</label>
-                        <input type="range" id="param-viscosity" min="0" max="5" step="0.1" value="0"/>
-                        <span class="param-value" data-for="param-viscosity">0.0</span>
-                    </div>
-                    <div class="param-group">
-                        <label for="param-temperature" data-i18n="temperature">Temp (K)</label>
-                        <input type="range" id="param-temperature" min="0" max="5000" step="10" value="293"/>
-                        <span class="param-value" data-for="param-temperature">293</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Hazard -->
-            <div id="hazard-section">
-                <h3 class="section-title" data-toggle="hazard-params" role="button" aria-expanded="true" tabindex="0">
-                    <span class="toggle-icon" aria-hidden="true">
-                        <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><path d="M2 3.5L5 7l3-3.5H2z"/></svg>
-                    </span>
-                    <span data-i18n="hazard">HAZARD SIMULATION</span>
-                </h3>
-                <div id="hazard-params">
-                    <div class="param-group">
-                        <label for="param-seismic" data-i18n="seismic">Seismic</label>
-                        <input type="range" id="param-seismic" min="0" max="10" step="0.1" value="0"/>
-                        <span class="param-value" data-for="param-seismic">0.0</span>
-                    </div>
-                    <div class="param-group">
-                        <label for="param-seismicFreq" data-i18n="seismicFreq">Frequency</label>
-                        <input type="range" id="param-seismicFreq" min="0.1" max="20" step="0.1" value="2.0"/>
-                        <span class="param-value" data-for="param-seismicFreq">2.0</span>
-                    </div>
-                    <div class="param-group">
-                        <label for="param-snowLoad" data-i18n="snowLoad">Snow Load</label>
-                        <input type="range" id="param-snowLoad" min="0" max="10" step="0.1" value="0"/>
-                        <span class="param-value" data-for="param-snowLoad">0.0</span>
-                    </div>
-                    <div class="param-group">
-                        <label for="param-floodLevel" data-i18n="floodLevel">Flood Lv.</label>
-                        <input type="range" id="param-floodLevel" min="0" max="10" step="0.1" value="0"/>
-                        <span class="param-value" data-for="param-floodLevel">0.0</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Visual Settings -->
-            <div id="visual-section">
-                <h3 class="section-title" data-toggle="visual-params" role="button" aria-expanded="true" tabindex="0">
-                    <span class="toggle-icon" aria-hidden="true">
-                        <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><path d="M2 3.5L5 7l3-3.5H2z"/></svg>
-                    </span>
-                    <span data-i18n="visual">VISUAL</span>
-                </h3>
-                <div id="visual-params">
-                    <!-- Color Mode -->
-                    <div class="param-group">
-                        <label for="color-mode" data-i18n="colorMode">Color Mode</label>
-                        <select id="color-mode">
-                            <option value="role" data-i18n="byRole">By Role</option>
-                            <option value="single" data-i18n="singleColor">Single Color</option>
-                            <option value="random" data-i18n="randomMix">Random Mix</option>
-                            <option value="gradient" data-i18n="gradient">Gradient</option>
-                            <option value="neon" data-i18n="neonRandom">Neon Random</option>
-                            <option value="velocity" data-i18n="byVelocity">By Velocity</option>
-                        </select>
-                    </div>
-                    <!-- Primary Color -->
-                    <div class="param-group">
-                        <label for="color-primary" data-i18n="colorPrimary">Primary</label>
-                        <input type="color" id="color-primary" value="#00ffff"/>
-                    </div>
-                    <!-- Secondary Color (for gradient) -->
-                    <div class="param-group" id="color-secondary-group">
-                        <label for="color-secondary" data-i18n="colorSecondary">Secondary</label>
-                        <input type="color" id="color-secondary" value="#ff00ff"/>
-                    </div>
-                    <!-- Emissive Intensity -->
-                    <div class="param-group">
-                        <label for="param-brightness" data-i18n="brightness">Brightness</label>
-                        <input type="range" id="param-brightness" min="0" max="3" step="0.05" value="0.8"/>
-                        <span class="param-value" data-for="param-brightness">0.80</span>
-                    </div>
-                    <!-- Bloom Strength -->
-                    <div class="param-group">
-                        <label for="param-bloom" data-i18n="neonGlow">Neon Glow</label>
-                        <input type="range" id="param-bloom" min="0" max="3" step="0.05" value="0.6"/>
-                        <span class="param-value" data-for="param-bloom">0.60</span>
-                    </div>
-                    <!-- Bloom Radius -->
-                    <div class="param-group">
-                        <label for="param-bloomRadius" data-i18n="glowRadius">Glow Radius</label>
-                        <input type="range" id="param-bloomRadius" min="0" max="1" step="0.01" value="0.2"/>
-                        <span class="param-value" data-for="param-bloomRadius">0.20</span>
-                    </div>
-                    <!-- Particle Size -->
-                    <div class="param-group">
-                        <label for="param-particleSize" data-i18n="particleSize">Particle Size</label>
-                        <input type="range" id="param-particleSize" min="0.01" max="0.15" step="0.005" value="0.03"/>
-                        <span class="param-value" data-for="param-particleSize">0.030</span>
-                    </div>
-                    <!-- Opacity -->
-                    <div class="param-group">
-                        <label for="param-opacity" data-i18n="opacity">Opacity</label>
-                        <input type="range" id="param-opacity" min="0.1" max="1" step="0.05" value="0.85"/>
-                        <span class="param-value" data-for="param-opacity">0.85</span>
-                    </div>
-                    <!-- Background -->
-                    <div class="param-group">
-                        <label for="color-bg" data-i18n="background">Background</label>
-                        <input type="color" id="color-bg" value="#000508"/>
-                    </div>
-                </div>
-            </div>
-
             <!-- AI Chat -->
             <div id="chat-section">
                 <h3 class="section-title" data-toggle="chat-container" role="button" aria-expanded="true" tabindex="0">
@@ -418,6 +161,267 @@
             </div>
         </div>
     </aside>
+
+    <!-- ========== RIGHT PARAMETER DRAWER ========== -->
+    <aside id="right-drawer" class="right-drawer">
+        <!-- Material & Ground Selection -->
+        <div id="material-select-section">
+            <h3 class="section-title" data-toggle="material-select-params" role="button" aria-expanded="true" tabindex="0">
+                <span class="toggle-icon" aria-hidden="true">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><path d="M2 3.5L5 7l3-3.5H2z"/></svg>
+                </span>
+                <span data-i18n="materialSelect">MATERIAL & GROUND</span>
+            </h3>
+            <div id="material-select-params">
+                <div class="param-group">
+                    <label for="sel-category" data-i18n="category">Category</label>
+                    <select id="sel-category">
+                        <option value="architecture" data-i18n="catArchitecture">Architecture</option>
+                        <option value="semiconductor" data-i18n="catSemiconductor">Semiconductors</option>
+                        <option value="biomechanics" data-i18n="catBiomechanics">Biomechanics</option>
+                        <option value="materials" data-i18n="catMaterials">Materials Science</option>
+                    </select>
+                </div>
+                <div class="param-group">
+                    <label for="sel-material" data-i18n="material">Material</label>
+                    <select id="sel-material"></select>
+                </div>
+                <div id="material-info" class="info-box" role="region" aria-label="Material information"></div>
+                <div class="param-group">
+                    <label for="sel-ground" data-i18n="groundType">Ground</label>
+                    <select id="sel-ground"></select>
+                </div>
+                <div class="param-group">
+                    <label for="param-foundationDepth" data-i18n="foundationDepth">Foundation Depth</label>
+                    <input type="range" id="param-foundationDepth" min="0" max="20" step="0.5" value="2.0"/>
+                    <span class="param-value" data-for="param-foundationDepth">2.0m</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Physics Parameters -->
+        <div id="physics-section">
+            <h3 class="section-title" data-toggle="physics-params" role="button" aria-expanded="true" tabindex="0">
+                <span class="toggle-icon" aria-hidden="true">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><path d="M2 3.5L5 7l3-3.5H2z"/></svg>
+                </span>
+                <span data-i18n="physics">PHYSICS</span>
+            </h3>
+            <div id="physics-params">
+                <div class="param-group">
+                    <label for="param-gravity" data-i18n="gravity">Gravity</label>
+                    <input type="range" id="param-gravity" min="-30" max="30" step="0.1" value="-9.81"/>
+                    <span class="param-value" data-for="param-gravity">-9.81</span>
+                </div>
+                <div class="param-group">
+                    <label for="param-damping" data-i18n="damping">Damping</label>
+                    <input type="range" id="param-damping" min="0" max="1" step="0.01" value="0.97"/>
+                    <span class="param-value" data-for="param-damping">0.97</span>
+                </div>
+                <div class="param-group">
+                    <label for="param-springK" data-i18n="springK">Spring K</label>
+                    <input type="range" id="param-springK" min="0" max="100" step="0.5" value="20"/>
+                    <span class="param-value" data-for="param-springK">20.0</span>
+                </div>
+                <div class="param-group">
+                    <label for="param-timeScale" data-i18n="timeScale">Time Scale</label>
+                    <input type="range" id="param-timeScale" min="0" max="5" step="0.1" value="1.0"/>
+                    <span class="param-value" data-for="param-timeScale">1.0</span>
+                </div>
+                <div class="param-group">
+                    <label for="param-friction" data-i18n="friction">Friction</label>
+                    <input type="range" id="param-friction" min="0" max="1" step="0.01" value="0.8"/>
+                    <span class="param-value" data-for="param-friction">0.80</span>
+                </div>
+                <div class="param-group">
+                    <label for="param-bounciness" data-i18n="bounciness">Bounciness</label>
+                    <input type="range" id="param-bounciness" min="0" max="1" step="0.01" value="0.3"/>
+                    <span class="param-value" data-for="param-bounciness">0.30</span>
+                </div>
+                <div class="param-group">
+                    <label for="param-particles" data-i18n="particleCount">Particles</label>
+                    <input type="range" id="param-particles" min="1000" max="50000" step="1000" value="25000"/>
+                    <span class="param-value" data-for="param-particles">25000</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Foundation & Material -->
+        <div id="material-section">
+            <h3 class="section-title" data-toggle="material-params" role="button" aria-expanded="true" tabindex="0">
+                <span class="toggle-icon" aria-hidden="true">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><path d="M2 3.5L5 7l3-3.5H2z"/></svg>
+                </span>
+                <span data-i18n="foundationMaterial">FOUNDATION & MATERIAL</span>
+            </h3>
+            <div id="material-params">
+                <div class="param-group">
+                    <label for="param-foundation" data-i18n="foundation">Foundation</label>
+                    <input type="range" id="param-foundation" min="0" max="10" step="0.1" value="5.0"/>
+                    <span class="param-value" data-for="param-foundation">5.00</span>
+                </div>
+                <div class="param-group">
+                    <label for="param-density" data-i18n="density">Density</label>
+                    <input type="range" id="param-density" min="0.1" max="20" step="0.1" value="2.4"/>
+                    <span class="param-value" data-for="param-density">2.40</span>
+                </div>
+                <div class="param-group">
+                    <label for="param-elasticity" data-i18n="elasticity">Elasticity</label>
+                    <input type="range" id="param-elasticity" min="0" max="1" step="0.01" value="0.3"/>
+                    <span class="param-value" data-for="param-elasticity">0.30</span>
+                </div>
+                <div class="param-group">
+                    <label for="param-yieldStrength" data-i18n="yieldStrength">Yield Str.</label>
+                    <input type="range" id="param-yieldStrength" min="0" max="100" step="1" value="50"/>
+                    <span class="param-value" data-for="param-yieldStrength">50</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Environment -->
+        <div id="environment-section">
+            <h3 class="section-title" data-toggle="env-params" role="button" aria-expanded="true" tabindex="0">
+                <span class="toggle-icon" aria-hidden="true">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><path d="M2 3.5L5 7l3-3.5H2z"/></svg>
+                </span>
+                <span data-i18n="environment">ENVIRONMENT</span>
+            </h3>
+            <div id="env-params">
+                <div class="param-group">
+                    <label for="param-windX" data-i18n="windX">Wind X</label>
+                    <input type="range" id="param-windX" min="-20" max="20" step="0.5" value="0"/>
+                    <span class="param-value" data-for="param-windX">0.0</span>
+                </div>
+                <div class="param-group">
+                    <label for="param-windY" data-i18n="windY">Wind Y</label>
+                    <input type="range" id="param-windY" min="-20" max="20" step="0.5" value="0"/>
+                    <span class="param-value" data-for="param-windY">0.0</span>
+                </div>
+                <div class="param-group">
+                    <label for="param-windZ" data-i18n="windZ">Wind Z</label>
+                    <input type="range" id="param-windZ" min="-20" max="20" step="0.5" value="0"/>
+                    <span class="param-value" data-for="param-windZ">0.0</span>
+                </div>
+                <div class="param-group">
+                    <label for="param-turbulence" data-i18n="turbulence">Turbulence</label>
+                    <input type="range" id="param-turbulence" min="0" max="10" step="0.1" value="0"/>
+                    <span class="param-value" data-for="param-turbulence">0.0</span>
+                </div>
+                <div class="param-group">
+                    <label for="param-viscosity" data-i18n="viscosity">Viscosity</label>
+                    <input type="range" id="param-viscosity" min="0" max="5" step="0.1" value="0"/>
+                    <span class="param-value" data-for="param-viscosity">0.0</span>
+                </div>
+                <div class="param-group">
+                    <label for="param-temperature" data-i18n="temperature">Temp (K)</label>
+                    <input type="range" id="param-temperature" min="0" max="5000" step="10" value="293"/>
+                    <span class="param-value" data-for="param-temperature">293</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hazard -->
+        <div id="hazard-section">
+            <h3 class="section-title" data-toggle="hazard-params" role="button" aria-expanded="true" tabindex="0">
+                <span class="toggle-icon" aria-hidden="true">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><path d="M2 3.5L5 7l3-3.5H2z"/></svg>
+                </span>
+                <span data-i18n="hazard">HAZARD SIMULATION</span>
+            </h3>
+            <div id="hazard-params">
+                <div class="param-group">
+                    <label for="param-seismic" data-i18n="seismic">Seismic</label>
+                    <input type="range" id="param-seismic" min="0" max="10" step="0.1" value="0"/>
+                    <span class="param-value" data-for="param-seismic">0.0</span>
+                </div>
+                <div class="param-group">
+                    <label for="param-seismicFreq" data-i18n="seismicFreq">Frequency</label>
+                    <input type="range" id="param-seismicFreq" min="0.1" max="20" step="0.1" value="2.0"/>
+                    <span class="param-value" data-for="param-seismicFreq">2.0</span>
+                </div>
+                <div class="param-group">
+                    <label for="param-snowLoad" data-i18n="snowLoad">Snow Load</label>
+                    <input type="range" id="param-snowLoad" min="0" max="10" step="0.1" value="0"/>
+                    <span class="param-value" data-for="param-snowLoad">0.0</span>
+                </div>
+                <div class="param-group">
+                    <label for="param-floodLevel" data-i18n="floodLevel">Flood Lv.</label>
+                    <input type="range" id="param-floodLevel" min="0" max="10" step="0.1" value="0"/>
+                    <span class="param-value" data-for="param-floodLevel">0.0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Visual Settings -->
+        <div id="visual-section">
+            <h3 class="section-title" data-toggle="visual-params" role="button" aria-expanded="true" tabindex="0">
+                <span class="toggle-icon" aria-hidden="true">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><path d="M2 3.5L5 7l3-3.5H2z"/></svg>
+                </span>
+                <span data-i18n="visual">VISUAL</span>
+            </h3>
+            <div id="visual-params">
+                <!-- Color Mode -->
+                <div class="param-group">
+                    <label for="color-mode" data-i18n="colorMode">Color Mode</label>
+                    <select id="color-mode">
+                        <option value="role" data-i18n="byRole">By Role</option>
+                        <option value="single" data-i18n="singleColor">Single Color</option>
+                        <option value="random" data-i18n="randomMix">Random Mix</option>
+                        <option value="gradient" data-i18n="gradient">Gradient</option>
+                        <option value="neon" data-i18n="neonRandom">Neon Random</option>
+                        <option value="velocity" data-i18n="byVelocity">By Velocity</option>
+                    </select>
+                </div>
+                <!-- Primary Color -->
+                <div class="param-group">
+                    <label for="color-primary" data-i18n="colorPrimary">Primary</label>
+                    <input type="color" id="color-primary" value="#00ffff"/>
+                </div>
+                <!-- Secondary Color (for gradient) -->
+                <div class="param-group" id="color-secondary-group">
+                    <label for="color-secondary" data-i18n="colorSecondary">Secondary</label>
+                    <input type="color" id="color-secondary" value="#ff00ff"/>
+                </div>
+                <!-- Emissive Intensity -->
+                <div class="param-group">
+                    <label for="param-brightness" data-i18n="brightness">Brightness</label>
+                    <input type="range" id="param-brightness" min="0" max="3" step="0.05" value="0.8"/>
+                    <span class="param-value" data-for="param-brightness">0.80</span>
+                </div>
+                <!-- Bloom Strength -->
+                <div class="param-group">
+                    <label for="param-bloom" data-i18n="neonGlow">Neon Glow</label>
+                    <input type="range" id="param-bloom" min="0" max="3" step="0.05" value="0.6"/>
+                    <span class="param-value" data-for="param-bloom">0.60</span>
+                </div>
+                <!-- Bloom Radius -->
+                <div class="param-group">
+                    <label for="param-bloomRadius" data-i18n="glowRadius">Glow Radius</label>
+                    <input type="range" id="param-bloomRadius" min="0" max="1" step="0.01" value="0.2"/>
+                    <span class="param-value" data-for="param-bloomRadius">0.20</span>
+                </div>
+                <!-- Particle Size -->
+                <div class="param-group">
+                    <label for="param-particleSize" data-i18n="particleSize">Particle Size</label>
+                    <input type="range" id="param-particleSize" min="0.01" max="0.15" step="0.005" value="0.05"/>
+                    <span class="param-value" data-for="param-particleSize">0.050</span>
+                </div>
+                <!-- Opacity -->
+                <div class="param-group">
+                    <label for="param-opacity" data-i18n="opacity">Opacity</label>
+                    <input type="range" id="param-opacity" min="0.1" max="1" step="0.05" value="0.85"/>
+                    <span class="param-value" data-for="param-opacity">0.85</span>
+                </div>
+                <!-- Background -->
+                <div class="param-group">
+                    <label for="color-bg" data-i18n="background">Background</label>
+                    <input type="color" id="color-bg" value="#000508"/>
+                </div>
+            </div>
+        </div>
+    </aside>
+    <button id="right-drawer-toggle" aria-label="Toggle parameters panel">&#9664;</button>
 
     <!-- ========== MAIN CANVAS ========== -->
     <main id="main-content">

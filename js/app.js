@@ -214,6 +214,16 @@ class App {
             this._populateGroundSelect();
             this.simManager._renderCardList();
         });
+
+        // === Right Drawer Toggle ===
+        const drawer = document.getElementById('right-drawer');
+        const drawerToggle = document.getElementById('right-drawer-toggle');
+        if (drawer && drawerToggle) {
+            drawerToggle.addEventListener('click', () => {
+                drawer.classList.toggle('open');
+                drawerToggle.textContent = drawer.classList.contains('open') ? '\u25B6' : '\u25C0';
+            });
+        }
     }
 
     _initMaterialUI() {

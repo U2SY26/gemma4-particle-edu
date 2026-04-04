@@ -1,16 +1,20 @@
 import * as THREE from 'three';
 
 const NEON_PALETTE = [
-    [0.50, 1.0, 0.55],  // Cyan #00FFFF
-    [0.83, 1.0, 0.55],  // Magenta #FF00FF
-    [0.33, 1.0, 0.55],  // Lime #00FF00
-    [0.08, 1.0, 0.60],  // Orange #FF6600
-    [0.75, 1.0, 0.55],  // Purple #9900FF
-    [0.58, 1.0, 0.55],  // Blue #0066FF
-    [0.95, 1.0, 0.55],  // Pink #FF0066
-    [0.17, 1.0, 0.55],  // Yellow #FFFF00
-    [0.42, 1.0, 0.55],  // Teal #00FF99
-    [0.67, 1.0, 0.55],  // Indigo #6600FF
+    [0.00, 1.0, 0.55],  // Red
+    [0.05, 1.0, 0.55],  // Red-Orange
+    [0.08, 1.0, 0.55],  // Orange
+    [0.12, 1.0, 0.55],  // Amber
+    [0.17, 1.0, 0.55],  // Yellow
+    [0.25, 1.0, 0.55],  // Yellow-Green
+    [0.33, 1.0, 0.55],  // Green
+    [0.42, 1.0, 0.55],  // Teal
+    [0.50, 1.0, 0.55],  // Cyan
+    [0.58, 1.0, 0.55],  // Blue
+    [0.67, 1.0, 0.55],  // Indigo
+    [0.75, 1.0, 0.55],  // Purple
+    [0.83, 1.0, 0.55],  // Magenta
+    [0.92, 1.0, 0.55],  // Pink
 ];
 
 export class ParticleSystem {
@@ -22,18 +26,17 @@ export class ParticleSystem {
         // Quality-adaptive geometry
         const segments = quality ? quality.particleSegments : 6;
         const rings = quality ? quality.particleRings : 4;
-        const geometry = new THREE.SphereGeometry(0.03, segments, rings);
+        const geometry = new THREE.SphereGeometry(0.05, segments, rings);
 
-        // Neon emissive material - disable transparency for iGPU
+        // Solid emissive material - brighter, more opaque
         const isLowQuality = quality && quality.label === 'LOW';
         this.material = new THREE.MeshStandardMaterial({
-            emissive: new THREE.Color(0x00ffff),
-            emissiveIntensity: isLowQuality ? 0.6 : 1.0,
-            color: 0x002222,
-            metalness: isLowQuality ? 0.2 : 0.4,
+            emissive: new THREE.Color(0xffffff),
+            emissiveIntensity: isLowQuality ? 0.8 : 1.2,
+            color: 0x111111,
+            metalness: isLowQuality ? 0.2 : 0.3,
             roughness: isLowQuality ? 0.6 : 0.4,
-            transparent: !isLowQuality,
-            opacity: isLowQuality ? 1.0 : 0.85,
+            transparent: false,
         });
 
         this.mesh = new THREE.InstancedMesh(geometry, this.material, maxCount);
@@ -73,8 +76,8 @@ export class ParticleSystem {
             this.positions[idx + 1] = Math.random() * 0.3;
             this.positions[idx + 2] = (Math.random() - 0.5) * spread;
 
-            const neon = NEON_PALETTE[Math.floor(Math.random() * NEON_PALETTE.length)];
-            this.color.setHSL(neon[0] + (Math.random() - 0.5) * 0.03, neon[1], neon[2]);
+            const hue = Math.random();  // Full 0-1 range instead of palette pick
+            this.color.setHSL(hue, 1.0, 0.55);
             this.mesh.instanceColor.setXYZ(i, this.color.r, this.color.g, this.color.b);
         }
 
@@ -179,8 +182,9 @@ export class ParticleSystem {
             }
         } else if (this.colorMode === 'neon') {
             for (let i = 0; i < this.activeCount; i++) {
-                const neon = NEON_PALETTE[Math.floor(Math.random() * NEON_PALETTE.length)];
-                this.color.setHSL(neon[0] + (Math.random() - 0.5) * 0.03, neon[1], neon[2]);
+                // Full rainbow: random hue across entire spectrum
+                const hue = Math.random();
+                this.color.setHSL(hue, 1.0, 0.55);
                 this.mesh.instanceColor.setXYZ(i, this.color.r, this.color.g, this.color.b);
             }
         } else if (this.colorMode === 'velocity') {

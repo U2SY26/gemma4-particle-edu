@@ -20,5 +20,18 @@
       "type": "url",
       "url": "http://localhost:5555/mcp"
     }
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/kanban-enforce.sh"
+          }
+        ]
+      }
+    ]
   }
 }

@@ -429,8 +429,8 @@ body {
 #card-detail {
     border-top: 1px solid var(--border);
     overflow-y: auto;
-    max-height: 55vh;
-    flex-shrink: 0;
+    flex: 1;
+    min-height: 0;
 }
 
 #card-detail.hidden {
@@ -1458,6 +1458,55 @@ textarea.text-input {
     50% { opacity: 0.4; }
 }
 
+/* ==================== RIGHT PARAMETER DRAWER ==================== */
+.right-drawer {
+    position: fixed;
+    top: 0;
+    right: -360px;
+    width: 360px;
+    height: 100vh;
+    background: var(--bg-secondary);
+    border-left: 1px solid var(--border);
+    z-index: 150;
+    overflow-y: auto;
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 16px;
+}
+
+.right-drawer.open {
+    right: 0;
+}
+
+#right-drawer-toggle {
+    position: fixed;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 64px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-right: none;
+    border-radius: 8px 0 0 8px;
+    cursor: pointer;
+    z-index: 151;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+#right-drawer-toggle:hover {
+    background: var(--accent);
+    color: white;
+}
+
+.right-drawer.open ~ #right-drawer-toggle {
+    right: 360px;
+}
+
 /* ==================== RESPONSIVE ==================== */
 @media (max-width: 768px) {
     body {
@@ -1549,6 +1598,15 @@ textarea.text-input {
     #card-detail {
         max-height: none;
     }
+
+    .right-drawer {
+        width: 300px;
+        right: -300px;
+    }
+
+    .right-drawer.open ~ #right-drawer-toggle {
+        right: 300px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -1582,6 +1640,15 @@ textarea.text-input {
 
     #chat-container {
         height: 180px;
+    }
+
+    .right-drawer {
+        width: 85%;
+        right: -85%;
+    }
+
+    .right-drawer.open ~ #right-drawer-toggle {
+        right: 85%;
     }
 }
 
