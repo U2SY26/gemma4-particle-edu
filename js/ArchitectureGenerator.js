@@ -29,6 +29,25 @@ export class ArchitectureGenerator {
             case 'stadium': return this._templateStadium(params);
             case 'cube': return this._templateCube(params);
             case 'sphere': return this._templateSphere(params);
+            // Molecule domain
+            case 'molecule': return this._templateMolecule(params);
+            case 'dna': return this._templateDNA(params);
+            case 'protein': return this._templateProtein(params);
+            // Orbit domain
+            case 'solar_system': return this._templateSolarSystem(params);
+            case 'galaxy': return this._templateGalaxy(params);
+            case 'asteroid_field': return this._templateAsteroidField(params);
+            // Weather domain
+            case 'cloud': return this._templateCloud(params);
+            case 'tornado': return this._templateTornado(params);
+            case 'rain': return this._templateRain(params);
+            // Fluid domain
+            case 'water_drop': return this._templateWaterDrop(params);
+            case 'river': return this._templateRiver(params);
+            case 'ocean_wave': return this._templateOceanWave(params);
+            // Electromagnetic domain
+            case 'magnet': return this._templateMagnet(params);
+            case 'electron_cloud': return this._templateElectronCloud(params);
             default: return this._templateHouse(params);
         }
     }
@@ -138,6 +157,25 @@ export class ArchitectureGenerator {
             'cube': 'cube', '큐브': 'cube', '정육면체': 'cube',
             'sphere': 'sphere', '구': 'sphere', '구체': 'sphere',
             'building': 'skyscraper', '건물': 'skyscraper',
+            // Molecule domain
+            'molecule': 'molecule', '분자': 'molecule',
+            'dna': 'dna', 'DNA': 'dna',
+            'protein': 'protein', '단백질': 'protein',
+            // Orbit domain
+            'solar': 'solar_system', 'solar_system': 'solar_system', '태양계': 'solar_system', '태양': 'solar_system',
+            'galaxy': 'galaxy', '은하': 'galaxy',
+            'asteroid': 'asteroid_field', 'asteroid_field': 'asteroid_field', '소행성': 'asteroid_field',
+            // Weather domain
+            'cloud': 'cloud', '구름': 'cloud',
+            'tornado': 'tornado', '토네이도': 'tornado', '회오리': 'tornado',
+            'rain': 'rain', '비': 'rain',
+            // Fluid domain
+            'drop': 'water_drop', 'water_drop': 'water_drop', '물방울': 'water_drop',
+            'river': 'river', '강': 'river',
+            'wave': 'ocean_wave', 'ocean_wave': 'ocean_wave', '파도': 'ocean_wave', '해일': 'ocean_wave',
+            // Electromagnetic domain
+            'magnet': 'magnet', '자석': 'magnet', '자기장': 'magnet',
+            'electron': 'electron_cloud', 'electron_cloud': 'electron_cloud', '전자': 'electron_cloud',
         };
 
         // Size modifiers
@@ -1389,6 +1427,1317 @@ export class ArchitectureGenerator {
                     stiffness: 35,
                     damping: 5,
                 });
+            }
+        }
+
+        return {
+            positions: new Float32Array(positions),
+            roles: new Uint8Array(roles),
+            loads: new Float32Array(roles.length),
+            connections,
+        };
+    }
+
+    // ==================== MOLECULE DOMAIN ====================
+
+    _templateMolecule(params) {
+        const s = params.scale;
+        const r = 3 * s;
+        const sp = this.spacing;
+        const positions = [];
+        const roles = [];
+        const connections = [];
+
+        // Spherical cluster of particles with weak bonds
+        const count = Math.max(20, Math.round(4 * Math.PI * r * r / (sp * sp)));
+        const startIdx = 0;
+
+        // Distribute on a sphere using Fibonacci spiral for even spacing
+        const goldenAngle = Math.PI * (3 - Math.sqrt(5));
+        for (let i = 0; i < count; i++) {
+            const y = 1 - (2 * i / (count - 1)); // -1 to 1
+            const radiusAtY = Math.sqrt(1 - y * y);
+            const theta = goldenAngle * i;
+
+            // Randomize radius slightly for organic feel
+            const rr = r * (0.7 + Math.random() * 0.3);
+            positions.push(
+                Math.cos(theta) * radiusAtY * rr,
+                y * rr + r,
+                Math.sin(theta) * radiusAtY * rr
+            );
+            roles.push(5); // decorative
+        }
+
+        // Connect nearby particles (weak molecular bonds)
+        const bondThreshold = sp * 6;
+        for (let i = 0; i < count; i++) {
+            for (let j = i + 1; j < count; j++) {
+                const dx = positions[i * 3] - positions[j * 3];
+                const dy = positions[i * 3 + 1] - positions[j * 3 + 1];
+                const dz = positions[i * 3 + 2] - positions[j * 3 + 2];
+                const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+                if (dist < bondThreshold) {
+                    connections.push({
+                        i, j,
+                        restLength: dist,
+                        stiffness: 10, // weak bonds
+                        damping: 3.0,
+                    });
+                }
+            }
+        }
+
+        return {
+            positions: new Float32Array(positions),
+            roles: new Uint8Array(roles),
+            loads: new Float32Array(roles.length),
+            connections,
+        };
+    }
+
+    _templateDNA(params) {
+        const s = params.scale;
+        const helixR = 1.5 * s * params.widthMul;
+        const totalH = 10 * s * params.heightMul;
+        const sp = this.spacing;
+        const positions = [];
+        const roles = [];
+        const connections = [];
+
+        // Two intertwined helices with cross-links
+        const turns = 3;
+        const pointsPerTurn = Math.max(12, Math.round(2 * Math.PI * helixR / sp));
+        const totalPoints = turns * pointsPerTurn;
+
+        // Helix 1
+        const helix1Start = positions.length / 3;
+        for (let i = 0; i <= totalPoints; i++) {
+            const t = i / totalPoints;
+            const angle = t * turns * 2 * Math.PI;
+            const y = t * totalH;
+            positions.push(
+                Math.cos(angle) * helixR,
+                y,
+                Math.sin(angle) * helixR
+            );
+            roles.push(2); // column role (backbone)
+        }
+        // Chain connections for helix 1
+        for (let i = 0; i < totalPoints; i++) {
+            const segLen = totalH / totalPoints;
+            connections.push({
+                i: helix1Start + i,
+                j: helix1Start + i + 1,
+                restLength: Math.sqrt(segLen * segLen + (2 * Math.PI * helixR / totalPoints) ** 2),
+                stiffness: 60,
+                damping: 5.0,
+            });
+        }
+
+        // Helix 2 (offset by PI)
+        const helix2Start = positions.length / 3;
+        for (let i = 0; i <= totalPoints; i++) {
+            const t = i / totalPoints;
+            const angle = t * turns * 2 * Math.PI + Math.PI;
+            const y = t * totalH;
+            positions.push(
+                Math.cos(angle) * helixR,
+                y,
+                Math.sin(angle) * helixR
+            );
+            roles.push(2);
+        }
+        for (let i = 0; i < totalPoints; i++) {
+            const segLen = totalH / totalPoints;
+            connections.push({
+                i: helix2Start + i,
+                j: helix2Start + i + 1,
+                restLength: Math.sqrt(segLen * segLen + (2 * Math.PI * helixR / totalPoints) ** 2),
+                stiffness: 60,
+                damping: 5.0,
+            });
+        }
+
+        // Cross-links (base pairs) every few steps
+        const crossLinkInterval = Math.max(2, Math.floor(pointsPerTurn / 5));
+        for (let i = 0; i <= totalPoints; i += crossLinkInterval) {
+            // Midpoint particle on the cross-link
+            const x1 = positions[(helix1Start + i) * 3];
+            const y1 = positions[(helix1Start + i) * 3 + 1];
+            const z1 = positions[(helix1Start + i) * 3 + 2];
+            const x2 = positions[(helix2Start + i) * 3];
+            const y2 = positions[(helix2Start + i) * 3 + 1];
+            const z2 = positions[(helix2Start + i) * 3 + 2];
+
+            const midIdx = positions.length / 3;
+            positions.push((x1 + x2) / 2, (y1 + y2) / 2, (z1 + z2) / 2);
+            roles.push(3); // beam role for cross-links
+
+            const halfDist = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2 + (z2 - z1) ** 2) / 2;
+            connections.push({
+                i: helix1Start + i,
+                j: midIdx,
+                restLength: halfDist,
+                stiffness: 30,
+                damping: 5.0,
+            });
+            connections.push({
+                i: midIdx,
+                j: helix2Start + i,
+                restLength: halfDist,
+                stiffness: 30,
+                damping: 5.0,
+            });
+        }
+
+        return {
+            positions: new Float32Array(positions),
+            roles: new Uint8Array(roles),
+            loads: new Float32Array(roles.length),
+            connections,
+        };
+    }
+
+    _templateProtein(params) {
+        const s = params.scale;
+        const r = 3 * s;
+        const sp = this.spacing;
+        const positions = [];
+        const roles = [];
+        const connections = [];
+
+        // Alpha-helix segment (core spine)
+        const helixR = 0.8 * s;
+        const helixH = 6 * s * params.heightMul;
+        const helixTurns = 4;
+        const helixPts = Math.max(20, Math.round(helixTurns * 2 * Math.PI * helixR / sp));
+
+        const helixStart = positions.length / 3;
+        for (let i = 0; i <= helixPts; i++) {
+            const t = i / helixPts;
+            const angle = t * helixTurns * 2 * Math.PI;
+            const y = t * helixH;
+            positions.push(
+                Math.cos(angle) * helixR,
+                y,
+                Math.sin(angle) * helixR
+            );
+            roles.push(2); // backbone
+        }
+        for (let i = 0; i < helixPts; i++) {
+            connections.push({
+                i: helixStart + i,
+                j: helixStart + i + 1,
+                restLength: helixH / helixPts * 1.1,
+                stiffness: 50,
+                damping: 5.0,
+            });
+        }
+
+        // Beta-sheet region (flat zigzag near top)
+        const sheetW = 3 * s * params.widthMul;
+        const sheetH = 1.5 * s;
+        const sheetY = helixH + 1 * s;
+        const sheetRows = 4;
+        const sheetCols = Math.max(4, Math.round(sheetW / sp));
+
+        for (let row = 0; row < sheetRows; row++) {
+            const rowStart = positions.length / 3;
+            const z = -sheetW / 2 + sheetW * (row / (sheetRows - 1));
+            for (let col = 0; col <= sheetCols; col++) {
+                const t = col / sheetCols;
+                const x = -sheetW / 2 + sheetW * t;
+                // Zigzag pleating
+                const yOff = (col % 2 === 0) ? 0 : sp * 1.5;
+                positions.push(x, sheetY + yOff, z);
+                roles.push(3); // beam
+            }
+            // Chain connections within row
+            for (let col = 0; col < sheetCols; col++) {
+                connections.push({
+                    i: rowStart + col,
+                    j: rowStart + col + 1,
+                    restLength: sheetW / sheetCols,
+                    stiffness: 40,
+                    damping: 5.0,
+                });
+            }
+        }
+
+        // Inter-row hydrogen bonds for beta-sheet
+        for (let row = 0; row < sheetRows - 1; row++) {
+            const row1Start = helixPts + 1 + row * (sheetCols + 1);
+            const row2Start = helixPts + 1 + (row + 1) * (sheetCols + 1);
+            for (let col = 0; col <= sheetCols; col += 2) {
+                const i1 = row1Start + col;
+                const i2 = row2Start + col;
+                if (i1 < positions.length / 3 && i2 < positions.length / 3) {
+                    const dx = positions[i1 * 3] - positions[i2 * 3];
+                    const dy = positions[i1 * 3 + 1] - positions[i2 * 3 + 1];
+                    const dz = positions[i1 * 3 + 2] - positions[i2 * 3 + 2];
+                    connections.push({
+                        i: i1, j: i2,
+                        restLength: Math.sqrt(dx * dx + dy * dy + dz * dz),
+                        stiffness: 20,
+                        damping: 3.0,
+                    });
+                }
+            }
+        }
+
+        // Globular cloud around the structure
+        const globCount = Math.max(30, Math.round(4 * Math.PI * r * r / (sp * sp * 4)));
+        const cx = 0, cy = helixH / 2 + sheetH, cz = 0;
+        const goldenAngle = Math.PI * (3 - Math.sqrt(5));
+        for (let i = 0; i < globCount; i++) {
+            const y = 1 - (2 * i / (globCount - 1));
+            const radiusAtY = Math.sqrt(1 - y * y);
+            const theta = goldenAngle * i;
+            const rr = r * (0.5 + Math.random() * 0.5);
+            positions.push(
+                cx + Math.cos(theta) * radiusAtY * rr,
+                cy + y * rr,
+                cz + Math.sin(theta) * radiusAtY * rr
+            );
+            roles.push(5); // decorative
+        }
+
+        // Weak connections among globular particles
+        const globStart = positions.length / 3 - globCount;
+        const globThreshold = sp * 5;
+        for (let i = globStart; i < positions.length / 3; i++) {
+            for (let j = i + 1; j < Math.min(i + 20, positions.length / 3); j++) {
+                const dx = positions[i * 3] - positions[j * 3];
+                const dy = positions[i * 3 + 1] - positions[j * 3 + 1];
+                const dz = positions[i * 3 + 2] - positions[j * 3 + 2];
+                const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+                if (dist < globThreshold) {
+                    connections.push({
+                        i, j,
+                        restLength: dist,
+                        stiffness: 8,
+                        damping: 2.0,
+                    });
+                }
+            }
+        }
+
+        return {
+            positions: new Float32Array(positions),
+            roles: new Uint8Array(roles),
+            loads: new Float32Array(roles.length),
+            connections,
+        };
+    }
+
+    // ==================== ORBIT DOMAIN ====================
+
+    _templateSolarSystem(params) {
+        const s = params.scale;
+        const sp = this.spacing;
+        const positions = [];
+        const roles = [];
+        const connections = [];
+
+        // Central sun — dense sphere
+        const sunR = 1.2 * s;
+        const sunPts = Math.max(12, Math.round(2 * Math.PI * sunR / sp));
+        const sunStart = positions.length / 3;
+
+        // Sun surface ring (equatorial)
+        for (let i = 0; i < sunPts; i++) {
+            const angle = (2 * Math.PI * i) / sunPts;
+            positions.push(Math.cos(angle) * sunR, sunR, Math.sin(angle) * sunR);
+            roles.push(1); // foundation = core
+        }
+        for (let i = 0; i < sunPts; i++) {
+            connections.push({
+                i: sunStart + i,
+                j: sunStart + ((i + 1) % sunPts),
+                restLength: 2 * Math.PI * sunR / sunPts,
+                stiffness: 80,
+                damping: 5,
+            });
+        }
+
+        // Sun meridian rings
+        for (let m = 1; m < 3; m++) {
+            const phi = Math.PI * m / 3;
+            const mStart = positions.length / 3;
+            const mPts = Math.max(8, Math.round(2 * Math.PI * sunR * Math.sin(phi) / sp));
+            for (let i = 0; i < mPts; i++) {
+                const angle = (2 * Math.PI * i) / mPts;
+                const rr = sunR * Math.sin(phi);
+                positions.push(
+                    Math.cos(angle) * rr,
+                    sunR + sunR * Math.cos(phi),
+                    Math.sin(angle) * rr
+                );
+                roles.push(1);
+            }
+            for (let i = 0; i < mPts; i++) {
+                connections.push({
+                    i: mStart + i,
+                    j: mStart + ((i + 1) % mPts),
+                    restLength: 2 * Math.PI * sunR * Math.sin(phi) / mPts,
+                    stiffness: 70,
+                    damping: 5,
+                });
+            }
+        }
+
+        // Orbiting planets at increasing radii
+        const planets = [
+            { orbitR: 3 * s, planetR: 0.3 * s, pts: 24 },
+            { orbitR: 5 * s, planetR: 0.5 * s, pts: 32 },
+            { orbitR: 7 * s, planetR: 0.8 * s, pts: 40 },
+            { orbitR: 9.5 * s, planetR: 0.6 * s, pts: 36 },
+            { orbitR: 12 * s, planetR: 0.4 * s, pts: 28 },
+        ];
+
+        for (const planet of planets) {
+            // Orbit ring
+            const orbitPts = Math.max(planet.pts, Math.round(2 * Math.PI * planet.orbitR / (sp * 3)));
+            const orbitStart = positions.length / 3;
+            for (let i = 0; i < orbitPts; i++) {
+                const angle = (2 * Math.PI * i) / orbitPts;
+                positions.push(
+                    Math.cos(angle) * planet.orbitR,
+                    sunR, // same plane as sun center
+                    Math.sin(angle) * planet.orbitR
+                );
+                roles.push(4); // brace (orbit path)
+            }
+            for (let i = 0; i < orbitPts; i++) {
+                connections.push({
+                    i: orbitStart + i,
+                    j: orbitStart + ((i + 1) % orbitPts),
+                    restLength: 2 * Math.PI * planet.orbitR / orbitPts,
+                    stiffness: 15,
+                    damping: 3,
+                });
+            }
+
+            // Planet body (small ring at one point on orbit)
+            const planetAngle = Math.random() * 2 * Math.PI;
+            const px = Math.cos(planetAngle) * planet.orbitR;
+            const pz = Math.sin(planetAngle) * planet.orbitR;
+            const planetPts = Math.max(6, Math.round(2 * Math.PI * planet.planetR / sp));
+            const planetStart = positions.length / 3;
+            for (let i = 0; i < planetPts; i++) {
+                const a = (2 * Math.PI * i) / planetPts;
+                positions.push(
+                    px + Math.cos(a) * planet.planetR,
+                    sunR + Math.sin(a) * planet.planetR,
+                    pz
+                );
+                roles.push(2); // column = planet body
+            }
+            for (let i = 0; i < planetPts; i++) {
+                connections.push({
+                    i: planetStart + i,
+                    j: planetStart + ((i + 1) % planetPts),
+                    restLength: 2 * Math.PI * planet.planetR / planetPts,
+                    stiffness: 50,
+                    damping: 5,
+                });
+            }
+        }
+
+        return {
+            positions: new Float32Array(positions),
+            roles: new Uint8Array(roles),
+            loads: new Float32Array(roles.length),
+            connections,
+        };
+    }
+
+    _templateGalaxy(params) {
+        const s = params.scale;
+        const r = 8 * s * params.widthMul;
+        const sp = this.spacing;
+        const positions = [];
+        const roles = [];
+        const connections = [];
+
+        // Central bulge
+        const bulgeR = 1.5 * s;
+        const bulgePts = Math.max(20, Math.round(4 * Math.PI * bulgeR * bulgeR / (sp * sp)));
+        const goldenAngle = Math.PI * (3 - Math.sqrt(5));
+        const bulgeStart = positions.length / 3;
+
+        for (let i = 0; i < bulgePts; i++) {
+            const y = 1 - (2 * i / (bulgePts - 1));
+            const radiusAtY = Math.sqrt(1 - y * y);
+            const theta = goldenAngle * i;
+            const rr = bulgeR * (0.6 + Math.random() * 0.4);
+            positions.push(
+                Math.cos(theta) * radiusAtY * rr,
+                y * rr * 0.5 + bulgeR, // flattened
+                Math.sin(theta) * radiusAtY * rr
+            );
+            roles.push(1); // foundation = core
+        }
+        // Connect bulge neighbors
+        for (let i = bulgeStart; i < bulgeStart + bulgePts; i++) {
+            for (let j = i + 1; j < Math.min(i + 8, bulgeStart + bulgePts); j++) {
+                const dx = positions[i * 3] - positions[j * 3];
+                const dy = positions[i * 3 + 1] - positions[j * 3 + 1];
+                const dz = positions[i * 3 + 2] - positions[j * 3 + 2];
+                const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+                if (dist < sp * 5) {
+                    connections.push({
+                        i, j,
+                        restLength: dist,
+                        stiffness: 25,
+                        damping: 4,
+                    });
+                }
+            }
+        }
+
+        // Spiral arms (logarithmic spiral)
+        const armCount = 2;
+        const ptsPerArm = Math.max(60, Math.round(r * 8 / sp));
+        for (let arm = 0; arm < armCount; arm++) {
+            const armOffset = (2 * Math.PI * arm) / armCount;
+            const armStart = positions.length / 3;
+
+            for (let i = 0; i < ptsPerArm; i++) {
+                const t = i / ptsPerArm;
+                const armR = bulgeR + (r - bulgeR) * t;
+                const angle = armOffset + t * 3 * Math.PI; // spiral winding
+                // Scatter width increases with radius
+                const scatter = t * sp * 3;
+                const yJitter = (Math.random() - 0.5) * sp * 2;
+                positions.push(
+                    Math.cos(angle) * armR + (Math.random() - 0.5) * scatter,
+                    bulgeR + yJitter,
+                    Math.sin(angle) * armR + (Math.random() - 0.5) * scatter
+                );
+                roles.push(3); // beam = arm particles
+            }
+            // Chain along arm
+            for (let i = 0; i < ptsPerArm - 1; i++) {
+                const idx = armStart + i;
+                const dx = positions[idx * 3] - positions[(idx + 1) * 3];
+                const dy = positions[idx * 3 + 1] - positions[(idx + 1) * 3 + 1];
+                const dz = positions[idx * 3 + 2] - positions[(idx + 1) * 3 + 2];
+                connections.push({
+                    i: idx,
+                    j: idx + 1,
+                    restLength: Math.sqrt(dx * dx + dy * dy + dz * dz),
+                    stiffness: 12,
+                    damping: 3,
+                });
+            }
+        }
+
+        // Scattered disk particles between arms
+        const diskPts = Math.max(40, Math.round(Math.PI * r * r / (sp * sp * 6)));
+        for (let i = 0; i < diskPts; i++) {
+            const dr = bulgeR + Math.random() * (r - bulgeR);
+            const angle = Math.random() * 2 * Math.PI;
+            const yJitter = (Math.random() - 0.5) * sp * 1.5;
+            positions.push(
+                Math.cos(angle) * dr,
+                bulgeR + yJitter,
+                Math.sin(angle) * dr
+            );
+            roles.push(5); // decorative
+        }
+
+        return {
+            positions: new Float32Array(positions),
+            roles: new Uint8Array(roles),
+            loads: new Float32Array(roles.length),
+            connections,
+        };
+    }
+
+    _templateAsteroidField(params) {
+        const s = params.scale;
+        const majorR = 6 * s * params.widthMul; // torus major radius
+        const minorR = 2 * s; // torus minor radius
+        const sp = this.spacing;
+        const positions = [];
+        const roles = [];
+        const connections = [];
+
+        // Particles scattered in a toroidal region
+        const count = Math.max(80, Math.round(4 * Math.PI * Math.PI * majorR * minorR / (sp * sp)));
+
+        for (let i = 0; i < count; i++) {
+            const theta = Math.random() * 2 * Math.PI; // around torus
+            const phi = Math.random() * 2 * Math.PI; // within tube
+            const tubeR = minorR * (0.3 + Math.random() * 0.7); // scattered within tube
+
+            const x = (majorR + tubeR * Math.cos(phi)) * Math.cos(theta);
+            const y = tubeR * Math.sin(phi) + majorR * 0.5; // lift above ground
+            const z = (majorR + tubeR * Math.cos(phi)) * Math.sin(theta);
+
+            positions.push(x, y, z);
+            roles.push(5); // decorative
+        }
+
+        // Sparse connections between nearby asteroids
+        const threshold = sp * 5;
+        for (let i = 0; i < count; i++) {
+            for (let j = i + 1; j < Math.min(i + 15, count); j++) {
+                const dx = positions[i * 3] - positions[j * 3];
+                const dy = positions[i * 3 + 1] - positions[j * 3 + 1];
+                const dz = positions[i * 3 + 2] - positions[j * 3 + 2];
+                const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+                if (dist < threshold) {
+                    connections.push({
+                        i, j,
+                        restLength: dist,
+                        stiffness: 5,
+                        damping: 2.0,
+                    });
+                }
+            }
+        }
+
+        return {
+            positions: new Float32Array(positions),
+            roles: new Uint8Array(roles),
+            loads: new Float32Array(roles.length),
+            connections,
+        };
+    }
+
+    // ==================== WEATHER DOMAIN ====================
+
+    _templateCloud(params) {
+        const s = params.scale;
+        const sp = this.spacing;
+        const positions = [];
+        const roles = [];
+        const connections = [];
+
+        // Main cloud body — multiple overlapping gaussian blobs
+        const blobCenters = [
+            { x: 0, y: 5 * s, z: 0, r: 2.5 * s },
+            { x: 2 * s, y: 5.5 * s, z: 0.5 * s, r: 2 * s },
+            { x: -1.5 * s, y: 5.2 * s, z: -0.5 * s, r: 1.8 * s },
+            { x: 0.5 * s, y: 5.8 * s, z: -1 * s, r: 1.5 * s },
+            { x: -0.5 * s, y: 4.8 * s, z: 1 * s, r: 1.6 * s },
+        ];
+
+        let totalCount = 0;
+        for (const blob of blobCenters) {
+            const count = Math.max(15, Math.round(4 / 3 * Math.PI * blob.r * blob.r * blob.r / (sp * sp * sp * 4)));
+            totalCount += count;
+
+            for (let i = 0; i < count; i++) {
+                // Gaussian-like: Box-Muller transform
+                const u1 = Math.random(), u2 = Math.random(), u3 = Math.random();
+                const u4 = Math.random(), u5 = Math.random(), u6 = Math.random();
+                const gx = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+                const gy = Math.sqrt(-2 * Math.log(u3)) * Math.cos(2 * Math.PI * u4);
+                const gz = Math.sqrt(-2 * Math.log(u5)) * Math.cos(2 * Math.PI * u6);
+
+                positions.push(
+                    blob.x + gx * blob.r * 0.4,
+                    blob.y + Math.abs(gy * blob.r * 0.3), // keep above center
+                    blob.z + gz * blob.r * 0.4
+                );
+                roles.push(5); // decorative
+            }
+        }
+
+        // Very weak connections for cohesion
+        const threshold = sp * 4;
+        for (let i = 0; i < totalCount; i++) {
+            for (let j = i + 1; j < Math.min(i + 12, totalCount); j++) {
+                const dx = positions[i * 3] - positions[j * 3];
+                const dy = positions[i * 3 + 1] - positions[j * 3 + 1];
+                const dz = positions[i * 3 + 2] - positions[j * 3 + 2];
+                const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+                if (dist < threshold) {
+                    connections.push({
+                        i, j,
+                        restLength: dist * 1.2, // loose
+                        stiffness: 3,
+                        damping: 1.0,
+                    });
+                }
+            }
+        }
+
+        return {
+            positions: new Float32Array(positions),
+            roles: new Uint8Array(roles),
+            loads: new Float32Array(roles.length),
+            connections,
+        };
+    }
+
+    _templateTornado(params) {
+        const s = params.scale;
+        const baseR = 3 * s * params.widthMul;
+        const topR = 0.5 * s;
+        const h = 12 * s * params.heightMul;
+        const sp = this.spacing;
+        const positions = [];
+        const roles = [];
+        const connections = [];
+
+        // Vertical spiral column: radius decreases with height
+        const spiralTurns = 6;
+        const ptsPerTurn = Math.max(16, Math.round(2 * Math.PI * baseR / sp));
+        const totalPts = spiralTurns * ptsPerTurn;
+
+        const spiralStart = positions.length / 3;
+        for (let i = 0; i <= totalPts; i++) {
+            const t = i / totalPts;
+            const angle = t * spiralTurns * 2 * Math.PI;
+            const currentR = baseR * (1 - t) + topR * t; // linear taper
+            const y = t * h;
+
+            // Add jitter for turbulence
+            const jitter = sp * 0.5 * (1 - t);
+            positions.push(
+                Math.cos(angle) * currentR + (Math.random() - 0.5) * jitter,
+                y,
+                Math.sin(angle) * currentR + (Math.random() - 0.5) * jitter
+            );
+            roles.push(2); // column = main vortex
+        }
+        // Chain along spiral
+        for (let i = 0; i < totalPts; i++) {
+            const idx = spiralStart + i;
+            const dx = positions[idx * 3] - positions[(idx + 1) * 3];
+            const dy = positions[idx * 3 + 1] - positions[(idx + 1) * 3 + 1];
+            const dz = positions[idx * 3 + 2] - positions[(idx + 1) * 3 + 2];
+            connections.push({
+                i: idx,
+                j: idx + 1,
+                restLength: Math.sqrt(dx * dx + dy * dy + dz * dz),
+                stiffness: 30,
+                damping: 4,
+            });
+        }
+
+        // Horizontal ring layers for structure
+        const ringLayers = 8;
+        for (let layer = 0; layer < ringLayers; layer++) {
+            const t = layer / ringLayers;
+            const ringR = baseR * (1 - t) + topR * t;
+            const ringY = t * h;
+            const ringPts = Math.max(8, Math.round(2 * Math.PI * ringR / (sp * 2)));
+            const ringStart = positions.length / 3;
+
+            for (let i = 0; i < ringPts; i++) {
+                const angle = (2 * Math.PI * i) / ringPts + t * Math.PI; // offset each ring
+                positions.push(
+                    Math.cos(angle) * ringR,
+                    ringY,
+                    Math.sin(angle) * ringR
+                );
+                roles.push(3); // beam
+            }
+            for (let i = 0; i < ringPts; i++) {
+                connections.push({
+                    i: ringStart + i,
+                    j: ringStart + ((i + 1) % ringPts),
+                    restLength: 2 * Math.PI * ringR / ringPts,
+                    stiffness: 20,
+                    damping: 3,
+                });
+            }
+        }
+
+        // Debris particles scattered around base
+        const debrisPts = Math.max(20, Math.round(Math.PI * baseR * baseR / (sp * sp * 3)));
+        for (let i = 0; i < debrisPts; i++) {
+            const angle = Math.random() * 2 * Math.PI;
+            const dr = baseR * (0.5 + Math.random() * 1.0);
+            const dy = Math.random() * h * 0.3;
+            positions.push(
+                Math.cos(angle) * dr,
+                dy,
+                Math.sin(angle) * dr
+            );
+            roles.push(4); // brace = debris
+        }
+
+        return {
+            positions: new Float32Array(positions),
+            roles: new Uint8Array(roles),
+            loads: new Float32Array(roles.length),
+            connections,
+        };
+    }
+
+    _templateRain(params) {
+        const s = params.scale;
+        const areaW = 8 * s * params.widthMul;
+        const areaD = 8 * s;
+        const h = 10 * s * params.heightMul;
+        const sp = this.spacing;
+        const positions = [];
+        const roles = [];
+        const connections = [];
+
+        // Rain particles: spawned at height, distributed across area
+        const count = Math.max(50, Math.round(areaW * areaD * h / (sp * sp * sp * 8)));
+
+        for (let i = 0; i < count; i++) {
+            const x = (Math.random() - 0.5) * areaW;
+            const y = Math.random() * h; // distributed through column
+            const z = (Math.random() - 0.5) * areaD;
+
+            // Slight drift pattern
+            const drift = Math.sin(x * 0.5) * sp * 2;
+            positions.push(x + drift, y, z);
+            roles.push(5); // decorative
+        }
+
+        // Vertical streak connections (nearby rain drops in same column)
+        for (let i = 0; i < count; i++) {
+            for (let j = i + 1; j < Math.min(i + 10, count); j++) {
+                const dx = positions[i * 3] - positions[j * 3];
+                const dz = positions[i * 3 + 2] - positions[j * 3 + 2];
+                const horizontalDist = Math.sqrt(dx * dx + dz * dz);
+                // Only connect nearly vertical neighbors
+                if (horizontalDist < sp * 2) {
+                    const dy = Math.abs(positions[i * 3 + 1] - positions[j * 3 + 1]);
+                    if (dy < sp * 6) {
+                        connections.push({
+                            i, j,
+                            restLength: dy,
+                            stiffness: 5,
+                            damping: 1.0,
+                        });
+                    }
+                }
+            }
+        }
+
+        // Ground puddle ring
+        const puddleR = areaW * 0.3;
+        const puddlePts = Math.max(12, Math.round(2 * Math.PI * puddleR / (sp * 2)));
+        const puddleStart = positions.length / 3;
+        for (let i = 0; i < puddlePts; i++) {
+            const angle = (2 * Math.PI * i) / puddlePts;
+            positions.push(Math.cos(angle) * puddleR, 0, Math.sin(angle) * puddleR);
+            roles.push(1); // foundation = ground
+        }
+        for (let i = 0; i < puddlePts; i++) {
+            connections.push({
+                i: puddleStart + i,
+                j: puddleStart + ((i + 1) % puddlePts),
+                restLength: 2 * Math.PI * puddleR / puddlePts,
+                stiffness: 20,
+                damping: 4,
+            });
+        }
+
+        return {
+            positions: new Float32Array(positions),
+            roles: new Uint8Array(roles),
+            loads: new Float32Array(roles.length),
+            connections,
+        };
+    }
+
+    // ==================== FLUID DOMAIN ====================
+
+    _templateWaterDrop(params) {
+        const s = params.scale;
+        const r = 2.5 * s;
+        const sp = this.spacing;
+        const positions = [];
+        const roles = [];
+        const connections = [];
+
+        // Sphere of particles with surface tension springs
+        // Fibonacci sphere distribution
+        const count = Math.max(30, Math.round(4 * Math.PI * r * r / (sp * sp)));
+        const goldenAngle = Math.PI * (3 - Math.sqrt(5));
+
+        // Surface shell
+        for (let i = 0; i < count; i++) {
+            const y = 1 - (2 * i / (count - 1));
+            const radiusAtY = Math.sqrt(1 - y * y);
+            const theta = goldenAngle * i;
+            positions.push(
+                Math.cos(theta) * radiusAtY * r,
+                y * r + r,
+                Math.sin(theta) * radiusAtY * r
+            );
+            roles.push(3); // beam = surface
+        }
+
+        // Surface tension: connect each particle to nearby ones
+        const surfaceThreshold = sp * 4;
+        for (let i = 0; i < count; i++) {
+            for (let j = i + 1; j < count; j++) {
+                const dx = positions[i * 3] - positions[j * 3];
+                const dy = positions[i * 3 + 1] - positions[j * 3 + 1];
+                const dz = positions[i * 3 + 2] - positions[j * 3 + 2];
+                const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+                if (dist < surfaceThreshold) {
+                    connections.push({
+                        i, j,
+                        restLength: dist,
+                        stiffness: 40, // strong surface tension
+                        damping: 5.0,
+                    });
+                }
+            }
+        }
+
+        // Inner core particles (denser packing)
+        const coreCount = Math.max(10, Math.round(count * 0.3));
+        const coreStart = positions.length / 3;
+        for (let i = 0; i < coreCount; i++) {
+            const y = 1 - (2 * i / (coreCount - 1));
+            const radiusAtY = Math.sqrt(1 - y * y);
+            const theta = goldenAngle * i;
+            const coreR = r * 0.5;
+            positions.push(
+                Math.cos(theta) * radiusAtY * coreR,
+                y * coreR + r,
+                Math.sin(theta) * radiusAtY * coreR
+            );
+            roles.push(2); // column = core
+        }
+
+        // Core internal bonds
+        for (let i = coreStart; i < coreStart + coreCount; i++) {
+            for (let j = i + 1; j < Math.min(i + 10, coreStart + coreCount); j++) {
+                const dx = positions[i * 3] - positions[j * 3];
+                const dy = positions[i * 3 + 1] - positions[j * 3 + 1];
+                const dz = positions[i * 3 + 2] - positions[j * 3 + 2];
+                const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+                if (dist < sp * 5) {
+                    connections.push({
+                        i, j,
+                        restLength: dist,
+                        stiffness: 30,
+                        damping: 4.0,
+                    });
+                }
+            }
+        }
+
+        return {
+            positions: new Float32Array(positions),
+            roles: new Uint8Array(roles),
+            loads: new Float32Array(roles.length),
+            connections,
+        };
+    }
+
+    _templateRiver(params) {
+        const s = params.scale;
+        const length = 15 * s * params.widthMul;
+        const width = 3 * s;
+        const depth = 0.5 * s;
+        const sp = this.spacing;
+        const positions = [];
+        const roles = [];
+        const connections = [];
+
+        // Elongated stream of particles flowing in one direction
+        // Sinusoidal meandering path
+        const segments = Math.max(20, Math.round(length / sp));
+        const widthPts = Math.max(4, Math.round(width / (sp * 2)));
+        const depthPts = Math.max(2, Math.round(depth / sp));
+
+        for (let seg = 0; seg <= segments; seg++) {
+            const t = seg / segments;
+            const x = -length / 2 + length * t;
+            // Meander
+            const meander = Math.sin(t * Math.PI * 3) * width * 0.4;
+            const segStart = positions.length / 3;
+
+            for (let w = 0; w < widthPts; w++) {
+                for (let d = 0; d < depthPts; d++) {
+                    const wt = w / (widthPts - 1);
+                    const dt = d / (depthPts - 1);
+                    const z = -width / 2 + width * wt + meander;
+                    const y = depth * dt;
+                    positions.push(x, y, z);
+
+                    if (d === 0) {
+                        roles.push(1); // foundation = riverbed
+                    } else if (w === 0 || w === widthPts - 1) {
+                        roles.push(2); // column = banks
+                    } else {
+                        roles.push(3); // beam = water surface
+                    }
+                }
+            }
+
+            // Connect particles within this cross-section
+            const crossPts = widthPts * depthPts;
+            for (let i = 0; i < crossPts - 1; i++) {
+                const idx1 = segStart + i;
+                const idx2 = segStart + i + 1;
+                // Only connect within same row or column
+                if ((i + 1) % depthPts !== 0) {
+                    const dx = positions[idx1 * 3] - positions[idx2 * 3];
+                    const dy = positions[idx1 * 3 + 1] - positions[idx2 * 3 + 1];
+                    const dz = positions[idx1 * 3 + 2] - positions[idx2 * 3 + 2];
+                    connections.push({
+                        i: idx1, j: idx2,
+                        restLength: Math.sqrt(dx * dx + dy * dy + dz * dz),
+                        stiffness: 15,
+                        damping: 3,
+                    });
+                }
+            }
+
+            // Connect to previous segment
+            if (seg > 0) {
+                const prevStart = segStart - crossPts;
+                for (let i = 0; i < crossPts; i++) {
+                    const dx = positions[(prevStart + i) * 3] - positions[(segStart + i) * 3];
+                    const dy = positions[(prevStart + i) * 3 + 1] - positions[(segStart + i) * 3 + 1];
+                    const dz = positions[(prevStart + i) * 3 + 2] - positions[(segStart + i) * 3 + 2];
+                    connections.push({
+                        i: prevStart + i,
+                        j: segStart + i,
+                        restLength: Math.sqrt(dx * dx + dy * dy + dz * dz),
+                        stiffness: 10,
+                        damping: 2,
+                    });
+                }
+            }
+        }
+
+        // Riverbank edges (stronger connections along length)
+        const bankSp = sp * 3;
+        const bankL = this._addParticlesAlongLine(positions, roles, 1,
+            -length / 2, 0, -width / 2 - sp, length / 2, 0, -width / 2 - sp, bankSp);
+        const bankR = this._addParticlesAlongLine(positions, roles, 1,
+            -length / 2, 0, width / 2 + sp, length / 2, 0, width / 2 + sp, bankSp);
+        connections.push(...bankL.connections, ...bankR.connections);
+
+        return {
+            positions: new Float32Array(positions),
+            roles: new Uint8Array(roles),
+            loads: new Float32Array(roles.length),
+            connections,
+        };
+    }
+
+    _templateOceanWave(params) {
+        const s = params.scale;
+        const waveLength = 12 * s * params.widthMul;
+        const waveW = 8 * s;
+        const amplitude = 1.5 * s * params.heightMul;
+        const sp = this.spacing;
+        const positions = [];
+        const roles = [];
+        const connections = [];
+
+        // Sinusoidal surface grid
+        const xSteps = Math.max(20, Math.round(waveLength / sp));
+        const zSteps = Math.max(12, Math.round(waveW / sp));
+        const waves = 2.5; // number of wave periods
+
+        for (let xi = 0; xi <= xSteps; xi++) {
+            for (let zi = 0; zi <= zSteps; zi++) {
+                const t = xi / xSteps;
+                const x = -waveLength / 2 + waveLength * t;
+                const z = -waveW / 2 + waveW * (zi / zSteps);
+                const y = Math.sin(t * waves * 2 * Math.PI) * amplitude + amplitude;
+
+                positions.push(x, y, z);
+
+                // Crest particles vs trough
+                if (Math.sin(t * waves * 2 * Math.PI) > 0.5) {
+                    roles.push(5); // arch = crest
+                } else if (Math.sin(t * waves * 2 * Math.PI) < -0.5) {
+                    roles.push(1); // foundation = trough
+                } else {
+                    roles.push(3); // beam = surface
+                }
+            }
+        }
+
+        // Grid connections
+        for (let xi = 0; xi <= xSteps; xi++) {
+            for (let zi = 0; zi <= zSteps; zi++) {
+                const idx = xi * (zSteps + 1) + zi;
+
+                // Connect to right neighbor
+                if (zi < zSteps) {
+                    const jdx = idx + 1;
+                    const dx = positions[idx * 3] - positions[jdx * 3];
+                    const dy = positions[idx * 3 + 1] - positions[jdx * 3 + 1];
+                    const dz = positions[idx * 3 + 2] - positions[jdx * 3 + 2];
+                    connections.push({
+                        i: idx, j: jdx,
+                        restLength: Math.sqrt(dx * dx + dy * dy + dz * dz),
+                        stiffness: 25,
+                        damping: 4,
+                    });
+                }
+
+                // Connect to next row
+                if (xi < xSteps) {
+                    const jdx = (xi + 1) * (zSteps + 1) + zi;
+                    const dx = positions[idx * 3] - positions[jdx * 3];
+                    const dy = positions[idx * 3 + 1] - positions[jdx * 3 + 1];
+                    const dz = positions[idx * 3 + 2] - positions[jdx * 3 + 2];
+                    connections.push({
+                        i: idx, j: jdx,
+                        restLength: Math.sqrt(dx * dx + dy * dy + dz * dz),
+                        stiffness: 25,
+                        damping: 4,
+                    });
+                }
+            }
+        }
+
+        // Seafloor reference line
+        const floor = this._addParticlesAlongLine(positions, roles, 1,
+            -waveLength / 2, 0, 0, waveLength / 2, 0, 0, sp * 3);
+        connections.push(...floor.connections);
+
+        return {
+            positions: new Float32Array(positions),
+            roles: new Uint8Array(roles),
+            loads: new Float32Array(roles.length),
+            connections,
+        };
+    }
+
+    // ==================== ELECTROMAGNETIC DOMAIN ====================
+
+    _templateMagnet(params) {
+        const s = params.scale;
+        const poleR = 1.2 * s;
+        const poleDist = 6 * s * params.widthMul;
+        const sp = this.spacing;
+        const positions = [];
+        const roles = [];
+        const connections = [];
+
+        // North pole cluster
+        const northX = -poleDist / 2;
+        const northPts = Math.max(12, Math.round(4 * Math.PI * poleR * poleR / (sp * sp)));
+        const goldenAngle = Math.PI * (3 - Math.sqrt(5));
+        const northStart = positions.length / 3;
+
+        for (let i = 0; i < northPts; i++) {
+            const y = 1 - (2 * i / (northPts - 1));
+            const radiusAtY = Math.sqrt(1 - y * y);
+            const theta = goldenAngle * i;
+            positions.push(
+                northX + Math.cos(theta) * radiusAtY * poleR,
+                y * poleR + poleR * 2,
+                Math.sin(theta) * radiusAtY * poleR
+            );
+            roles.push(1); // foundation = north pole
+        }
+        // Connect north pole internally
+        for (let i = northStart; i < northStart + northPts; i++) {
+            for (let j = i + 1; j < Math.min(i + 8, northStart + northPts); j++) {
+                const dx = positions[i * 3] - positions[j * 3];
+                const dy = positions[i * 3 + 1] - positions[j * 3 + 1];
+                const dz = positions[i * 3 + 2] - positions[j * 3 + 2];
+                const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+                if (dist < sp * 5) {
+                    connections.push({ i, j, restLength: dist, stiffness: 60, damping: 5 });
+                }
+            }
+        }
+
+        // South pole cluster
+        const southX = poleDist / 2;
+        const southPts = northPts;
+        const southStart = positions.length / 3;
+
+        for (let i = 0; i < southPts; i++) {
+            const y = 1 - (2 * i / (southPts - 1));
+            const radiusAtY = Math.sqrt(1 - y * y);
+            const theta = goldenAngle * i;
+            positions.push(
+                southX + Math.cos(theta) * radiusAtY * poleR,
+                y * poleR + poleR * 2,
+                Math.sin(theta) * radiusAtY * poleR
+            );
+            roles.push(2); // column = south pole
+        }
+        for (let i = southStart; i < southStart + southPts; i++) {
+            for (let j = i + 1; j < Math.min(i + 8, southStart + southPts); j++) {
+                const dx = positions[i * 3] - positions[j * 3];
+                const dy = positions[i * 3 + 1] - positions[j * 3 + 1];
+                const dz = positions[i * 3 + 2] - positions[j * 3 + 2];
+                const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+                if (dist < sp * 5) {
+                    connections.push({ i, j, restLength: dist, stiffness: 60, damping: 5 });
+                }
+            }
+        }
+
+        // Field lines — curved arcs from north to south pole
+        const fieldLineCount = 8;
+        const cy = poleR * 2; // center height
+        for (let f = 0; f < fieldLineCount; f++) {
+            const phi = (2 * Math.PI * f) / fieldLineCount;
+            const lineStart = positions.length / 3;
+            const linePts = Math.max(12, Math.round(poleDist * 1.5 / sp));
+
+            for (let i = 0; i <= linePts; i++) {
+                const t = i / linePts;
+                // Parametric arc from north to south
+                const x = northX + (southX - northX) * t;
+                // Field line bulges outward in y and z
+                const bulge = Math.sin(t * Math.PI);
+                const fieldR = poleR * 2.0 * bulge;
+                const y = cy + Math.cos(phi) * fieldR;
+                const z = Math.sin(phi) * fieldR;
+
+                positions.push(x, y, z);
+                roles.push(4); // brace = field lines
+            }
+            for (let i = 0; i < linePts; i++) {
+                const idx = lineStart + i;
+                const dx = positions[idx * 3] - positions[(idx + 1) * 3];
+                const dy = positions[idx * 3 + 1] - positions[(idx + 1) * 3 + 1];
+                const dz = positions[idx * 3 + 2] - positions[(idx + 1) * 3 + 2];
+                connections.push({
+                    i: idx,
+                    j: idx + 1,
+                    restLength: Math.sqrt(dx * dx + dy * dy + dz * dz),
+                    stiffness: 20,
+                    damping: 3,
+                });
+            }
+        }
+
+        // Bar connecting poles (magnet body)
+        const bar = this._addParticlesAlongLine(positions, roles, 3,
+            northX, cy, 0, southX, cy, 0, sp);
+        connections.push(...bar.connections);
+
+        return {
+            positions: new Float32Array(positions),
+            roles: new Uint8Array(roles),
+            loads: new Float32Array(roles.length),
+            connections,
+        };
+    }
+
+    _templateElectronCloud(params) {
+        const s = params.scale;
+        const sp = this.spacing;
+        const positions = [];
+        const roles = [];
+        const connections = [];
+
+        // Central nucleus — compact cluster
+        const nucleusR = 0.6 * s;
+        const nucleusPts = Math.max(8, Math.round(4 * Math.PI * nucleusR * nucleusR / (sp * sp)));
+        const goldenAngle = Math.PI * (3 - Math.sqrt(5));
+        const nucleusStart = positions.length / 3;
+        const centerY = 4 * s;
+
+        for (let i = 0; i < nucleusPts; i++) {
+            const y = 1 - (2 * i / (nucleusPts - 1));
+            const radiusAtY = Math.sqrt(1 - y * y);
+            const theta = goldenAngle * i;
+            positions.push(
+                Math.cos(theta) * radiusAtY * nucleusR,
+                centerY + y * nucleusR,
+                Math.sin(theta) * radiusAtY * nucleusR
+            );
+            roles.push(1); // foundation = nucleus
+        }
+        // Strong nucleus bonds
+        for (let i = nucleusStart; i < nucleusStart + nucleusPts; i++) {
+            for (let j = i + 1; j < Math.min(i + 6, nucleusStart + nucleusPts); j++) {
+                const dx = positions[i * 3] - positions[j * 3];
+                const dy = positions[i * 3 + 1] - positions[j * 3 + 1];
+                const dz = positions[i * 3 + 2] - positions[j * 3 + 2];
+                const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+                if (dist < sp * 4) {
+                    connections.push({ i, j, restLength: dist, stiffness: 80, damping: 5 });
+                }
+            }
+        }
+
+        // Electron probability shells (s, p orbital approximations)
+        // 1s orbital — spherical
+        const s1R = 2 * s;
+        const s1Pts = Math.max(20, Math.round(4 * Math.PI * s1R * s1R / (sp * sp * 2)));
+        for (let i = 0; i < s1Pts; i++) {
+            const y = 1 - (2 * i / (s1Pts - 1));
+            const radiusAtY = Math.sqrt(1 - y * y);
+            const theta = goldenAngle * i;
+            // Randomize radius for probability cloud effect
+            const rr = s1R * (0.5 + Math.random() * 0.5);
+            positions.push(
+                Math.cos(theta) * radiusAtY * rr,
+                centerY + y * rr,
+                Math.sin(theta) * radiusAtY * rr
+            );
+            roles.push(5); // decorative = electron cloud
+        }
+
+        // 2p orbital — dumbbell shape along y-axis
+        const p2R = 3.5 * s * params.heightMul;
+        const p2Pts = Math.max(20, Math.round(4 * Math.PI * p2R * p2R / (sp * sp * 3)));
+        for (let i = 0; i < p2Pts; i++) {
+            const y = 1 - (2 * i / (p2Pts - 1));
+            const radiusAtY = Math.sqrt(1 - y * y);
+            const theta = goldenAngle * i;
+            // Dumbbell: thinner at equator, fatter at poles
+            const lobeScale = Math.abs(y) * 0.8 + 0.2;
+            const rr = p2R * lobeScale * (0.5 + Math.random() * 0.5);
+            const xr = rr * radiusAtY * 0.5; // compressed horizontally
+            positions.push(
+                Math.cos(theta) * xr,
+                centerY + y * rr,
+                Math.sin(theta) * xr
+            );
+            roles.push(4); // brace = p orbital
+        }
+
+        // 2p orbital along x-axis
+        const p2xPts = Math.max(15, Math.round(p2Pts * 0.7));
+        for (let i = 0; i < p2xPts; i++) {
+            const y = 1 - (2 * i / (p2xPts - 1));
+            const radiusAtY = Math.sqrt(1 - y * y);
+            const theta = goldenAngle * i;
+            const lobeScale = Math.abs(y) * 0.8 + 0.2;
+            const rr = p2R * 0.8 * lobeScale * (0.5 + Math.random() * 0.5);
+            // Rotated: dumbbell along x
+            positions.push(
+                Math.cos(theta) * rr * radiusAtY + (y > 0 ? 1 : -1) * rr * 0.3,
+                centerY + Math.sin(theta) * radiusAtY * rr * 0.5,
+                Math.sin(theta) * rr * radiusAtY * 0.5
+            );
+            roles.push(3); // beam = another orbital
+        }
+
+        // Weak probabilistic connections within each shell
+        const cloudStart = nucleusStart + nucleusPts;
+        const totalCloud = positions.length / 3 - cloudStart;
+        const cloudThreshold = sp * 5;
+        for (let i = cloudStart; i < cloudStart + totalCloud; i++) {
+            for (let j = i + 1; j < Math.min(i + 12, cloudStart + totalCloud); j++) {
+                const dx = positions[i * 3] - positions[j * 3];
+                const dy = positions[i * 3 + 1] - positions[j * 3 + 1];
+                const dz = positions[i * 3 + 2] - positions[j * 3 + 2];
+                const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+                if (dist < cloudThreshold) {
+                    connections.push({
+                        i, j,
+                        restLength: dist * 1.1, // slightly loose
+                        stiffness: 6,
+                        damping: 2,
+                    });
+                }
             }
         }
 
