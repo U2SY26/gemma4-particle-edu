@@ -1,0 +1,24 @@
+{
+  "name": "gemma4-particle-edu",
+  "version": "0.1.0",
+  "description": "Gemma 4 + 3D Particle Physics Simulator for Science Education",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "author": "U2DIA <contact@u2dia.com>",
+  "license": "MIT",
+  "keywords": [
+    "gemma4",
+    "particle-simulation",
+    "physics",
+    "education",
+    "threejs",
+    "webgl"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/U2SY26/gemma4-particle-edu.git"
+  }
+}
