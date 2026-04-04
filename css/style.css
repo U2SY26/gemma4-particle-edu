@@ -1405,6 +1405,59 @@ textarea.text-input {
     max-width: 92%;
 }
 
+/* ==================== WORKFLOW STEPS (Replit-style) ==================== */
+.workflow-container {
+    padding: 12px;
+    background: var(--bg-elevated);
+    border-radius: var(--radius-lg);
+    border-left: 3px solid var(--accent);
+    max-width: 100%;
+}
+
+.workflow-step {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    font-size: 13px;
+    transition: opacity 0.3s ease;
+}
+
+.workflow-step + .workflow-step {
+    border-top: 1px solid var(--border-muted);
+}
+
+.step-icon {
+    width: 20px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.step-title {
+    font-weight: 600;
+    color: var(--text-primary);
+    min-width: 100px;
+    white-space: nowrap;
+}
+
+.step-detail {
+    color: var(--text-secondary);
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.step-running .step-title { color: var(--accent); }
+.step-running .step-icon { animation: pulse 1.5s ease-in-out infinite; }
+.step-done .step-title { color: var(--accent-green); }
+.step-error .step-title { color: var(--accent-red); }
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
 /* ==================== RESPONSIVE ==================== */
 @media (max-width: 768px) {
     body {

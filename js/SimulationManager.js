@@ -540,21 +540,41 @@ export class SimulationManager {
         this.addChatMessage('user', content);
         this._chatHistory.push({ role: 'user', content });
 
+        // Clear any previous workflow container
+        this._clearWorkflowContainer();
+
         try {
+            // Step 1: Planning
+            this._showWorkflowStep(1, '\uD83D\uDCCB', 'Planning', '\uC2DC\uB098\uB9AC\uC624 \uBD84\uC11D \uC911...', 'running');
+
             // Try Ollama SSE first, fall back to keyword NLP
             const ollamaResponse = await this._sendToOllama(content);
 
             if (ollamaResponse) {
+                this._showWorkflowStep(1, '\uD83D\uDCCB', 'Planning', 'Gemma 4 \uBD84\uC11D \uC644\uB8CC', 'done');
+
                 // Finalize streaming message into a permanent chat message
                 this._finalizeStreamingMessage();
                 this.addChatMessage('assistant', ollamaResponse);
                 this._chatHistory.push({ role: 'assistant', content: ollamaResponse });
 
+                // Step 2: Parameter Generation
+                this._showWorkflowStep(2, '\uD83D\uDD27', 'Generating', '\uD30C\uB77C\uBBF8\uD130 \uCD94\uCD9C \uC911...', 'running');
+
                 // Extract simulation parameters from Gemma response
                 const simParams = this._extractSimParams(ollamaResponse);
+
                 if (simParams) {
+                    const groups = simParams.particles?.groups?.length || 0;
+                    const count = simParams.physics?.particleCount || 25000;
+                    this._showWorkflowStep(2, '\uD83D\uDD27', 'Generating',
+                        `${groups > 0 ? groups + '\uAC1C \uADF8\uB8F9, ' : ''}${count.toLocaleString()}\uAC1C \uD30C\uD2F0\uD074 \uC124\uC815 \uC644\uB8CC`, 'done');
+
                     const card = this.getActiveCard();
                     if (card) {
+                        // Step 3: Building Structure
+                        this._showWorkflowStep(3, '\uD83C\uDFD7\uFE0F', 'Building', '\uAD6C\uC870\uBB3C \uC0DD\uC131 \uC911...', 'running');
+
                         if (simParams.physics) {
                             Object.assign(card.physics, simParams.physics);
                             this._syncPhysicsUI(card.physics);
@@ -576,6 +596,27 @@ export class SimulationManager {
                             if (this.onCardSelect) this.onCardSelect(card);
                         }
 
+                        this._showWorkflowStep(3, '\uD83C\uDFD7\uFE0F', 'Building',
+                            `${simParams.title || simParams.prompt || 'custom'} \uAD6C\uC870 \uC0DD\uC131 \uC644\uB8CC`, 'done');
+
+                        // Step 4: Rendering
+                        this._showWorkflowStep(4, '\uD83C\uDFA8', 'Rendering', '3D \uC2DC\uAC01\uD654 \uC801\uC6A9 \uC911...', 'running');
+
+                        // Short delay for visual effect
+                        await new Promise(r => setTimeout(r, 500));
+
+                        this._showWorkflowStep(4, '\uD83C\uDFA8', 'Rendering', '\uB124\uC628 \uBE14\uB8F8 \uB80C\uB354\uB9C1 \uC644\uB8CC', 'done');
+
+                        // Step 5: Complete
+                        this._showWorkflowStep(5, '\u2728', 'Complete',
+                            `"${simParams.title || simParams.prompt || 'simulation'}" \uC2DC\uBBAC\uB808\uC774\uC158 \uD65C\uC131\uD654!`, 'done');
+
+                        // === Gemma 4 Self-QA Loop ===
+                        // After building, collect actual simulation state and ask Gemma to verify
+                        if (this._ollamaAvailable) {
+                            await this._runSelfQA(content, simParams, card);
+                        }
+
                         // Save to history
                         this._saveToHistory({
                             query: content,
@@ -589,17 +630,29 @@ export class SimulationManager {
                             particleCount: card.physics.particleCount || 25000,
                         });
                     }
+                } else {
+                    this._showWorkflowStep(2, '\uD83D\uDD27', 'Generating', 'JSON \uD30C\uB77C\uBBF8\uD130 \uC5C6\uC74C \u2014 \uAE30\uBCF8 \uD504\uB9AC\uC14B \uC801\uC6A9', 'done');
                 }
             } else {
+                // NLP Fallback
+                this._showWorkflowStep(1, '\uD83D\uDCCB', 'Planning', 'AI \uC624\uD504\uB77C\uC778 \u2014 \uD0A4\uC6CC\uB4DC \uBD84\uC11D \uBAA8\uB4DC', 'done');
+                this._showWorkflowStep(2, '\uD83D\uDD27', 'Generating', '\uD0A4\uC6CC\uB4DC \uAE30\uBC18 \uD30C\uB77C\uBBF8\uD130 \uC0DD\uC131', 'running');
+
                 // Fallback to keyword NLP
                 const response = this._processNaturalLanguage(content);
                 this.addChatMessage('assistant', response);
                 this._chatHistory.push({ role: 'assistant', content: response });
+
+                this._showWorkflowStep(2, '\uD83D\uDD27', 'Generating', '\uD0A4\uC6CC\uB4DC \uB9E4\uCE6D \uC644\uB8CC', 'done');
+                this._showWorkflowStep(3, '\uD83C\uDFD7\uFE0F', 'Building', '\uAD6C\uC870\uBB3C \uC0DD\uC131 \uC644\uB8CC', 'done');
+                this._showWorkflowStep(4, '\uD83C\uDFA8', 'Rendering', '\uB80C\uB354\uB9C1 \uC644\uB8CC', 'done');
             }
         } catch (err) {
             console.warn('[Chat] Chat submit failed:', err.message || err);
             // Clean up any lingering streaming cursor
             this._finalizeStreamingMessage();
+            // Mark current workflow step as error
+            this._showWorkflowStep(1, '\uD83D\uDCCB', 'Planning', `\uC624\uB958: ${err.message || '\uCC98\uB9AC \uC2E4\uD328'}`, 'error');
             // Show error message in chat
             this._showChatError(t('chatError'));
         }
@@ -613,6 +666,92 @@ export class SimulationManager {
         el.textContent = message;
         chatBox.appendChild(el);
         chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // ==================== GEMMA 4 SELF-QA LOOP ====================
+
+    async _runSelfQA(userRequest, simParams, card, maxIter = 2) {
+        for (let i = 0; i < maxIter; i++) {
+            const state = this._collectSimState();
+            const qaPrompt = `[QA ${i+1}/${maxIter}] User: "${userRequest}"
+Built: ${simParams.prompt}, particles=${state.activeParticles}, gravity=${state.gravity}, temp=${state.temperature}K
+Correct? Reply ONLY \`\`\`json: {"qa":"pass","reason":"..."} or corrected simulation JSON.`;
+            try {
+                const qaRes = await this._callOllamaSync(qaPrompt);
+                if (!qaRes) break;
+                const m = qaRes.match(/```json\s*([\s\S]*?)```/);
+                if (!m) break;
+                const parsed = JSON.parse(m[1]);
+                if (parsed.qa === 'pass') {
+                    this.addChatMessage('system', `🔍 QA: ${parsed.reason || '✅ 요청에 부합'}`);
+                    break;
+                }
+                const fix = parsed.simulation;
+                if (fix) {
+                    this.addChatMessage('system', `🔧 QA 개선 ${i+1}: 수정 적용 중...`);
+                    if (fix.physics) { Object.assign(card.physics, fix.physics); this._syncPhysicsUI(card.physics); if (this.onPhysicsChange) this.onPhysicsChange(card.physics); }
+                    if (fix.particles) { card.particleSpec = fix.particles; if (this.onCardSelect) this.onCardSelect(card); }
+                } else break;
+            } catch (err) { console.warn('[QA]', err.message); break; }
+        }
+    }
+
+    _collectSimState() {
+        const card = this.getActiveCard();
+        return { activeParticles: card?.physics?.particleCount || 0, gravity: card?.physics?.gravity ?? -9.81, temperature: card?.physics?.temperature ?? 293 };
+    }
+
+    async _callOllamaSync(prompt) {
+        try {
+            const res = await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ messages: [{ role: 'system', content: 'QA validator. Reply ONLY ```json.' }, { role: 'user', content: prompt }] }) });
+            if (!res.ok) return null;
+            const reader = res.body.getReader(); const decoder = new TextDecoder();
+            let full = '', buffer = '';
+            while (true) { const { done, value } = await reader.read(); if (done) break;
+                buffer += decoder.decode(value, { stream: true }); const lines = buffer.split('\n'); buffer = lines.pop() || '';
+                for (const line of lines) { if (!line.startsWith('data: ')) continue;
+                    try { const j = JSON.parse(line.slice(6)); if (j.message?.content) full += j.message.content; } catch {} } }
+            return full || null;
+        } catch { return null; }
+    }
+
+    // ==================== WORKFLOW VISUALIZATION ====================
+
+    _showWorkflowStep(stepNum, icon, title, detail, status = 'running') {
+        const chatBox = document.getElementById('chat-messages');
+        if (!chatBox) return;
+
+        let container = chatBox.querySelector('.workflow-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.className = 'chat-msg assistant workflow-container';
+            chatBox.appendChild(container);
+        }
+
+        let stepEl = container.querySelector(`[data-step="${stepNum}"]`);
+        if (!stepEl) {
+            stepEl = document.createElement('div');
+            stepEl.className = `workflow-step step-${status}`;
+            stepEl.setAttribute('data-step', stepNum);
+            container.appendChild(stepEl);
+        }
+
+        stepEl.className = `workflow-step step-${status}`;
+        stepEl.innerHTML = `
+            <span class="step-icon">${status === 'done' ? '\u2705' : status === 'error' ? '\u274C' : '\u23F3'}</span>
+            <span class="step-title">${icon} ${title}</span>
+            <span class="step-detail">${detail}</span>
+        `;
+
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    _clearWorkflowContainer() {
+        const chatBox = document.getElementById('chat-messages');
+        if (!chatBox) return;
+        const container = chatBox.querySelector('.workflow-container');
+        if (container) container.remove();
     }
 
     // ==================== OLLAMA SSE CHAT ====================
@@ -813,6 +952,15 @@ I'll create two intertwined helices for the backbones, with small connecting par
 💡 **Want to explore more?**
 - What happens when we "unzip" the DNA for replication?
 - How does UV radiation cause thymine dimers?
+
+## Architecture Guidelines
+For buildings and cities, use multiple particle groups for structural realism:
+- Foundation: grid at ground level, color=orange, connect=grid
+- Columns: cylinder, vertical, color=cyan, connect=chain
+- Floors: disk at each level, color=blue, connect=grid
+- Facade: shell or grid surface, color=magenta, connect=nearest:4
+- Details: point_cloud for windows/decorations, color=yellow, connect=none
+This creates much more detailed and realistic structural simulations with visible load-bearing elements.
 
 ## CRITICAL RULES
 - You MUST include a \`\`\`json block in EVERY response. Never skip it.
