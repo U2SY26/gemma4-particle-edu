@@ -546,14 +546,16 @@ class App {
         this.physics.temperature = p.temperature || 293;
 
         // Material properties — sliders map to real SI units
-        // density slider (0.1–20) → ×1000 = kg/m³
-        // springK slider (0–100) → ×1e9 = Pa (GPa)
-        // damping slider (0–1) → inverted to damping ratio ζ
-        // yieldStrength slider (0–100) → ×1e6 = Pa (MPa)
-        this.physics.materialDensity = (p.density || 2.4) * 1000;
-        this.physics.youngsModulus = (p.springStiffness || 20) * 1e9;
-        this.physics.dampingRatio = Math.max(0.001, 1.0 - (p.damping || 0.97));
-        this.physics.materialYieldStrength = (p.yieldStrength || 50) * 1e6;
+        // density: handle both kg/m³ (>100) and ×1000 scale (<100)
+        const rawDensity = p.density || 2.4;
+        this.physics.materialDensity = rawDensity > 100 ? rawDensity : rawDensity * 1000;
+
+        // springStiffness: cap to safe Verlet range to prevent particle explosion
+        // Gemma 4 may send large values (5000+) — clamp to [0, 100] before ×1e9
+        const rawK = Math.min(p.springStiffness || 20, 100);
+        this.physics.youngsModulus = rawK * 1e9;
+        this.physics.dampingRatio = Math.max(0.001, Math.min(1.0 - (p.damping || 0.97), 0.5));
+        this.physics.materialYieldStrength = Math.min(p.yieldStrength || 50, 100) * 1e6;
 
         // Foundation depth (m)
         this.physics.foundationDepth = p.foundation || 5.0;
