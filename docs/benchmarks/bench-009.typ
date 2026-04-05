@@ -4,7 +4,7 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #009]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Jupiter Atmospheric Gas Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[Jupiter Atmosphere Simulation]
   #v(2pt)
   #text(size: 10pt)[Model: gemma4:26b]
 ]
@@ -13,15 +13,12 @@
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [목성의 대기를 구성하고 있는 수소와 헬륨 등의 기체 성분],
+  [Step 1: 식별], [수소와 헬륨 등으로 이루어진 목성의 대기 성분],
   [Step 2: 재료], [gas],
-  [Step 3: 밀도], [1.225 kg/m³],
+  [Step 3: 밀도], [1.2 kg/m³],
   [Step 4: 중력], [-24.79 m/s²],
   [Step 5: 온도], [165 K],
-  [Step 6: 특수], [```json
-{
-  "pressure": "high",
-  "tempe],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

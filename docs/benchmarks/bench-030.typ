@@ -4,7 +4,7 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #030]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Red Blood Cell Transport in Capillaries]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[Microvascular Gas Exchange Simulation]
   #v(2pt)
   #text(size: 10pt)[Model: gemma4:26b]
 ]
@@ -13,12 +13,15 @@
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [산소를 운반하는 적혈구가 지나는 아주 가는 혈관],
-  [Step 2: 재료], [endothelium],
+  [Step 1: 식별], [산소와 이산화탄소 교환이 일어나는 미세 혈관과 적혈구.],
+  [Step 2: 재료], [blood],
   [Step 3: 밀도], [1060 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [310 K],
-  [Step 6: 특수], [{}],
+  [Step 6: 특수], [```json
+{
+  "viscosity": "low",
+  "tempe],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

@@ -13,15 +13,14 @@
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [태양 대기 가장 바깥층을 구성하는 고온의 이온화된 가스],
+  [Step 1: 식별], [태양 대기 가장 바깥층을 이루는 초고온의 이온화된 물질],
   [Step 2: 재료], [plasma],
-  [Step 3: 밀도], [플라스마는 특정 물질의 이름이 아니라 kg/m³],
+  [Step 3: 밀도], [플라스마의 밀도는 온도와 압력 등 환 kg/m³],
   [Step 4: 중력], [-274 m/s²],
   [Step 5: 온도], [1000000 K],
   [Step 6: 특수], [```json
 {
-  "temperature_K": 1000000,
-  ],
+  "temperature_kelvin": 100000],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

@@ -4,7 +4,7 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #012]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Protein Alpha Helix Structure Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[Simulation of Protein Alpha-Helix Secondary Structure]
   #v(2pt)
   #text(size: 10pt)[Model: gemma4:26b]
 ]
@@ -13,12 +13,14 @@
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [단백질의 2차 구조 중 하나인 나선형 구조.],
+  [Step 1: 식별], [단백질의 2차 구조를 형성하는 나선형 구조],
   [Step 2: 재료], [amino acid],
   [Step 3: 밀도], [1400 kg/m³],
   [Step 4: 중력], [0 m/s²],
   [Step 5: 온도], [310 K],
-  [Step 6: 특수], [{}],
+  [Step 6: 특수], [```json
+{}
+```],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

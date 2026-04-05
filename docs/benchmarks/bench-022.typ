@@ -4,7 +4,7 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #022]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Superconductor Magnetic Field Expulsion Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[Meissner Effect in Superconductor]
   #v(2pt)
   #text(size: 10pt)[Model: gemma4:26b]
 ]
@@ -13,9 +13,9 @@
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [초전도체가 내부의 자기장을 외부로 밀어내는 현상],
+  [Step 1: 식별], [초전도체 내부의 자기장이 배제되는 현상],
   [Step 2: 재료], [superconductor],
-  [Step 3: 밀도], [2500-7200 kg/m³],
+  [Step 3: 밀도], [8570 kg/m³],
   [Step 4: 중력], [0 m/s²],
   [Step 5: 온도], [77 K],
   [Step 6: 특수], [```json

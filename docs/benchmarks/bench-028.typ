@@ -4,7 +4,7 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #028]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Dark Matter Galaxy Merger Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[Galactic Collision Simulation]
   #v(2pt)
   #text(size: 10pt)[Model: gemma4:26b]
 ]
@@ -13,15 +13,15 @@
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [중력적 상호작용으로 은하들이 서로 충돌하고 병합되는 현상],
-  [Step 2: 재료], [dark matter],
-  [Step 3: 밀도], [5 \times 10^{-22} kg/m³],
+  [Step 1: 식별], [중력 상호작용으로 인해 두 은하가 서로 부딪히는 천문학적 현상],
+  [Step 2: 재료], [matter],
+  [Step 3: 밀도], [물질(matter)은 종류에 따라 밀 kg/m³],
   [Step 4: 중력], [0 m/s²],
   [Step 5: 온도], [1000000 K],
   [Step 6: 특수], [```json
 {
-  "massRatio": 1.0,
-  "relativ],
+  "gravity": "essential",
+  "m],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

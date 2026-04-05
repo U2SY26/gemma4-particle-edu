@@ -4,7 +4,7 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #024]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[High Viscosity Honey Flow Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[Viscous Liquid Flow Simulation]
   #v(2pt)
   #text(size: 10pt)[Model: gemma4:26b]
 ]
@@ -13,9 +13,9 @@
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [점도가 매우 높은 액체가 끈적하게 흐르는 유동 현상],
-  [Step 2: 재료], [honey],
-  [Step 3: 밀도], [1420 kg/m³],
+  [Step 1: 식별], [꿀처럼 점도가 높은 액체가 끈적하게 흐르는 현상],
+  [Step 2: 재료], [viscosity],
+  [Step 3: 밀도], [점도(viscosity)는 물질의 흐 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
   [Step 6: 특수], [{}],

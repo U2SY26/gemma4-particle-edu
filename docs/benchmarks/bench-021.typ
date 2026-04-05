@@ -4,7 +4,7 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #021]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[High-Temperature Plasma Fusion Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[Nuclear Fusion Plasma Simulation]
   #v(2pt)
   #text(size: 10pt)[Model: gemma4:26b]
 ]
@@ -13,21 +13,21 @@
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [핵융합 반응을 일으키는 초고온의 이온화된 기체 상태],
+  [Step 1: 식별], [핵융합 반응을 일으키기 위해 초고온으로 가열된 이온화된 기체 상태],
   [Step 2: 재료], [plasma],
-  [Step 3: 밀도], [1025 kg/m³],
-  [Step 4: 중력], [9.81 m/s²],
-  [Step 5: 온도], [100000000 K],
+  [Step 3: 밀도], [플라스마의 밀도는 온도와 압력 등 상 kg/m³],
+  [Step 4: 중력], [0 m/s²],
+  [Step 5: 온도], [100,000,000 K],
   [Step 6: 특수], [```json
 {
-  "temperature_celsius": 15000],
+  "temperature": "extremely_hi],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)
 #table(columns: (auto, auto, auto), inset: 5pt,
   [검증 항목], [결과], [판정],
-  [stability], [안정 (y=16.29)], [PASS],
-  [gravity_dir], [상승 OK], [PASS],
+  [stability], [안정 (y=10.00)], [PASS],
+  [gravity_dir], [무중력 OK (drift=0.000)], [PASS],
   [damping], [damping=0.97 OK], [PASS],
   [temperature], [100000000K OK], [PASS],
   [particle_count], [25000 OK], [PASS],
@@ -36,6 +36,6 @@
 === 종합
 정확도: ★★★★★ 100%
 파티클: 25000
-중력: 9.81 m/s²
+중력: ? m/s²
 온도: 100000000 K
 시뮬 안정성: ✓ 안정

@@ -4,7 +4,7 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #001]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Ancient Egyptian Limestone Tomb Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[Simulation of Ancient Egyptian Pharaoh's Stone Tomb]
   #v(2pt)
   #text(size: 10pt)[Model: gemma4:26b]
 ]
@@ -13,9 +13,9 @@
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [고대 이집트의 거대한 석조 무덤],
+  [Step 1: 식별], [고대 이집트 파라오의 거대한 석조 무덤],
   [Step 2: 재료], [limestone],
-  [Step 3: 밀도], [2500 kg/m³],
+  [Step 3: 밀도], [2700 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
   [Step 6: 특수], [{}],

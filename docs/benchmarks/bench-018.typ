@@ -4,7 +4,7 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #018]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[High-Magnitude Earthquake Energy Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[High-Magnitude Seismic Energy Destruction Simulation]
   #v(2pt)
   #text(size: 10pt)[Model: gemma4:26b]
 ]
@@ -14,8 +14,8 @@
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
   [Step 1: 식별], [매우 강력하고 파괴적인 지진],
-  [Step 2: 재료], [Energy],
-  [Step 3: 밀도], [에너지는 물질이 아니기 때문에 고정된 kg/m³],
+  [Step 2: 재료], [energy],
+  [Step 3: 밀도], [에너지는 물질이 아니기 때문에 $\t kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [지진 규모(Magnitude)는 지진 K],
   [Step 6: 특수], [{}],
@@ -27,7 +27,7 @@
   [stability], [안정 (y=3.71)], [PASS],
   [gravity_dir], [하강 OK (y=3.71)], [PASS],
   [damping], [damping=0.97 OK], [PASS],
-  [temperature], [0K OK], [PASS],
+  [temperature], [500K OK], [PASS],
   [particle_count], [25000 OK], [PASS],
 )
 
@@ -35,5 +35,5 @@
 정확도: ★★★★★ 100%
 파티클: 25000
 중력: -9.81 m/s²
-온도: ? K
+온도: 500 K
 시뮬 안정성: ✓ 안정

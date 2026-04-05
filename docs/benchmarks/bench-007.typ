@@ -4,7 +4,7 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #007]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Microgravity Water Droplet Surface Tension Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[Microgravity Water Sphere Simulation]
   #v(2pt)
   #text(size: 10pt)[Model: gemma4:26b]
 ]
@@ -13,7 +13,7 @@
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [국제우주정거장의 무중력 환경에서 표면 장력으로 인해 구형을 이루는 물방울],
+  [Step 1: 식별], [국제우주정거장의 미세 중력 상태에서 표면 장력으로 형성된 구형의 액체],
   [Step 2: 재료], [water],
   [Step 3: 밀도], [1000 kg/m³],
   [Step 4: 중력], [0 m/s²],

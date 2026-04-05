@@ -4,7 +4,7 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #003]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Roman Concrete Structural Load Distribution Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[Roman Concrete Structural Stability Simulation]
   #v(2pt)
   #text(size: 10pt)[Model: gemma4:26b]
 ]
@@ -13,7 +13,7 @@
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [거대한 석조 구조물의 하중을 효율적으로 분산하고 지탱하는 로마의 건축 공법입니다.],
+  [Step 1: 식별], [거대한 하중을 분산하여 구조적 안정성을 제공하는 로마의 건축 공법.],
   [Step 2: 재료], [concrete],
   [Step 3: 밀도], [2400 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],

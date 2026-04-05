@@ -13,14 +13,15 @@
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [달 표면에서 도약하는 우주인의 모습],
+  [Step 1: 식별], [달 표면에서 우주인이 뛰어오르는 장면],
   [Step 2: 재료], [regolith],
   [Step 3: 밀도], [1500 kg/m³],
   [Step 4: 중력], [-1.62 m/s²],
-  [Step 5: 온도], [390 K],
+  [Step 5: 온도], [100~400 K],
   [Step 6: 특수], [```json
 {
-  "gravity_relative_to_earth":],
+  "gravity_ratio": 0.166,
+  "a],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)
@@ -29,7 +30,7 @@
   [stability], [안정 (y=8.96)], [PASS],
   [gravity_dir], [하강 OK (y=8.96)], [PASS],
   [damping], [damping=0.97 OK], [PASS],
-  [temperature], [390K OK], [PASS],
+  [temperature], [250K OK], [PASS],
   [particle_count], [25000 OK], [PASS],
 )
 
@@ -37,5 +38,5 @@
 정확도: ★★★★★ 100%
 파티클: 25000
 중력: -1.62 m/s²
-온도: 390 K
+온도: 250 K
 시뮬 안정성: ✓ 안정

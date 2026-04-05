@@ -13,30 +13,27 @@
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [지진 등으로 발생한 해일이 바다를 통해 퍼져 나가는 현상],
+  [Step 1: 식별], [해일이 바다를 통해 이동하며 퍼져나가는 현상],
   [Step 2: 재료], [water],
   [Step 3: 밀도], [1000 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
-  [Step 5: 온도], [273 K],
-  [Step 6: 특수], [```json
-{
-  "seismic_energy": "high",
-  ],
+  [Step 5: 온도], [277 K],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)
 #table(columns: (auto, auto, auto), inset: 5pt,
   [검증 항목], [결과], [판정],
-  [stability], [안정 (y=16.28)], [PASS],
-  [gravity_dir], [상승 OK], [PASS],
+  [stability], [안정 (y=3.71)], [PASS],
+  [gravity_dir], [하강 OK (y=3.71)], [PASS],
   [damping], [damping=0.97 OK], [PASS],
-  [temperature], [273K OK], [PASS],
+  [temperature], [277K OK], [PASS],
   [particle_count], [25000 OK], [PASS],
 )
 
 === 종합
 정확도: ★★★★★ 100%
 파티클: 25000
-중력: 9.8 m/s²
-온도: 273 K
+중력: -9.81 m/s²
+온도: 277 K
 시뮬 안정성: ✓ 안정

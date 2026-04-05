@@ -4,7 +4,7 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #020]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Extreme Blizzard and Cold Wave Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[영하 30도의 혹독한 눈보라]
   #v(2pt)
   #text(size: 10pt)[Model: gemma4:26b]
 ]
@@ -13,14 +13,14 @@
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [영하 30도의 극심한 한파와 눈보라가 몰아치는 기상 현상],
-  [Step 2: 재료], [water],
-  [Step 3: 밀도], [1000 kg/m³],
+  [Step 1: 식별], [영하 30도의 혹독한 눈보라 날씨],
+  [Step 2: 재료], [snow],
+  [Step 3: 밀도], [100 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [243 K],
   [Step 6: 특수], [```json
 {
-  "wind_speed": 85,
+  "wind_speed": 60,
   "visibil],
 )
 

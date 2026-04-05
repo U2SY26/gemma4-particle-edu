@@ -4,7 +4,7 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #023]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Vertical Free Fall Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[10미터 높이 낙하 물리 시뮬레이션]
   #v(2pt)
   #text(size: 10pt)[Model: gemma4:26b]
 ]
@@ -13,9 +13,9 @@
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [중력에 의해 10m 높이에서 수직으로 떨어지는 물리적 운동],
-  [Step 2: 재료], [Gravity],
-  [Step 3: 밀도], [중력(Gravity)은 물질이 아니라 kg/m³],
+  [Step 1: 식별], [10미터 높이에서 중력에 의해 낙하하는 물리적 운동],
+  [Step 2: 재료], [mass],
+  [Step 3: 밀도], [질량(mass)은 특정 물질이 아니라 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
   [Step 6: 특수], [```json
