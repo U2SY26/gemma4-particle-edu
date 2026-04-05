@@ -4,21 +4,24 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #146]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Giant Ice Sphere of the Outer Solar System]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[오르트 구름 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [태양계 외곽을 둘러싸고 있는 얼음 천체들의 거대한 구체 영역],
+  [Step 1: 식별], [태양계를 구형으로 둘러싸고 있는 얼음 천체들의 거대 집단],
   [Step 2: 재료], [ice],
   [Step 3: 밀도], [917 kg/m³],
   [Step 4: 중력], [0 m/s²],
   [Step 5: 온도], [10 K],
-  [Step 6: 특수], [{}],
+  [Step 6: 특수], [```json
+{
+  "temperature_K": 10,
+  "pres],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

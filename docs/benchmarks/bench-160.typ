@@ -4,23 +4,21 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #160]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Hertzsprung-Russell Diagram Plasma Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[별의 표면 온도와 광도의 관계 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [별의 광도와 표면 온도를 나타내는 그래프],
+  [Step 1: 식별], [별의 표면 온도와 광도의 관계를 나타낸 그래프],
   [Step 2: 재료], [plasma],
-  [Step 3: 밀도], [0.000001 kg/m³],
+  [Step 3: 밀도], [플라즈마의 밀도는 상태와 환경(성간  kg/m³],
   [Step 4: 중력], [0 m/s²],
-  [Step 5: 온도], [별의 **HR도표(헤르츠스프룽-러셀  K],
-  [Step 6: 특수], [```json
-{}
-```],
+  [Step 5: 온도], [2.7 K],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)
@@ -29,7 +27,7 @@
   [stability], [안정 (y=10.00)], [PASS],
   [gravity_dir], [무중력 OK (drift=0.000)], [PASS],
   [damping], [damping=0.97 OK], [PASS],
-  [temperature], [30000K OK], [PASS],
+  [temperature], [2.7K OK], [PASS],
   [particle_count], [25000 OK], [PASS],
 )
 
@@ -37,5 +35,5 @@
 정확도: ★★★★★ 100%
 파티클: 25000
 중력: ? m/s²
-온도: 30000 K
+온도: 2.7 K
 시뮬 안정성: ✓ 안정

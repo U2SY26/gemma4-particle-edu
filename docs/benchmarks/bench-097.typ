@@ -4,24 +4,24 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #097]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Synovial Fluid Viscoelasticity Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[관절액(Hyaluronan)의 윤활 작용 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [관절의 마찰을 줄여 움직임을 부드럽게 하는 활액의 작용],
-  [Step 2: 재료], [히알루론산],
-  [Step 3: 밀도], [1000 kg/m³],
+  [Step 1: 식별], [뼈와 뼈 사이의 마찰을 줄여주는 관절액의 작용],
+  [Step 2: 재료], [Hyaluronan],
+  [Step 3: 밀도], [1500 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [310 K],
   [Step 6: 특수], [```json
 {
   "viscosity": "high",
-  "pres],
+  "shea],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

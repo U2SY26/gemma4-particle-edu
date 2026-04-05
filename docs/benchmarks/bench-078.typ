@@ -4,30 +4,30 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #078]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Mars Habitat Pressurized Regolith Structure Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[화성 레골리스 인공 보호 거주지 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [화성 거주를 위해 설계된 압력 유지형 인공 구조물],
-  [Step 2: 재료], [regolith],
+  [Step 1: 식별], [화성 거주를 위해 설계된 인공 보호 거주지],
+  [Step 2: 재료], [Regolith],
   [Step 3: 밀도], [1500 kg/m³],
   [Step 4: 중력], [-3.72 m/s²],
   [Step 5: 온도], [293 K],
   [Step 6: 특수], [```json
 {
-  "internal_pressure_pascal": ],
+  "atmosphericPressure": 101.3],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)
 #table(columns: (auto, auto, auto), inset: 5pt,
   [검증 항목], [결과], [판정],
-  [stability], [안정 (y=7.62)], [PASS],
-  [gravity_dir], [하강 OK (y=7.62)], [PASS],
+  [stability], [안정 (y=12.38)], [PASS],
+  [gravity_dir], [상승 OK], [PASS],
   [damping], [damping=0.97 OK], [PASS],
   [temperature], [293K OK], [PASS],
   [particle_count], [25000 OK], [PASS],
@@ -36,6 +36,6 @@
 === 종합
 정확도: ★★★★★ 100%
 파티클: 25000
-중력: -3.72 m/s²
+중력: 3.72 m/s²
 온도: 293 K
 시뮬 안정성: ✓ 안정

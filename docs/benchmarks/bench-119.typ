@@ -4,18 +4,18 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #119]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Cement Hardening Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[시멘트 수화 반응 및 경화 과정 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [시멘트와 물의 화학적 반응을 통한 경화 과정],
-  [Step 2: 재료], [cement],
-  [Step 3: 밀도], [3150 kg/m³],
+  [Step 1: 식별], [시멘트와 물의 화학 반응을 통해 단단하게 굳어지는 과정],
+  [Step 2: 재료], [concrete],
+  [Step 3: 밀도], [2400 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
   [Step 6: 특수], [{}],

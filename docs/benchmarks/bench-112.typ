@@ -4,21 +4,24 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #112]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Next-generation High-efficiency Perovskite Solar Cell Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[차세대 고효율 페로브스카이트 태양전지 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [페로브스카이트 구조를 활용한 차세대 고효율 태양전지],
+  [Step 1: 식별], [페로브스카이트 구조의 물질을 이용한 차세대 고효율 태양전지],
   [Step 2: 재료], [Perovskite],
-  [Step 3: 밀도], [4100 (주로 사용되는 $MAPbI kg/m³],
+  [Step 3: 밀도], [5100 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
-  [Step 6: 특수], [{}],
+  [Step 6: 특수], [```json
+{
+  "humidity": "low",
+  "oxygen],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

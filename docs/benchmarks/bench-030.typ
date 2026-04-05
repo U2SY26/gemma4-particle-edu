@@ -4,24 +4,24 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #030]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Microvascular Gas Exchange Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[미세 혈관 산소 및 이산화탄소 교환 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [산소와 이산화탄소 교환이 일어나는 미세 혈관과 적혈구.],
-  [Step 2: 재료], [blood],
-  [Step 3: 밀도], [1060 kg/m³],
+  [Step 1: 식별], [산소와 이산화탄소 교환이 일어나는 미세 혈관과 그 속의 혈액 세포],
+  [Step 2: 재료], [water],
+  [Step 3: 밀도], [1000 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [310 K],
   [Step 6: 특수], [```json
 {
-  "viscosity": "low",
-  "tempe],
+  "temperature": 37,
+  "viscos],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

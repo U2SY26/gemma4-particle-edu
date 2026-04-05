@@ -4,24 +4,24 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #121]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Electroplating Process Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[금속 전해 도금 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [전류를 이용해 금속 표면에 다른 금속을 입히는 기술],
+  [Step 1: 식별], [전류를 이용해 금속 표면에 다른 금속을 얇게 입히는 표면 처리 공법],
   [Step 2: 재료], [electrolyte],
   [Step 3: 밀도], [1200 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
   [Step 6: 특수], [```json
 {
-  "temperature": "essential",
-],
+  "voltage": "required",
+  "cu],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

@@ -4,23 +4,21 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #167]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Water Falling Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[수직 낙하 물 흐름 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [높은 곳에서 물이 아래로 떨어지는 현상],
+  [Step 1: 식별], [높은 곳에서 아래로 수직으로 쏟아지는 물의 흐름.],
   [Step 2: 재료], [water],
   [Step 3: 밀도], [1000 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
-  [Step 6: 특수], [```json
-{}
-```],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

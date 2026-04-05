@@ -4,21 +4,24 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #042]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Byzantine Brick Structure Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[비잔틴 양식 거대 돔 구조 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [터키 이스탄불의 비잔티움 양식 역사적 건축물],
+  [Step 1: 식별], [비잔틴 건축의 정수를 보여주는 거대한 돔 구조물],
   [Step 2: 재료], [brick],
   [Step 3: 밀도], [1900 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
-  [Step 6: 특수], [{}],
+  [Step 6: 특수], [```json
+{
+  "seismic": 9,
+  "lateral_thr],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

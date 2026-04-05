@@ -4,24 +4,24 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #047]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Silla Era Granite Grotto Structural Analysis]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[통일 신라 시대 과학적 석조 돔 구조 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [신라 시대의 정교한 인공 석굴 사원 구조물],
-  [Step 2: 재료], [granite],
-  [Step 3: 밀도], [2650 kg/m³],
+  [Step 1: 식별], [통일 신라 시대의 정교한 과학적 설계가 적용된 석조 돔 구조물입니다.],
+  [Step 2: 재료], [stone],
+  [Step 3: 밀도], [2500 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [288 K],
   [Step 6: 특수], [```json
 {
-  "humidity_control": "high",
-],
+  "humidity": "low",
+  "ventil],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

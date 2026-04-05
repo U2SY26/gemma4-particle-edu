@@ -4,16 +4,16 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #070]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Simulation of Steel Rope for Elevator Support]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[엘리베이터 강철 와이어 로프 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [엘리베이터를 지탱하고 움직이는 강철 로프],
+  [Step 1: 식별], [엘리베이터 카를 지탱하고 이동시키는 강철 와이어 로프.],
   [Step 2: 재료], [steel],
   [Step 3: 밀도], [7850 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],

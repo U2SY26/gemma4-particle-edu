@@ -4,18 +4,18 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #159]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Sunspot Plasma Magnetic Activity Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[태양 흑점 플라즈마 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [태양 표면에서 강력한 자기장 활동으로 인해 온도가 낮아져 검게 보이는 영역],
+  [Step 1: 식별], [태양 표면에서 주변보다 온도가 낮아 검게 보이는 영역],
   [Step 2: 재료], [plasma],
-  [Step 3: 밀도], [1026 kg/m³],
+  [Step 3: 밀도], [1025 kg/m³],
   [Step 4: 중력], [-274 m/s²],
   [Step 5: 온도], [4000 K],
   [Step 6: 특수], [```json

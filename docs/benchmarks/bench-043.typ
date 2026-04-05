@@ -4,21 +4,24 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #043]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Structural Simulation of a Steel High-rise in Chicago]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[현대 고층 빌딩 효시 건축물의 구조 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [미국 시카고에 위치한 고층 건물],
+  [Step 1: 식별], [현대 고층 빌딩의 효시가 된 건축물들],
   [Step 2: 재료], [steel],
   [Step 3: 밀도], [7850 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
-  [Step 6: 특수], [{}],
+  [Step 6: 특수], [```json
+{
+  "wind_load": "high",
+  "soil],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

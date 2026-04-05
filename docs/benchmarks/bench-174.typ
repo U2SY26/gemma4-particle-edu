@@ -4,24 +4,23 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #174]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Soil Liquefaction Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[지반 액상화 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [지진 등의 충격으로 인해 지반이 액체처럼 변하는 현상],
-  [Step 2: 재료], [sand],
-  [Step 3: 밀도], [1600 kg/m³],
+  [Step 1: 식별], [지진 등으로 인해 지반이 액체처럼 변하는 현상.],
+  [Step 2: 재료], [water],
+  [Step 3: 밀도], [1000 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
   [Step 6: 특수], [```json
 {
-  "soil_saturation": "high",
- ],
+  "soil_type": "loose_granular],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

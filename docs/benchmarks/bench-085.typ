@@ -4,18 +4,18 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #085]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[CRISPR-Cas9 Precision DNA Editing Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[정밀 DNA 유전자 교정 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [특정 DNA 부위를 정밀하게 절단하고 교정하는 유전자 편집 기술],
+  [Step 1: 식별], [특정 DNA 부위를 정밀하게 절단하고 편집하는 유전자 교정 기술],
   [Step 2: 재료], [CRISPR],
-  [Step 3: 밀도], [CRISPR는 물질이 아니라 유전자를 kg/m³],
+  [Step 3: 밀도], [CRISPR은 특정 물질이 아니라 유 kg/m³],
   [Step 4: 중력], [0 m/s²],
   [Step 5: 온도], [310 K],
   [Step 6: 특수], [{}],

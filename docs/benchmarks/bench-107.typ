@@ -4,17 +4,17 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #107]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Antibiotic-Resistant Bacteria Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[항생제 내성 세균 DNA 구조 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [항생제를 사용해도 죽지 않고 살아남는 세균],
-  [Step 2: 재료], [genes],
+  [Step 1: 식별], [항생제 치료에도 죽지 않고 살아남은 세균],
+  [Step 2: 재료], [DNA],
   [Step 3: 밀도], [1700 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [310 K],

@@ -4,23 +4,21 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #103]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Allergic Reaction Histamine Release Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[히스타민 체내 반응 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [알레르기 반응 시 체내에서 방출되어 증상을 유발하는 화학 물질],
+  [Step 1: 식별], [알레르기 증상을 유발하는 체내 화학 물질],
   [Step 2: 재료], [histamine],
-  [Step 3: 밀도], [1600 kg/m³],
+  [Step 3: 밀도], [1100 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [310 K],
-  [Step 6: 특수], [```json
-{}
-```],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

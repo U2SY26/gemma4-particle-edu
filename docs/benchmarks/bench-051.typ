@@ -4,23 +4,23 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #051]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[지하철 통로 피스톤 효과 및 지진 하중 시뮬레이션]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[지하철 역내 콘크리트 지하 통로 구조 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [지하철 열차가 통과하는 지하 통로],
+  [Step 1: 식별], [지하철 역내 열차가 통행하는 지하 통로],
   [Step 2: 재료], [concrete],
   [Step 3: 밀도], [2400 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
   [Step 6: 특수], [```json
 {
-  "piston_effect_pressure": 50],
+  "seismic_resistance": "Requi],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

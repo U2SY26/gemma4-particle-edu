@@ -4,9 +4,9 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #040]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Structural Simulation of Tower Bridge, London]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[런던 템스강 타워 브리지 구조 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
@@ -18,9 +18,7 @@
   [Step 3: 밀도], [7850 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [288 K],
-  [Step 6: 특수], [```json
-{}
-```],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

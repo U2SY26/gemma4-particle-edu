@@ -4,23 +4,23 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #139]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Precision Laser Cutting Simulation for Metal]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[고출력 레이저 빔을 이용한 Steel 정밀 절단 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [레이저 빔을 이용한 정밀 재료 절단 및 가공 기술],
-  [Step 2: 재료], [metal],
+  [Step 1: 식별], [고출력 레이저 빔을 이용해 재료를 정밀하게 절단하는 가공 기술.],
+  [Step 2: 재료], [steel],
   [Step 3: 밀도], [7850 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
-  [Step 5: 온도], [3000 K],
+  [Step 5: 온도], [10000 K],
   [Step 6: 특수], [```json
-{}
-```],
+{
+  "assist_gas_pressure": "requ],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)
@@ -29,7 +29,7 @@
   [stability], [안정 (y=3.71)], [PASS],
   [gravity_dir], [하강 OK (y=3.71)], [PASS],
   [damping], [damping=0.97 OK], [PASS],
-  [temperature], [3000K OK], [PASS],
+  [temperature], [10000K OK], [PASS],
   [particle_count], [25000 OK], [PASS],
 )
 
@@ -37,5 +37,5 @@
 정확도: ★★★★★ 100%
 파티클: 25000
 중력: -9.81 m/s²
-온도: 3000 K
+온도: 10000 K
 시뮬 안정성: ✓ 안정

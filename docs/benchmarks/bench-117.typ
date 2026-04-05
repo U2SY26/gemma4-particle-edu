@@ -4,23 +4,21 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #117]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Polymer Chain Entanglement Dynamics]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[Simulation of Entangled Polymer Chains]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [긴 고분자 사슬들이 서로 복잡하게 뒤엉켜 움직임이 제한되는 현상],
+  [Step 1: 식별], [긴 고분자 사슬들이 서로 꼬이고 겹쳐져 물리적으로 연결된 상태.],
   [Step 2: 재료], [polymer],
-  [Step 3: 밀도], [1000 kg/m³],
+  [Step 3: 밀도], [900-2200 kg/m³],
   [Step 4: 중력], [0 m/s²],
   [Step 5: 온도], [293 K],
-  [Step 6: 특수], [```json
-{
-  "molecular_weight": "> Mc (c],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

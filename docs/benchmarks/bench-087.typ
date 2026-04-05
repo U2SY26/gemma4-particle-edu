@@ -4,24 +4,21 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #087]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Retinal Photoreceptor Protein Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[망막 광수용체 세포 Rhodopsin 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [빛을 전기 신호로 변환하여 시각 정보를 생성하는 망막의 특수 세포.],
-  [Step 2: 재료], [protein],
+  [Step 1: 식별], [빛을 감지해 전기 신호로 변환하는 망막의 특수 세포],
+  [Step 2: 재료], [Rhodopsin],
   [Step 3: 밀도], [1350 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [310 K],
-  [Step 6: 특수], [```json
-{
-  "wavelength_min_nm": 400,
-  ],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

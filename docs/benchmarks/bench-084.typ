@@ -4,17 +4,17 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #084]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Cancer Cell Metastasis Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[암세포 전이 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [암세포가 원래 발생한 부위를 벗어나 다른 장기로 퍼지는 현상],
-  [Step 2: 재료], [cancer cells],
+  [Step 1: 식별], [암세포가 원래 발생한 부위에서 혈관이나 림프관을 타고 다른 조직이나 장기로 이동하여 증식하는 현상.],
+  [Step 2: 재료], [암세포],
   [Step 3: 밀도], [1050 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [310 K],

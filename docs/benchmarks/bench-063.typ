@@ -4,21 +4,24 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #063]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Simulation of the 1912 Luxury Ocean Liner Wreckage]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[심해 타이타닉호 선체 물리 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [1912년 침몰한 호화 여객선의 잔해],
+  [Step 1: 식별], [1912년 침몰한 호화 여객선 타이타닉호의 본체],
   [Step 2: 재료], [steel],
   [Step 3: 밀도], [7850 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [275 K],
-  [Step 6: 특수], [{}],
+  [Step 6: 특수], [```json
+{
+  "pressure": 380,
+  "temperat],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

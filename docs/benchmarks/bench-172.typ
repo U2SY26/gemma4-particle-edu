@@ -4,23 +4,21 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #172]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Burning Space Debris in Earth's Atmosphere]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[유성체의 대기권 진입 및 플라스마 연소 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [우주의 부스러기들이 지구 대기권으로 들어와 타오르는 현상],
-  [Step 2: 재료], [dust],
-  [Step 3: 밀도], [2000 kg/m³],
+  [Step 1: 식별], [수많은 유성체가 지구 대기권으로 들어와 빛을 내며 타는 현상],
+  [Step 2: 재료], [plasma],
+  [Step 3: 밀도], [1025 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [3000 K],
-  [Step 6: 특수], [```json
-{
-  "relative_velocity": "high",],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

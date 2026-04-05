@@ -1,0 +1,25 @@
+{
+  "name": "gemma4-particle-edu-video",
+  "version": "1.0.0",
+  "description": "Kaggle Gemma 4 Good Hackathon submission video",
+  "private": true,
+  "scripts": {
+    "dev": "remotion studio src/index.ts",
+    "build": "remotion render src/index.ts Main out/video.mp4",
+    "build:scene1": "remotion render src/index.ts Scene1Hook out/scene1.mp4",
+    "build:still": "remotion still src/index.ts Main out/cover.png --frame=0"
+  },
+  "dependencies": {
+    "@remotion/bundler": "^4.0.285",
+    "@remotion/cli": "^4.0.285",
+    "@remotion/renderer": "^4.0.285",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "remotion": "^4.0.285"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "^5.7.0"
+  }
+}

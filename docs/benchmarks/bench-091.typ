@@ -4,23 +4,23 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #091]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Simulation of Kidney Blood Filtration and Waste Removal]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[신장 네프론의 사구체 여과 과정 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [혈액 속 노폐물을 걸러내 소변을 만드는 신장의 핵심 기능],
-  [Step 2: 재료], [blood],
-  [Step 3: 밀도], [1060 kg/m³],
+  [Step 1: 식별], [신장의 기능 단위인 네프론에서 혈액 속 노폐물을 걸러내는 과정],
+  [Step 2: 재료], [plasma],
+  [Step 3: 밀도], [1025 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [310 K],
   [Step 6: 특수], [```json
 {
-  "hydrostatic_pressure": "hig],
+  "glomerular_hydrostatic_pres],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

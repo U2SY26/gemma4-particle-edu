@@ -4,16 +4,16 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #102]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Autoimmune Cellular Attack Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[자가면역 세포의 정상 세포 공격 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [자신의 신체 세포를 외부 침입자로 오인하여 공격하는 면역 세포],
+  [Step 1: 식별], [자신의 정상 세포를 외부 침입자로 오인해 공격하는 면역 세포],
   [Step 2: 재료], [protein],
   [Step 3: 밀도], [1350 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],

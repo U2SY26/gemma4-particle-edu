@@ -29,17 +29,24 @@ async function ask(question, context = '') {
   if (context) messages.push({ role: 'system', content: context });
   messages.push({ role: 'user', content: question });
 
-  const res = await fetch(`${OLLAMA}/api/chat`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model: MODEL, stream: false, messages }),
-  });
-  const data = await res.json();
-  return data.message?.content || '';
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 600000); // 600초 타임아웃
+  try {
+    const res = await fetch(`${OLLAMA}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: MODEL, stream: false, messages }),
+      signal: controller.signal,
+    });
+    const data = await res.json();
+    return data.message?.content || '';
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 // ============================================================
-// 마이크로스텝 DAG — 7단계
+// 마이크로스텝 DAG — 7단계 (타임아웃 300초)
 // ============================================================
 async function dagWorkflow(scenario) {
   const steps = {};

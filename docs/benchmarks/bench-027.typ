@@ -4,23 +4,23 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #027]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[태양계 8개 행성 시뮬레이션]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[태양계 주요 천체 먼지 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [태양을 중심으로 공전하는 여덟 개의 행성],
-  [Step 2: 재료], [text],
-  [Step 3: 밀도], [2500 kg/m³],
+  [Step 1: 식별], [태양을 중심으로 공전하는 여덟 개의 주요 천체],
+  [Step 2: 재료], [Dust],
+  [Step 3: 밀도], [2000 kg/m³],
   [Step 4: 중력], [0 m/s²],
-  [Step 5: 온도], [수성=440, 금성=737, 지구=2 K],
-  [Step 6: 특수], [```json
-{}
-```],
+  [Step 5: 온도], [수성: 440
+금성: 737
+지구:  K],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)
@@ -29,7 +29,7 @@
   [stability], [안정 (y=10.00)], [PASS],
   [gravity_dir], [무중력 OK (drift=0.000)], [PASS],
   [damping], [damping=0.97 OK], [PASS],
-  [temperature], [264K OK], [PASS],
+  [temperature], [265.25K OK], [PASS],
   [particle_count], [25000 OK], [PASS],
 )
 
@@ -37,5 +37,5 @@
 정확도: ★★★★★ 100%
 파티클: 25000
 중력: ? m/s²
-온도: 264 K
+온도: 265.25 K
 시뮬 안정성: ✓ 안정

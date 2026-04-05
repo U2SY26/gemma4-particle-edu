@@ -4,23 +4,24 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #010]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Solar Corona Plasma Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[태양 코로나 전리 기체 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [태양 대기 가장 바깥층을 이루는 초고온의 이온화된 물질],
+  [Step 1: 식별], [태양의 최외곽 대기를 구성하는 고온의 전리 기체.],
   [Step 2: 재료], [plasma],
-  [Step 3: 밀도], [플라스마의 밀도는 온도와 압력 등 환 kg/m³],
+  [Step 3: 밀도], [1025 kg/m³],
   [Step 4: 중력], [-274 m/s²],
   [Step 5: 온도], [1000000 K],
   [Step 6: 특수], [```json
 {
-  "temperature_kelvin": 100000],
+  "temperature_K": 1000000,
+  ],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

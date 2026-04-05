@@ -4,16 +4,16 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #094]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Physiological Action of Hormones in Maintaining Blood Glucose Levels]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[췌장 호르몬을 통한 혈당 조절 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [혈액 내 포도당 농도를 일정하게 유지하는 호르몬의 생리적 작용],
+  [Step 1: 식별], [췌장 호르몬을 통해 혈액 속 당 수치를 일정하게 유지하는 생체 조절 작용],
   [Step 2: 재료], [glucose],
   [Step 3: 밀도], [1540 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],

@@ -4,18 +4,18 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #096]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Osteoporosis Diagnosis Simulation: Calcium Mineral Content]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[골밀도 및 골다공증 진단 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [골다공증 진단을 위해 측정하는 뼈의 미네랄 함유량 수치],
-  [Step 2: 재료], [calcium],
-  [Step 3: 밀도], [1550 kg/m³],
+  [Step 1: 식별], [뼈의 단단한 정도를 나타내는 수치이자 골다공증 진단의 핵심 지표입니다.],
+  [Step 2: 재료], [Calcium],
+  [Step 3: 밀도], [1540 kg/m³],
   [Step 4: 중력], [0 m/s²],
   [Step 5: 온도], [310 K],
   [Step 6: 특수], [{}],

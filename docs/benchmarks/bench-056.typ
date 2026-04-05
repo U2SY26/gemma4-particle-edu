@@ -4,21 +4,23 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #056]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Simulation of London's Landmark Ferris Wheel]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[런던 시내 거대 관람차 구조 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [영국 런던의 랜드마크인 대형 관람차],
+  [Step 1: 식별], [영국 런던의 시내를 조망하는 거대 관람차],
   [Step 2: 재료], [steel],
   [Step 3: 밀도], [7850 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
-  [Step 6: 특수], [{}],
+  [Step 6: 특수], [```json
+{
+  "wind_speed_limit": "critica],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

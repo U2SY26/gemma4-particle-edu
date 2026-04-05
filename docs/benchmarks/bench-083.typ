@@ -4,24 +4,21 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #083]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Fibrin-based Blood Clotting Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[혈관 내 피브린 혈전 형성 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [혈액이 응고되어 혈관 내에 덩어리가 생기는 현상.],
+  [Step 1: 식별], [혈관 내에서 혈액이 응고되어 덩어리가 생기는 현상],
   [Step 2: 재료], [fibrin],
   [Step 3: 밀도], [1350 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [310 K],
-  [Step 6: 특수], [```json
-{
-  "blood_flow_stasis": 10,
-  "],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

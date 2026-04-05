@@ -4,24 +4,24 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #093]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Gastric Acid Protein Digestion Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[위장 내 단백질의 화학적 소화 과정]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [위산이 단백질의 구조를 변형시키고 분해를 돕는 소화 과정.],
-  [Step 2: 재료], [protein],
+  [Step 1: 식별], [위장에서 산을 이용해 단백질을 분해하는 화학적 소화 과정입니다.],
+  [Step 2: 재료], [단백질],
   [Step 3: 밀도], [1350 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [310 K],
   [Step 6: 특수], [```json
 {
-  "pH": 2.0,
-  "temperature_ce],
+  "temperature": 37,
+  "pH": 2],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

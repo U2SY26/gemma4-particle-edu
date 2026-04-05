@@ -4,16 +4,16 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #003]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Roman Concrete Structural Stability Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[로마식 곡선 지지 구조 하중 분산 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [거대한 하중을 분산하여 구조적 안정성을 제공하는 로마의 건축 공법.],
+  [Step 1: 식별], [하중을 효과적으로 분산시켜 거대 건축물을 지탱하는 로마식 곡선 지지 구조],
   [Step 2: 재료], [concrete],
   [Step 3: 밀도], [2400 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],

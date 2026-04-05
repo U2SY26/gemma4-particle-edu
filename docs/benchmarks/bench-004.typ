@@ -4,9 +4,9 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #004]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Golden Gate Bridge Structural Integrity Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[샌프란시스코 금문교 구조 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
@@ -20,7 +20,8 @@
   [Step 5: 온도], [293 K],
   [Step 6: 특수], [```json
 {
-  "wind_load_resistance": "hig],
+  "wind_resistance": "high",
+ ],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

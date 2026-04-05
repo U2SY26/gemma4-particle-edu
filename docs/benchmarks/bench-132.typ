@@ -4,23 +4,24 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #132]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Metamaterial Light Manipulation Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[자연계에 없는 음의 굴절률을 가진 메타물질의 빛 굴절 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [자연계에 없는 구조를 이용해 빛의 경로를 인위적으로 조절하는 현상],
-  [Step 2: 재료], [metamaterial],
-  [Step 3: 밀도], [메타물질(Metamaterial)은  kg/m³],
+  [Step 1: 식별], [자연계에 없는 굴절 특성을 구현하는 인공 구조체의 빛 굴절 현상],
+  [Step 2: 재료], [Metamaterials],
+  [Step 3: 밀도], [메타물질(Metamaterials)은 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
   [Step 6: 특수], [```json
-{}
-```],
+{
+  "permittivity": "negative",
+],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

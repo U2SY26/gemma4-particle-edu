@@ -4,23 +4,23 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #135]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Silicon Plasma Etching Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[반도체 웨이퍼 플라즈마 식각 공정 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [화학적 또는 물리적 방법으로 표면에 미세한 회로를 새기는 공정],
-  [Step 2: 재료], [silicon],
-  [Step 3: 밀도], [2329 kg/m³],
+  [Step 1: 식별], [반도체 웨이퍼 위에 정밀한 회로 모양을 깎아 만드는 공정],
+  [Step 2: 재료], [plasma],
+  [Step 3: 밀도], [1025 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
   [Step 6: 특수], [```json
 {
-  "temperature": "controlled",],
+  "vacuum_pressure": "required],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

@@ -4,24 +4,23 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #161]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Glacier Calving Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[거대 빙하 붕괴 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [거대한 빙하 조각이 부서져 내리는 현상],
-  [Step 2: 재료], [ice],
+  [Step 1: 식별], [거대한 얼음 덩어리가 무너져 내리는 현상],
+  [Step 2: 재료], [Ice],
   [Step 3: 밀도], [917 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [273 K],
   [Step 6: 특수], [```json
 {
-  "temperature_increase": 8,
- ],
+  "ocean_temperature": "increa],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)
@@ -30,7 +29,7 @@
   [stability], [안정 (y=3.71)], [PASS],
   [gravity_dir], [하강 OK (y=3.71)], [PASS],
   [damping], [damping=0.97 OK], [PASS],
-  [temperature], [281K OK], [PASS],
+  [temperature], [273K OK], [PASS],
   [particle_count], [25000 OK], [PASS],
 )
 
@@ -38,5 +37,5 @@
 정확도: ★★★★★ 100%
 파티클: 25000
 중력: -9.81 m/s²
-온도: 281 K
+온도: 273 K
 시뮬 안정성: ✓ 안정

@@ -4,23 +4,23 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #165]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Rapid Mudflow and Debris Flow Simulation in Steep Valleys]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[Rapid Mudflow Simulation in Steep Valley]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [흙과 돌이 물과 섞여 계곡을 따라 빠르게 흘러내리는 현상],
+  [Step 1: 식별], [물과 흙, 바위가 뒤섞여 계곡을 따라 빠르게 흘러내리는 현상],
   [Step 2: 재료], [mud],
   [Step 3: 밀도], [1600 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
   [Step 6: 특수], [```json
 {
-  "rainfall_intensity": "high"],
+  "precipitation_intensity": "],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

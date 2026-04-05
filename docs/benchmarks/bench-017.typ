@@ -4,24 +4,24 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #017]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Volcanic Lava Flow Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[화산 용암 흐름 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [화산 분출로 지표면을 따라 흘러나오는 뜨거운 액체 상태의 암석],
+  [Step 1: 식별], [화산에서 분출되어 지표면을 따라 흐르는 용융 암석.],
   [Step 2: 재료], [lava],
   [Step 3: 밀도], [2600 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [1500 K],
   [Step 6: 특수], [```json
 {
-  "viscosity": 3,
-  "temperatu],
+  "temperature": 1200,
+  "visc],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

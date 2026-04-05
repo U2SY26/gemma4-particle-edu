@@ -4,23 +4,21 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #157]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Most Energy Efficient Orbital Transfer: Hohmann Transfer]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[최소 에너지 궤도 전이 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [서로 다른 두 궤도를 연결하는 가장 에너지 효율적인 우주 궤도 전이 방식],
-  [Step 2: 재료], [gravity],
-  [Step 3: 밀도], [중력(gravity)은 물질이 아니라 kg/m³],
+  [Step 1: 식별], [최소 에너지를 사용하여 두 원형 궤도 사이를 이동하는 궤도 전이 방식.],
+  [Step 2: 재료], [fuel],
+  [Step 3: 밀도], [800 kg/m³],
   [Step 4: 중력], [0 m/s²],
-  [Step 5: 온도], ['호만 전이(Hohmann trans K],
-  [Step 6: 특수], [```json
-{}
-```],
+  [Step 5: 온도], [2.7 K],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)
@@ -29,7 +27,7 @@
   [stability], [안정 (y=10.00)], [PASS],
   [gravity_dir], [무중력 OK (drift=0.000)], [PASS],
   [damping], [damping=0.97 OK], [PASS],
-  [temperature], [0K OK], [PASS],
+  [temperature], [2.7K OK], [PASS],
   [particle_count], [25000 OK], [PASS],
 )
 
@@ -37,5 +35,5 @@
 정확도: ★★★★★ 100%
 파티클: 25000
 중력: ? m/s²
-온도: ? K
+온도: 2.7 K
 시뮬 안정성: ✓ 안정

@@ -4,23 +4,21 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #029]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Cell Division Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[세포 분열 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [하나의 세포가 두 개 이상의 세포로 나누어지는 생물학적 과정],
+  [Step 1: 식별], [하나의 세포가 두 개 이상의 새로운 세포로 나누어지는 과정.],
   [Step 2: 재료], [DNA],
   [Step 3: 밀도], [1700 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [310 K],
-  [Step 6: 특수], [```json
-{}
-```],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

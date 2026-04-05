@@ -4,23 +4,23 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #141]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Simulation of Nitrogen Ice Plains on Pluto]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[명왕성 하트 모양 질소 빙하 지형 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [명왕성 표면의 하트 모양 질소 얼음 평원],
-  [Step 2: 재료], [nitrogen],
+  [Step 1: 식별], [명왕성 표면의 하트 모양 질소 빙하 지형],
+  [Step 2: 재료], [Nitrogen],
   [Step 3: 밀도], [1.25 kg/m³],
   [Step 4: 중력], [-0.62 m/s²],
   [Step 5: 온도], [40 K],
   [Step 6: 특수], [```json
 {
-  "convection_mechanism": "nit],
+  "temperature": "extremely lo],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

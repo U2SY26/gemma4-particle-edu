@@ -4,24 +4,24 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #136]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Molten Metal Injection Molding Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[정밀 플라스틱 사출 성형 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [녹은 재료를 금형 내부에 주입하여 제품을 만드는 제조 공정.],
-  [Step 2: 재료], [metal],
-  [Step 3: 밀도], [7874 kg/m³],
+  [Step 1: 식별], [녹인 플라스틱을 금형에 주입하여 제품을 만드는 정밀 성형 공법.],
+  [Step 2: 재료], [plastic],
+  [Step 3: 밀도], [1100 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
-  [Step 5: 온도], [293 K],
+  [Step 5: 온도], [500 K],
   [Step 6: 특수], [```json
 {
-  "temperature": "essential",
-],
+  "temperature": "high",
+  "pr],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)
@@ -30,7 +30,7 @@
   [stability], [안정 (y=3.71)], [PASS],
   [gravity_dir], [하강 OK (y=3.71)], [PASS],
   [damping], [damping=0.97 OK], [PASS],
-  [temperature], [293K OK], [PASS],
+  [temperature], [500K OK], [PASS],
   [particle_count], [25000 OK], [PASS],
 )
 
@@ -38,5 +38,5 @@
 정확도: ★★★★★ 100%
 파티클: 25000
 중력: -9.81 m/s²
-온도: 293 K
+온도: 500 K
 시뮬 안정성: ✓ 안정

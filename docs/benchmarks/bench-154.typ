@@ -4,18 +4,18 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #154]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[JWST Deep Field Galaxy Observation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[초기 우주 심우주 관측 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [제임스 웹 우주 망원경이 촬영한 아주 먼 우주의 은하 이미지],
-  [Step 2: 재료], [light],
-  [Step 3: 밀도], [0 kg/m³],
+  [Step 1: 식별], [초기 우주의 수천 개 은하를 포착한 고해상도 심우주 관측 이미지],
+  [Step 2: 재료], [plasma],
+  [Step 3: 밀도], [10⁻¹⁵~10¹⁵ kg/m³],
   [Step 4: 중력], [0 m/s²],
   [Step 5: 온도], [2.7 K],
   [Step 6: 특수], [{}],

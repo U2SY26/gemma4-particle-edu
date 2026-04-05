@@ -6,19 +6,21 @@
   #v(2pt)
   #text(size: 11pt, fill: rgb("#58a6ff"))[Carbon Fiber Quadcopter Physics Simulation]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [4개의 회전 날개를 이용해 비행하는 무인 항공기],
-  [Step 2: 재료], [Carbon fiber],
-  [Step 3: 밀도], [1750 kg/m³],
+  [Step 1: 식별], [네 개의 프로펠러를 가진 무인 항공기.],
+  [Step 2: 재료], [Carbon],
+  [Step 3: 밀도], [2260 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
-  [Step 6: 특수], [{}],
+  [Step 6: 특수], [```json
+{}
+```],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

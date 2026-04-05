@@ -4,18 +4,18 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #120]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Stainless Steel Passivation Process]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[스테인리스 표면 크롬 산화막 부식 방지 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [스테인리스 표면에 부식 방지용 산화막을 형성하는 화학적 처리 과정],
-  [Step 2: 재료], [acid],
-  [Step 3: 밀도], [산(acid)은 종류가 매우 다양하기 kg/m³],
+  [Step 1: 식별], [스테인리스 표면에 형성된 얇은 보호 산화막에 의한 부식 방지 상태.],
+  [Step 2: 재료], [Chromium],
+  [Step 3: 밀도], [7190 kg/m³],
   [Step 4: 중력], [0 m/s²],
   [Step 5: 온도], [293 K],
   [Step 6: 특수], [{}],

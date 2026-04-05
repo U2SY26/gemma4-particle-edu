@@ -4,23 +4,21 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #090]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Simulation of Amino Acid-based Detoxifying Protein in the Liver]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[간 독소 분해 촉매 단백질 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [간에서 독성 물질을 분해하는 단백질.],
-  [Step 2: 재료], [아미노산],
-  [Step 3: 밀도], [1400 kg/m³],
+  [Step 1: 식별], [간에서 체내 독소와 노폐물을 분해하여 제거하는 촉매 단백질.],
+  [Step 2: 재료], [protein],
+  [Step 3: 밀도], [1350 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [310 K],
-  [Step 6: 특수], [```json
-{}
-```],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

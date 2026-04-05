@@ -4,18 +4,18 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #105]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[혈관 내 세포 보호막 시뮬레이션]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[혈액-뇌 장벽(BBB) 보호막 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [뇌를 보호하기 위해 유해 물질의 유입을 선택적으로 차단하는 혈관 내 보호막],
-  [Step 2: 재료], [cells],
-  [Step 3: 밀도], [1000 kg/m³],
+  [Step 1: 식별], [혈액 속 물질이 뇌로 들어가는 것을 선택적으로 차단하는 보호막입니다.],
+  [Step 2: 재료], [lipid],
+  [Step 3: 밀도], [900 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [310 K],
   [Step 6: 특수], [{}],

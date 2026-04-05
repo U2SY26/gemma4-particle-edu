@@ -4,30 +4,31 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #074]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Apollo 11 Lunar Landing Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[인류 최초의 달 표면 착륙 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [인류 최초로 달 표면에 발을 내디딘 미국의 우주 탐사 프로젝트],
-  [Step 2: 재료], [aluminum],
+  [Step 1: 식별], [인류 최초의 달 표면 착륙 사건.],
+  [Step 2: 재료], [Aluminum],
   [Step 3: 밀도], [2700 kg/m³],
   [Step 4: 중력], [-1.62 m/s²],
-  [Step 5: 온도], [100~400 K],
+  [Step 5: 온도], [100-400 K],
   [Step 6: 특수], [```json
 {
-  "gravity_earth_ratio": 0.165],
+  "gravity": 1.62,
+  "atmosphe],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)
 #table(columns: (auto, auto, auto), inset: 5pt,
   [검증 항목], [결과], [판정],
-  [stability], [안정 (y=8.96)], [PASS],
-  [gravity_dir], [하강 OK (y=8.96)], [PASS],
+  [stability], [안정 (y=11.04)], [PASS],
+  [gravity_dir], [상승 OK], [PASS],
   [damping], [damping=0.97 OK], [PASS],
   [temperature], [250K OK], [PASS],
   [particle_count], [25000 OK], [PASS],
@@ -36,6 +37,6 @@
 === 종합
 정확도: ★★★★★ 100%
 파티클: 25000
-중력: -1.62 m/s²
+중력: 1.62 m/s²
 온도: 250 K
 시뮬 안정성: ✓ 안정

@@ -4,23 +4,21 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #044]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Shanghai Skyline Steel Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[Shanghai Modern High-rise Urban Landscape Simulation]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [황푸강 연안의 현대적 고층 빌딩군],
-  [Step 2: 재료], [steel],
-  [Step 3: 밀도], [7850 kg/m³],
+  [Step 1: 식별], [상하이 현대 고층 빌딩들의 도시 경관.],
+  [Step 2: 재료], [glass],
+  [Step 3: 밀도], [2500 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
-  [Step 5: 온도], ["상하이 스카이라인"은 지리적 경관( K],
-  [Step 6: 특수], [```json
-{}
-```],
+  [Step 5: 온도], [293 K],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)
@@ -29,7 +27,7 @@
   [stability], [안정 (y=3.71)], [PASS],
   [gravity_dir], [하강 OK (y=3.71)], [PASS],
   [damping], [damping=0.97 OK], [PASS],
-  [temperature], [25K OK], [PASS],
+  [temperature], [293K OK], [PASS],
   [particle_count], [25000 OK], [PASS],
 )
 
@@ -37,5 +35,5 @@
 정확도: ★★★★★ 100%
 파티클: 25000
 중력: -9.81 m/s²
-온도: 25 K
+온도: 293 K
 시뮬 안정성: ✓ 안정

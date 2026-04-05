@@ -4,23 +4,21 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #082]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[mRNA-based Viral Antigen Production Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[mRNA 기반 항체 생성 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [세포에 바이러스 항원 생성 지침을 전달하는 유전 정보 기술],
+  [Step 1: 식별], [바이러스 설계도를 전달해 체내에서 항체를 생성하게 하는 방식.],
   [Step 2: 재료], [mRNA],
   [Step 3: 밀도], [1700 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [310 K],
-  [Step 6: 특수], [```json
-{}
-```],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

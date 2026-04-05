@@ -4,23 +4,21 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #013]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Sodium Chloride (NaCl) Lattice Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[3D Regular Arrangement of Salt Particles]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [소듐 이온과 염화 이온이 규칙적으로 교차 배열된 입체적 구조],
+  [Step 1: 식별], [소금 입자들이 규칙적으로 배열된 입체 구조],
   [Step 2: 재료], [salt],
   [Step 3: 밀도], [2160 kg/m³],
   [Step 4: 중력], [0 m/s²],
   [Step 5: 온도], [293 K],
-  [Step 6: 특수], [```json
-{}
-```],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

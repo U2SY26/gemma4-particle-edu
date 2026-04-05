@@ -4,24 +4,24 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #076]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Steel Cable Sagging Analysis]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[Steel Cable Catenary Sag Simulation]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [중력에 의해 아래로 처진 케이블카 케이블의 곡선 형태],
+  [Step 1: 식별], [양 끝이 고정된 케이블이 자중에 의해 늘어져 형성되는 곡선],
   [Step 2: 재료], [steel],
   [Step 3: 밀도], [7850 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
   [Step 6: 특수], [```json
 {
-  "wind_load": "variable",
-  "],
+  "tension": "required",
+  "li],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

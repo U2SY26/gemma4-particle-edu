@@ -4,24 +4,21 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #108]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Enzyme-Substrate Complex Formation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[효소-기질 결합 및 화학 반응 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [효소가 특정 기질과 물리적으로 결합하여 화학 반응을 촉진하는 과정],
-  [Step 2: 재료], [protein],
+  [Step 1: 식별], [효소가 특정 기질과 결합하여 화학 반응을 촉진하는 과정입니다.],
+  [Step 2: 재료], [효소],
   [Step 3: 밀도], [1350 kg/m³],
   [Step 4: 중력], [0 m/s²],
   [Step 5: 온도], [310 K],
-  [Step 6: 특수], [```json
-{
-  "temperature": "optimal",
-  ],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

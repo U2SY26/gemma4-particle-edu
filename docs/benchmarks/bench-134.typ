@@ -4,18 +4,18 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #134]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Electrochemical Metal Corrosion Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[전기화학적 금속 부식 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [금속의 부식 현상을 전기화학적 반응으로 설명하는 학문.],
+  [Step 1: 식별], [금속이 환경과 반응해 부식되는 과정을 전자의 이동으로 설명하는 전기화학적 연구입니다.],
   [Step 2: 재료], [metal],
-  [Step 3: 밀도], [7874 kg/m³],
+  [Step 3: 밀도], [7850 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
   [Step 6: 특수], [{}],

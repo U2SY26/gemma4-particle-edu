@@ -4,24 +4,23 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #163]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Geyser Eruption Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[지열 에너지에 의한 간헐천 분출 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [지표면의 틈을 통해 뜨거운 물과 수증기가 주기적으로 솟구치는 현상],
+  [Step 1: 식별], [뜨거운 물과 수증기가 주기적으로 뿜어져 나오는 자연 현상],
   [Step 2: 재료], [water],
   [Step 3: 밀도], [1000 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [373 K],
   [Step 6: 특수], [```json
 {
-  "heat_source_intensity": 8,
-],
+  "heat_source": "magma/geothe],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

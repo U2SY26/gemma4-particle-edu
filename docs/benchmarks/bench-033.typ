@@ -4,21 +4,23 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #033]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Simulation of Ancient Roman Aqueduct]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[로마 시대 석조 수로 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [고대 로마의 급수용 수로 시설],
+  [Step 1: 식별], [로마 시대 도시로 물을 끌어오기 위해 만든 석조 수로입니다.],
   [Step 2: 재료], [stone],
-  [Step 3: 밀도], [2600 kg/m³],
+  [Step 3: 밀도], [2500 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
-  [Step 6: 특수], [{}],
+  [Step 6: 특수], [```json
+{"slope": 0.002}
+```],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

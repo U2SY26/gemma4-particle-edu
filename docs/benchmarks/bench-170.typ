@@ -4,23 +4,24 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #170]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[El Niño Sea Surface Temperature Anomaly Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[동태평양 적도 부근 해수면 온도 상승 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [동태평양 해수면 온도가 비정상적으로 높아지는 현상.],
-  [Step 2: 재료], [El Niño],
-  [Step 3: 밀도], [엘니뇨(El Niño)는 기상 현상( kg/m³],
+  [Step 1: 식별], [동태평양 적도 부근의 해수면 온도가 비정상적으로 상승하는 현상],
+  [Step 2: 재료], [water],
+  [Step 3: 밀도], [1000 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
-  [Step 5: 온도], [303 K],
+  [Step 5: 온도], [300 K],
   [Step 6: 특수], [```json
 {
-  "trade_wind_strength": "weak],
+  "trade_winds": "weakened",
+ ],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)
@@ -29,7 +30,7 @@
   [stability], [안정 (y=3.71)], [PASS],
   [gravity_dir], [하강 OK (y=3.71)], [PASS],
   [damping], [damping=0.97 OK], [PASS],
-  [temperature], [303K OK], [PASS],
+  [temperature], [300K OK], [PASS],
   [particle_count], [25000 OK], [PASS],
 )
 
@@ -37,5 +38,5 @@
 정확도: ★★★★★ 100%
 파티클: 25000
 중력: -9.81 m/s²
-온도: 303 K
+온도: 300 K
 시뮬 안정성: ✓ 안정

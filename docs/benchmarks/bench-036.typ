@@ -4,24 +4,21 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #036]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Palm Tree Shaped Sand Artificial Island Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[세계 최대 인공 제도(팜 주메이라) 모래 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [야자수 모양의 인공 섬],
+  [Step 1: 식별], [야자수 모양의 세계 최대 인공 제도],
   [Step 2: 재료], [sand],
   [Step 3: 밀도], [1600 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [303 K],
-  [Step 6: 특수], [```json
-{
-  "wave_height_limit": 2.5,
-  ],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

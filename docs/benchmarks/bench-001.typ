@@ -4,7 +4,7 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #001]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[고대 이집트 쿠푸 왕의 거대 석조 무덤 시뮬레이션]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[쿠푸 왕의 거대 피라미드 시뮬레이션]
   #v(2pt)
   #text(size: 10pt)[Model: gemma4:31b]
 ]

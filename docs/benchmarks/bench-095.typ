@@ -4,18 +4,18 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #095]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Simulation of Glucose Accumulation during High-Intensity Exercise]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[근육 내 젖산 축적 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [고강도 운동 시 산소 부족으로 인해 근육에 쌓이는 대사 부산물],
-  [Step 2: 재료], [glucose],
-  [Step 3: 밀도], [1540 kg/m³],
+  [Step 1: 식별], [격렬한 운동 시 근육에 축적되어 피로를 유발하는 대사 산물입니다.],
+  [Step 2: 재료], [Lactate],
+  [Step 3: 밀도], [1210 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [310 K],
   [Step 6: 특수], [{}],

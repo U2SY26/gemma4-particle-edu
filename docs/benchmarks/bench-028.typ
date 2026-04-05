@@ -4,24 +4,21 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #028]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Galactic Collision Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[은하 충돌 및 병합 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [중력 상호작용으로 인해 두 은하가 서로 부딪히는 천문학적 현상],
-  [Step 2: 재료], [matter],
-  [Step 3: 밀도], [물질(matter)은 종류에 따라 밀 kg/m³],
+  [Step 1: 식별], [중력으로 인해 두 개 이상의 은하가 서로 충돌하고 병합되는 현상],
+  [Step 2: 재료], [Dark matter],
+  [Step 3: 밀도], [2.2e-27 kg/m³],
   [Step 4: 중력], [0 m/s²],
-  [Step 5: 온도], [1000000 K],
-  [Step 6: 특수], [```json
-{
-  "gravity": "essential",
-  "m],
+  [Step 5: 온도], [10000000 K],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)
@@ -30,7 +27,7 @@
   [stability], [안정 (y=10.00)], [PASS],
   [gravity_dir], [무중력 OK (drift=0.000)], [PASS],
   [damping], [damping=0.97 OK], [PASS],
-  [temperature], [1000000K OK], [PASS],
+  [temperature], [10000000K OK], [PASS],
   [particle_count], [25000 OK], [PASS],
 )
 
@@ -38,5 +35,5 @@
 정확도: ★★★★★ 100%
 파티클: 25000
 중력: ? m/s²
-온도: 1000000 K
+온도: 10000000 K
 시뮬 안정성: ✓ 안정

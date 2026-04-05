@@ -4,16 +4,16 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #059]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Undersea Concrete Tunnel Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[해저 콘크리트 교통 터널 구조 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [바다 밑을 지나도록 건설된 통로],
+  [Step 1: 식별], [바다 밑으로 건설된 교통 터널],
   [Step 2: 재료], [concrete],
   [Step 3: 밀도], [2400 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],

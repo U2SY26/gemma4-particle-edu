@@ -4,20 +4,20 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #026]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Lorenz Attractor: Chaos Theory Butterfly Pattern]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[Chaos Theory: Lorenz Attractor Visualization]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [카오스 이론을 상징하는 나비 모양의 수학적 궤적 패턴],
-  [Step 2: 재료], [math],
-  [Step 3: 밀도], [수학(math)은 물리적인 물질이 아 kg/m³],
+  [Step 1: 식별], [카오스 이론을 시각화한 나비 모양의 기하학적 궤적],
+  [Step 2: 재료], [light],
+  [Step 3: 밀도], [0 kg/m³],
   [Step 4: 중력], [0 m/s²],
-  [Step 5: 온도], [로렌츠 어트랙터(Lorenz Attr K],
+  [Step 5: 온도], [로렌츠 어트랙터는 물리적 실체가 아니 K],
   [Step 6: 특수], [{}],
 )
 

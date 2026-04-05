@@ -4,9 +4,9 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #005]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[World's Tallest Steel Skyscraper Structural Integrity Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[세계 최고층 빌딩 구조 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
@@ -14,13 +14,14 @@
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
   [Step 1: 식별], [세계에서 가장 높은 초고층 빌딩],
-  [Step 2: 재료], [steel],
-  [Step 3: 밀도], [7850 kg/m³],
+  [Step 2: 재료], [concrete],
+  [Step 3: 밀도], [2400 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
-  [Step 5: 온도], [293 K],
+  [Step 5: 온도], [296 K],
   [Step 6: 특수], [```json
 {
-  "wind_vortex_shedding_contro],
+  "wind_resistance": 10,
+  "st],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)
@@ -29,7 +30,7 @@
   [stability], [안정 (y=3.71)], [PASS],
   [gravity_dir], [하강 OK (y=3.71)], [PASS],
   [damping], [damping=0.97 OK], [PASS],
-  [temperature], [293K OK], [PASS],
+  [temperature], [296K OK], [PASS],
   [particle_count], [25000 OK], [PASS],
 )
 
@@ -37,5 +38,5 @@
 정확도: ★★★★★ 100%
 파티클: 25000
 중력: -9.81 m/s²
-온도: 293 K
+온도: 296 K
 시뮬 안정성: ✓ 안정

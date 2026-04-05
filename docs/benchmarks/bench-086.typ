@@ -4,18 +4,18 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #086]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Human Gut Microbiome Community Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[인체 소화기관 미생물 군집 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [인간의 소화기관 내에 서식하는 미생물들의 복합적인 공동체],
-  [Step 2: 재료], [microbiome],
-  [Step 3: 밀도], [마이크로바이옴(microbiome)은 kg/m³],
+  [Step 1: 식별], [인간의 소화기관 속에 서식하는 방대한 미생물들의 공동체],
+  [Step 2: 재료], [Bacteria],
+  [Step 3: 밀도], [1100 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [310 K],
   [Step 6: 특수], [```json

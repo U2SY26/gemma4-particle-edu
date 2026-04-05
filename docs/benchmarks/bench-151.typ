@@ -4,23 +4,21 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #151]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Dark Matter Galaxy Cluster Collision Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[거대 은하 집단 간의 중력적 충돌 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [중력에 의해 거대한 은하 집단들이 서로 충돌하는 우주적 현상],
-  [Step 2: 재료], [dark matter],
-  [Step 3: 밀도], [5.34 \times 10^{-22} kg/m³],
+  [Step 1: 식별], [거대 은하 집단 간의 중력적 충돌 현상],
+  [Step 2: 재료], [plasma],
+  [Step 3: 밀도], [1025 kg/m³],
   [Step 4: 중력], [0 m/s²],
-  [Step 5: 온도], [10^7 K],
-  [Step 6: 특수], [```json
-{}
-```],
+  [Step 5: 온도], [10,000,000 K],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

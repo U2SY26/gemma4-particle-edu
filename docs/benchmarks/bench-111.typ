@@ -4,21 +4,23 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #111]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Simulation of Lithium-ion movement in a secondary battery]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[현대 고밀도 리튬 에너지 저장 장치 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [리튬 이온의 이동을 이용해 에너지를 저장하는 이차 전지],
+  [Step 1: 식별], [충전과 방전이 가능한 현대의 고밀도 에너지 저장 장치],
   [Step 2: 재료], [Lithium],
   [Step 3: 밀도], [534 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
-  [Step 6: 특수], [{}],
+  [Step 6: 특수], [```json
+{
+  "temperature": "15-35°C (Opt],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

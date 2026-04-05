@@ -4,18 +4,18 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #014]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[sp3 Hybridized Diamond Crystal Structure Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[Diamond Crystal Lattice Simulation]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [sp3 혼성 오비탈로 결합된 탄소의 결정 구조],
-  [Step 2: 재료], [diamond],
-  [Step 3: 밀도], [3510 kg/m³],
+  [Step 1: 식별], [탄소 원자가 정사면체 형태로 강하게 결합한 다이아몬드의 결정 구조.],
+  [Step 2: 재료], [carbon],
+  [Step 3: 밀도], [2260 kg/m³],
   [Step 4: 중력], [0 m/s²],
   [Step 5: 온도], [293 K],
   [Step 6: 특수], [```json

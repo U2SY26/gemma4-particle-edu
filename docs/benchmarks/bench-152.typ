@@ -4,23 +4,24 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #152]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Cosmic Web: Dark Matter Distribution Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[Cosmic Web Dark Matter Distribution Simulation]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [은하와 은하단이 그물망처럼 얽혀 있는 우주의 거대한 분포 형태],
-  [Step 2: 재료], [dark matter],
-  [Step 3: 밀도], [5 \times 10^{-22} kg/m³],
+  [Step 1: 식별], [거대한 거미줄 모양의 은하 분포망],
+  [Step 2: 재료], [Dark matter],
+  [Step 3: 밀도], [2.2 \times 10^{-27} kg/m³],
   [Step 4: 중력], [0 m/s²],
   [Step 5: 온도], [2.7 K],
   [Step 6: 특수], [```json
 {
-  "matter_density_parameter": ],
+  "gravity": "essential",
+  "d],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

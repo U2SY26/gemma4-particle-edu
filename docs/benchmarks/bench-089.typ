@@ -4,16 +4,16 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #089]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Melanin Pigmentation Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[멜라닌 색소 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [자외선으로부터 피부를 보호하고 피부색을 결정하는 색소.],
+  [Step 1: 식별], [피부색을 결정하고 자외선으로부터 피부를 보호하는 천연 색소],
   [Step 2: 재료], [melanin],
   [Step 3: 밀도], [1300 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
