@@ -123,7 +123,7 @@ export class SimulationManager {
             if (res.ok) {
                 this.serverOnline = true;
                 document.getElementById('server-dot').classList.add('online');
-                document.getElementById('server-label').textContent = 'ONLINE';
+                document.getElementById('server-label').textContent = t('online');
                 this._loadHistory();
 
                 // Check providers from the status response
@@ -134,13 +134,13 @@ export class SimulationManager {
 
                 // Determine the active provider label
                 if (this._ollamaAvailable) {
-                    document.getElementById('server-label').textContent = 'ONLINE (Gemma 4)';
+                    document.getElementById('server-label').textContent = t('serverGemma4');
                     this._removeOfflineBanner();
                 } else if (providers.gemini) {
-                    document.getElementById('server-label').textContent = 'ONLINE (Gemini)';
+                    document.getElementById('server-label').textContent = t('serverGemini');
                     this._removeOfflineBanner();
                 } else if (providers.claude) {
-                    document.getElementById('server-label').textContent = 'ONLINE (Claude)';
+                    document.getElementById('server-label').textContent = t('serverClaude');
                     this._removeOfflineBanner();
                 } else {
                     this._showOfflineBanner();
@@ -159,7 +159,7 @@ export class SimulationManager {
     _showOfflineBanner() {
         const serverLabel = document.getElementById('server-label');
         if (serverLabel && !this._ollamaAvailable) {
-            serverLabel.textContent = 'OFFLINE';
+            serverLabel.textContent = t('offline');
             serverLabel.style.color = 'var(--accent-red)';
         }
         // Add inline banner in chat area if not already present
@@ -561,12 +561,12 @@ export class SimulationManager {
             }
             if (!ollamaResponse) {
                 // Fallback to single-call
-                this._showWorkflowStep(1, '📋', 'Planning', '단일 호출 모드...', 'running');
+                this._showWorkflowStep(1, '📋', t('wfPlanning'), '단일 호출 모드...', 'running');
                 ollamaResponse = await this._sendToOllama(content);
             }
 
             if (ollamaResponse) {
-                this._showWorkflowStep(5, '✨', 'Complete', '시뮬레이션 준비 완료', 'done');
+                this._showWorkflowStep(5, '✨', t('wfComplete'), '시뮬레이션 준비 완료', 'done');
 
                 // Finalize streaming message into a permanent chat message
                 this._finalizeStreamingMessage();
@@ -588,7 +588,7 @@ export class SimulationManager {
                     const card = this.getActiveCard();
                     if (card) {
                         // Step 3: Building Structure
-                        this._showWorkflowStep(3, '\uD83C\uDFD7\uFE0F', 'Building', '\uAD6C\uC870\uBB3C \uC0DD\uC131 \uC911...', 'running');
+                        this._showWorkflowStep(3, '\uD83C\uDFD7\uFE0F', t('wfBuilding'), '\uAD6C\uC870\uBB3C \uC0DD\uC131 \uC911...', 'running');
 
                         if (simParams.physics) {
                             Object.assign(card.physics, simParams.physics);
@@ -611,7 +611,7 @@ export class SimulationManager {
                             if (this.onCardSelect) this.onCardSelect(card);
                         }
 
-                        this._showWorkflowStep(3, '\uD83C\uDFD7\uFE0F', 'Building',
+                        this._showWorkflowStep(3, '\uD83C\uDFD7\uFE0F', t('wfBuilding'),
                             `${simParams.title || simParams.prompt || 'custom'} \uAD6C\uC870 \uC0DD\uC131 \uC644\uB8CC`, 'done');
 
                         // Step 4: Rendering
@@ -623,7 +623,7 @@ export class SimulationManager {
                         this._showWorkflowStep(4, '\uD83C\uDFA8', 'Rendering', '\uB124\uC628 \uBE14\uB8F8 \uB80C\uB354\uB9C1 \uC644\uB8CC', 'done');
 
                         // Step 5: Complete
-                        this._showWorkflowStep(5, '\u2728', 'Complete',
+                        this._showWorkflowStep(5, '\u2728', t('wfComplete'),
                             `"${simParams.title || simParams.prompt || 'simulation'}" \uC2DC\uBBAC\uB808\uC774\uC158 \uD65C\uC131\uD654!`, 'done');
 
                         // === Gemma 4 Self-QA Loop ===
@@ -650,7 +650,7 @@ export class SimulationManager {
                 }
             } else {
                 // NLP Fallback
-                this._showWorkflowStep(1, '\uD83D\uDCCB', 'Planning', 'AI \uC624\uD504\uB77C\uC778 \u2014 \uD0A4\uC6CC\uB4DC \uBD84\uC11D \uBAA8\uB4DC', 'done');
+                this._showWorkflowStep(1, '\uD83D\uDCCB', t('wfPlanning'), 'AI \uC624\uD504\uB77C\uC778 \u2014 \uD0A4\uC6CC\uB4DC \uBD84\uC11D \uBAA8\uB4DC', 'done');
                 this._showWorkflowStep(2, '\uD83D\uDD27', 'Generating', '\uD0A4\uC6CC\uB4DC \uAE30\uBC18 \uD30C\uB77C\uBBF8\uD130 \uC0DD\uC131', 'running');
 
                 // Fallback to keyword NLP
@@ -659,7 +659,7 @@ export class SimulationManager {
                 this._chatHistory.push({ role: 'assistant', content: response });
 
                 this._showWorkflowStep(2, '\uD83D\uDD27', 'Generating', '\uD0A4\uC6CC\uB4DC \uB9E4\uCE6D \uC644\uB8CC', 'done');
-                this._showWorkflowStep(3, '\uD83C\uDFD7\uFE0F', 'Building', '\uAD6C\uC870\uBB3C \uC0DD\uC131 \uC644\uB8CC', 'done');
+                this._showWorkflowStep(3, '\uD83C\uDFD7\uFE0F', t('wfBuilding'), '\uAD6C\uC870\uBB3C \uC0DD\uC131 \uC644\uB8CC', 'done');
                 this._showWorkflowStep(4, '\uD83C\uDFA8', 'Rendering', '\uB80C\uB354\uB9C1 \uC644\uB8CC', 'done');
             }
         } catch (err) {
@@ -667,7 +667,7 @@ export class SimulationManager {
             // Clean up any lingering streaming cursor
             this._finalizeStreamingMessage();
             // Mark current workflow step as error
-            this._showWorkflowStep(1, '\uD83D\uDCCB', 'Planning', `\uC624\uB958: ${err.message || '\uCC98\uB9AC \uC2E4\uD328'}`, 'error');
+            this._showWorkflowStep(1, '\uD83D\uDCCB', t('wfPlanning'), `\uC624\uB958: ${err.message || '\uCC98\uB9AC \uC2E4\uD328'}`, 'error');
             // Show error message in chat
             this._showChatError(t('chatError'));
         }
@@ -741,17 +741,17 @@ Correct? Reply ONLY \`\`\`json: {"qa":"pass","reason":"..."} or corrected simula
      */
     async _dagAgentWorkflow(userMessage) {
         // Step 1: ANALYZE — What is the user asking for?
-        this._showWorkflowStep(1, '🔍', 'Analyze', '요청 분석 중...', 'running');
+        this._showWorkflowStep(1, '🔍', t('wfAnalyze'), '요청 분석 중...', 'running');
         const step1 = await this._callOllamaSync(
             `[STEP 1: ANALYZE]\nUser request: "${userMessage}"\n\n` +
             `Identify:\n1. What object/phenomenon to simulate\n2. Key physical properties needed\n3. Relevant science domain\n4. Scale (nano/human/planetary)\n\nRespond in 3-4 bullet points. Korean OK.`
         );
         if (!step1) return null;
-        this._showWorkflowStep(1, '🔍', 'Analyze', step1.slice(0, 60), 'done');
+        this._showWorkflowStep(1, '🔍', t('wfAnalyze'), step1.slice(0, 60), 'done');
         this._updateStreamingMessage(step1);
 
         // Step 2: RESEARCH — Get accurate physical values
-        this._showWorkflowStep(2, '📚', 'Research', '물성치 조사 중...', 'running');
+        this._showWorkflowStep(2, '📚', t('wfResearch'), '물성치 조사 중...', 'running');
         const step2 = await this._callOllamaSync(
             `[STEP 2: RESEARCH PHYSICAL PROPERTIES]\n` +
             `Based on this analysis:\n${step1}\n\n` +
@@ -765,10 +765,10 @@ Correct? Reply ONLY \`\`\`json: {"qa":"pass","reason":"..."} or corrected simula
             `List each value with justification. Be PRECISE.`
         );
         if (!step2) return null;
-        this._showWorkflowStep(2, '📚', 'Research', step2.slice(0, 60), 'done');
+        this._showWorkflowStep(2, '📚', t('wfResearch'), step2.slice(0, 60), 'done');
 
         // Step 3: DESIGN — Plan particle layout
-        this._showWorkflowStep(3, '📐', 'Design', '파티클 배치 설계 중...', 'running');
+        this._showWorkflowStep(3, '📐', t('wfDesign'), '파티클 배치 설계 중...', 'running');
         const step3 = await this._callOllamaSync(
             `[STEP 3: DESIGN PARTICLE LAYOUT]\n` +
             `Physical properties:\n${step2}\n\n` +
@@ -780,10 +780,10 @@ Correct? Reply ONLY \`\`\`json: {"qa":"pass","reason":"..."} or corrected simula
             `Describe the layout plan briefly.`
         );
         if (!step3) return null;
-        this._showWorkflowStep(3, '📐', 'Design', step3.slice(0, 60), 'done');
+        this._showWorkflowStep(3, '📐', t('wfDesign'), step3.slice(0, 60), 'done');
 
         // Step 4: GENERATE — Create the final JSON
-        this._showWorkflowStep(4, '🔧', 'Generate', 'JSON 생성 중...', 'running');
+        this._showWorkflowStep(4, '🔧', t('wfGenerate'), 'JSON 생성 중...', 'running');
         const step4 = await this._callOllamaSync(
             `[STEP 4: GENERATE SIMULATION JSON]\n` +
             `Analysis: ${step1.slice(0, 200)}\n` +
@@ -794,10 +794,10 @@ Correct? Reply ONLY \`\`\`json: {"qa":"pass","reason":"..."} or corrected simula
             '```json\n{"simulation":{"prompt":"keyword","title":"...","domain":"...","physics":{"gravity":-9.81,"damping":0.97,"springStiffness":20,"particleCount":25000,"temperature":293,"density":2.4,"viscosity":0,"friction":0.8,"bounciness":0.3,"windX":0,"turbulence":0,"seismic":0}}}\n```'
         );
         if (!step4) return null;
-        this._showWorkflowStep(4, '🔧', 'Generate', 'JSON 생성 완료', 'done');
+        this._showWorkflowStep(4, '🔧', t('wfGenerate'), 'JSON 생성 완료', 'done');
 
         // Step 5: VALIDATE — Self-check
-        this._showWorkflowStep(5, '✅', 'Validate', '검증 중...', 'running');
+        this._showWorkflowStep(5, '✅', t('wfValidate'), '검증 중...', 'running');
         const step5 = await this._callOllamaSync(
             `[STEP 5: VALIDATE]\n` +
             `Original request: "${userMessage}"\n` +
@@ -810,7 +810,7 @@ Correct? Reply ONLY \`\`\`json: {"qa":"pass","reason":"..."} or corrected simula
             `If ANY wrong: respond with CORRECTED JSON.\n` +
             `ALWAYS include \`\`\`json block.`
         );
-        this._showWorkflowStep(5, '✅', 'Validate', '검증 완료', 'done');
+        this._showWorkflowStep(5, '✅', t('wfValidate'), '검증 완료', 'done');
 
         // Use step5 (validated) or step4 (if step5 failed)
         const finalResponse = step5 || step4;

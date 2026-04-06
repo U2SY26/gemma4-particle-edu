@@ -219,10 +219,12 @@ class App {
             });
         }
 
-        // Landing page chips
+        // Landing page chips (language-aware prompt)
         for (const chip of document.querySelectorAll('.landing-chip')) {
             chip.addEventListener('click', () => {
-                enterSimPage(chip.dataset.prompt);
+                const lang = localStorage.getItem('particleLang') || 'ko';
+                const prompt = lang === 'ko' ? (chip.dataset.promptKo || chip.dataset.prompt) : chip.dataset.prompt;
+                enterSimPage(prompt);
             });
         }
     }
