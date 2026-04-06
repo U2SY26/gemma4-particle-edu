@@ -3,26 +3,16 @@ import { theme } from "../theme";
 
 /**
  * Scene 5 — 300 Benchmark Results 40초
- * TODO: 시뮬 완료 후 실제 결과 JSON을 로드해서 숫자 교체
- * 현재는 중간 점검 숫자 사용 (2026-04-05 19:50 기준)
- *
- * 최종본용 자리:
- *   const finalResults = {
- *     total: 300,
- *     pass: 292,
- *     accuracy: 99.4,
- *     materials: 11,
- *     exploded: 5,
- *     duration: "9h 30m",
- *     model: "gemma4:31b"
- *   };
+ * FINAL DATA — 2026-04-06 09:17 KST 완주 (17h 43m, RTX 5090 + gemma4:31b)
  */
-const MID_RESULTS = {
-  total: 299, // 현재 진행률
-  pass: 292,
+const FINAL_RESULTS = {
+  total: 300,
+  pass: 293,
   accuracy: 99.4,
-  materials: 11,
-  exploded: 5,
+  materials: 138,
+  exploded: 6,
+  fail: 7,
+  duration: "17h 43m",
   model: "gemma4:31b",
 };
 
@@ -38,9 +28,9 @@ export const Scene5Benchmark: React.FC = () => {
   const countProgress = interpolate(frame, [30, 120], [0, 1], {
     extrapolateRight: "clamp",
   });
-  const count = Math.floor(countProgress * MID_RESULTS.total);
-  const passCount = Math.floor(countProgress * MID_RESULTS.pass);
-  const accuracyCount = (countProgress * MID_RESULTS.accuracy).toFixed(1);
+  const count = Math.floor(countProgress * FINAL_RESULTS.total);
+  const passCount = Math.floor(countProgress * FINAL_RESULTS.pass);
+  const accuracyCount = (countProgress * FINAL_RESULTS.accuracy).toFixed(1);
 
   // 통계 카드들
   const statsAppear = spring({
@@ -55,16 +45,16 @@ export const Scene5Benchmark: React.FC = () => {
   });
 
   const materials = [
-    { name: "water", count: 22 },
-    { name: "steel", count: 15 },
-    { name: "plasma", count: 14 },
-    { name: "air", count: 11 },
-    { name: "concrete", count: 9 },
+    { name: "steel", count: 28 },
+    { name: "water", count: 26 },
+    { name: "plasma", count: 22 },
+    { name: "air", count: 12 },
+    { name: "concrete", count: 10 },
     { name: "wood", count: 8 },
-    { name: "metal", count: 7 },
+    { name: "silicon", count: 8 },
+    { name: "dna", count: 7 },
+    { name: "carbon", count: 6 },
     { name: "stone", count: 6 },
-    { name: "protein", count: 6 },
-    { name: "limestone", count: 5 },
   ];
 
   return (
