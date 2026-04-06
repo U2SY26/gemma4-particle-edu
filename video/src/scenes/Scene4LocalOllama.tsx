@@ -1,100 +1,142 @@
-import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
+import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { theme } from "../theme";
 
-/**
- * Scene 4 — Gemma 4 Local via Ollama 25초
- * 핵심 메시지: "이건 진짜 로컬에서 돌고 있는 31B 모델이야"
- * Ollama Special Tech Track $10K 증명 장면
- */
 export const Scene4LocalOllama: React.FC = () => {
   const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
 
-  const headerOpacity = interpolate(frame, [0, 20], [0, 1], {
-    extrapolateRight: "clamp",
-  });
+  // 대형 헤더
+  const headerSpring = spring({ frame, fps, config: { damping: 10 } });
 
-  // 터미널 라인들이 순차적으로 타이핑
-  const terminalLines = [
-    { t: 40, text: "$ ollama ps", color: theme.colors.text },
-    {
-      t: 100,
-      text: "NAME          SIZE      VRAM       PROCESSOR",
-      color: theme.colors.textMuted,
-    },
-    {
-      t: 130,
-      text: "gemma4:31b    30.9 GB   28 GB      100% GPU",
-      color: theme.colors.success,
-    },
-    { t: 220, text: "", color: theme.colors.text },
-    { t: 250, text: "$ journalctl -u ollama --since '1 hour ago' | wc -l", color: theme.colors.text },
-    { t: 340, text: "335 API requests", color: theme.colors.success },
-    { t: 420, text: "", color: theme.colors.text },
-    { t: 450, text: "$ curl localhost:11434/api/ps", color: theme.colors.text },
-    { t: 520, text: '{ "model": "gemma4:31b", "size_vram": 28GB }', color: theme.colors.accent },
+  // 터미널 라인 (빠른 타이핑)
+  const lines = [
+    { t: 80, cmd: "$ ollama ps", result: "" },
+    { t: 110, cmd: "", result: "gemma4:31b  30.9GB  28GB VRAM  96% GPU" },
+    { t: 200, cmd: "$ nvidia-smi", result: "" },
+    { t: 230, cmd: "", result: "RTX 5090  76°C  531W  96% UTIL" },
+    { t: 350, cmd: "$ uptime", result: "" },
+    { t: 380, cmd: "", result: "17 HOURS 43 MINUTES — ZERO RESTARTS" },
+  ];
+
+  // 대형 통계
+  const stats = [
+    { value: "300", label: "SCENARIOS", t: 470, color: theme.colors.accent },
+    { value: "97.7%", label: "ACCURACY", t: 510, color: theme.colors.success },
+    { value: "0", label: "CLOUD CALLS", t: 550, color: theme.colors.gemma },
   ];
 
   return (
-    <AbsoluteFill
-      style={{
-        backgroundColor: theme.colors.bg,
-        fontFamily: theme.fonts.mono,
-        padding: 80,
-      }}
-    >
+    <AbsoluteFill style={{ backgroundColor: "#010409", fontFamily: theme.fonts.mono, overflow: "hidden" }}>
+      {/* 스캔라인 효과 */}
       <div
         style={{
-          fontSize: 32,
-          color: theme.colors.gemma,
-          opacity: headerOpacity,
-          marginBottom: 16,
+          position: "absolute",
+          inset: 0,
+          backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, #ffffff05 2px, #ffffff05 4px)",
+          zIndex: 5,
+          pointerEvents: "none",
         }}
-      >
-        ▶ LOCAL GEMMA 4 — NO CLOUD, NO API KEYS
-      </div>
+      />
+
+      {/* 대형 헤더 */}
       <div
         style={{
-          fontSize: 56,
-          fontWeight: 700,
-          color: theme.colors.text,
-          opacity: headerOpacity,
-          marginBottom: 48,
-          fontFamily: theme.fonts.heading,
+          position: "absolute",
+          top: 60,
+          left: 80,
+          right: 80,
+          opacity: headerSpring,
+          transform: `translateX(${interpolate(headerSpring, [0, 1], [-100, 0])}px)`,
         }}
       >
-        진짜 로컬에서 돌아가는 31B 모델
+        <div style={{ fontSize: 36, color: theme.colors.gemma, fontWeight: 700, marginBottom: 8 }}>
+          100% LOCAL EXECUTION
+        </div>
+        <div style={{ fontSize: 100, fontWeight: 900, color: theme.colors.text, letterSpacing: -4, lineHeight: 1 }}>
+          NO CLOUD.
+        </div>
+        <div style={{ fontSize: 100, fontWeight: 900, color: theme.colors.accent, letterSpacing: -4, lineHeight: 1 }}>
+          NO API KEYS.
+        </div>
       </div>
 
-      {/* 터미널 */}
+      {/* 터미널 영역 */}
       <div
         style={{
-          flex: 1,
-          background: "#010409",
+          position: "absolute",
+          top: 340,
+          left: 60,
+          right: 60,
+          bottom: 220,
+          background: "#0d1117",
           border: `1px solid ${theme.colors.border}`,
           borderRadius: 12,
-          padding: 40,
-          fontSize: 32,
-          lineHeight: 1.6,
+          padding: 32,
+          fontSize: 30,
+          lineHeight: 1.8,
         }}
       >
-        {terminalLines.map((line, i) => {
-          const opacity = interpolate(
-            frame,
-            [line.t, line.t + 15],
-            [0, 1],
-            { extrapolateRight: "clamp" }
-          );
+        {lines.map((line, i) => {
+          const text = line.cmd || line.result;
+          const charCount = Math.max(0, Math.floor((frame - line.t) * 1.5));
+          const displayed = text.slice(0, charCount);
+          const isResult = !line.cmd;
           return (
             <div
               key={i}
               style={{
-                opacity,
-                color: line.color,
-                fontFamily: theme.fonts.mono,
+                color: isResult ? theme.colors.success : theme.colors.text,
+                fontWeight: isResult ? 700 : 400,
+                opacity: frame > line.t ? 1 : 0,
                 minHeight: 40,
               }}
             >
-              {line.text}
+              {displayed}
+              {frame > line.t && charCount < text.length && frame % 6 < 3 && (
+                <span style={{ color: theme.colors.accent }}>_</span>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* 하단 대형 통계 */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: 40,
+          left: 60,
+          right: 60,
+          display: "flex",
+          gap: 40,
+        }}
+      >
+        {stats.map((s) => {
+          const sp = spring({ frame: frame - s.t, fps, config: { damping: 8, stiffness: 120 } });
+          return (
+            <div
+              key={s.label}
+              style={{
+                flex: 1,
+                textAlign: "center",
+                opacity: sp,
+                transform: `scale(${interpolate(sp, [0, 1], [0.5, 1])})`,
+              }}
+            >
+              <div
+                style={{
+                  fontSize: 96,
+                  fontWeight: 900,
+                  color: s.color,
+                  lineHeight: 1,
+                  textShadow: `0 0 40px ${s.color}44`,
+                }}
+              >
+                {s.value}
+              </div>
+              <div style={{ fontSize: 28, color: theme.colors.textMuted, marginTop: 8 }}>
+                {s.label}
+              </div>
             </div>
           );
         })}

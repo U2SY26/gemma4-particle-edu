@@ -1,0 +1,11 @@
+node_modules
+.git
+.vercel
+video
+docs
+test
+test-results
+scripts
+*.md
+.env*
+.claude

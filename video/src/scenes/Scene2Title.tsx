@@ -5,27 +5,17 @@ export const Scene2Title: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  // 로고 드롭 애니메이션
-  const logoSpring = spring({
-    frame,
-    fps,
-    config: { damping: 10, stiffness: 100 },
-  });
-  const logoY = interpolate(logoSpring, [0, 1], [-200, 0]);
+  const logoSpring = spring({ frame, fps, config: { damping: 8, stiffness: 100 } });
+  const logoScale = interpolate(logoSpring, [0, 1], [0, 1]);
+  const logoGlow = interpolate(frame, [0, 60, 120], [0, 1, 0.6]);
 
-  // 타이틀 글자별 등장
-  const titleChars = "Gemma 4 Particle Edu".split("");
-  const subtitleOpacity = interpolate(frame, [120, 160], [0, 1], {
-    extrapolateRight: "clamp",
-  });
-  const tagsOpacity = interpolate(frame, [200, 240], [0, 1], {
-    extrapolateRight: "clamp",
-  });
-  const tagsY = interpolate(
-    spring({ frame: frame - 200, fps, config: { damping: 12 } }),
-    [0, 1],
-    [30, 0]
-  );
+  const subtitleOpacity = interpolate(frame, [90, 120], [0, 1], { extrapolateRight: "clamp" });
+
+  const tags = ["Ollama", "Gemma 4 31B", "Three.js", "Verlet Physics"];
+  const tagBaseFrame = 200;
+
+  // 배경 회전 그리드
+  const gridRotate = interpolate(frame, [0, 600], [0, 15]);
 
   return (
     <AbsoluteFill
@@ -34,16 +24,30 @@ export const Scene2Title: React.FC = () => {
         justifyContent: "center",
         alignItems: "center",
         fontFamily: theme.fonts.heading,
+        overflow: "hidden",
       }}
     >
-      {/* 배경 파티클 그리드 효과 */}
+      {/* 회전 그리드 배경 */}
       <div
         style={{
           position: "absolute",
-          inset: 0,
-          backgroundImage: `radial-gradient(${theme.colors.border} 1px, transparent 1px)`,
-          backgroundSize: "40px 40px",
-          opacity: 0.3,
+          inset: -200,
+          backgroundImage: `linear-gradient(${theme.colors.accent}11 1px, transparent 1px), linear-gradient(90deg, ${theme.colors.accent}11 1px, transparent 1px)`,
+          backgroundSize: "80px 80px",
+          transform: `rotate(${gridRotate}deg)`,
+        }}
+      />
+
+      {/* 글로우 서클 */}
+      <div
+        style={{
+          position: "absolute",
+          width: 600,
+          height: 600,
+          borderRadius: "50%",
+          background: `radial-gradient(circle, ${theme.colors.accent}22 0%, transparent 70%)`,
+          opacity: logoGlow,
+          transform: `scale(${1 + logoGlow * 0.3})`,
         }}
       />
 
@@ -51,78 +55,90 @@ export const Scene2Title: React.FC = () => {
       <div
         style={{
           textAlign: "center",
-          transform: `translateY(${logoY}px)`,
-          opacity: logoSpring,
+          transform: `scale(${logoScale})`,
           zIndex: 1,
         }}
       >
-        <div style={{ fontSize: 40, marginBottom: 24 }}>🪐</div>
         <h1
           style={{
-            fontSize: 140,
+            fontSize: 160,
             fontWeight: 900,
-            background: `linear-gradient(135deg, ${theme.colors.accent} 0%, ${theme.colors.gemma} 100%)`,
+            background: `linear-gradient(135deg, ${theme.colors.accent} 0%, #a855f7 50%, ${theme.colors.gemma} 100%)`,
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             margin: 0,
+            letterSpacing: -6,
+            lineHeight: 0.9,
+            textShadow: `0 0 120px ${theme.colors.accent}44`,
+          }}
+        >
+          GEMMA 4
+        </h1>
+        <h1
+          style={{
+            fontSize: 120,
+            fontWeight: 900,
+            color: theme.colors.text,
+            margin: 0,
+            marginTop: -10,
             letterSpacing: -4,
             lineHeight: 1,
           }}
         >
-          {titleChars.map((ch, i) => {
-            const charOpacity = interpolate(
-              frame,
-              [30 + i * 3, 45 + i * 3],
-              [0, 1],
-              { extrapolateRight: "clamp" }
-            );
-            return (
-              <span key={i} style={{ opacity: charOpacity }}>
-                {ch === " " ? "\u00A0" : ch}
-              </span>
-            );
-          })}
+          PARTICLE EDU
         </h1>
-        <div
-          style={{
-            fontSize: 42,
-            color: theme.colors.textMuted,
-            marginTop: 24,
-            opacity: subtitleOpacity,
-            fontWeight: 400,
-          }}
-        >
-          무료 · 오픈소스 · 로컬 실행
-        </div>
+      </div>
+
+      {/* 서브타이틀 */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: 200,
+          fontSize: 56,
+          color: theme.colors.textMuted,
+          opacity: subtitleOpacity,
+          fontWeight: 400,
+          letterSpacing: 8,
+          textTransform: "uppercase",
+        }}
+      >
+        FREE &middot; OPEN SOURCE &middot; LOCAL
       </div>
 
       {/* 태그 */}
       <div
         style={{
           position: "absolute",
-          bottom: 120,
+          bottom: 100,
           display: "flex",
-          gap: 32,
-          opacity: tagsOpacity,
-          transform: `translateY(${tagsY}px)`,
+          gap: 24,
         }}
       >
-        {["Ollama", "Gemma 4 31B", "Three.js", "Verlet Physics"].map((tag) => (
-          <div
-            key={tag}
-            style={{
-              padding: "16px 32px",
-              border: `2px solid ${theme.colors.accent}`,
-              borderRadius: 50,
-              fontSize: 28,
-              color: theme.colors.accent,
-              background: `${theme.colors.accent}15`,
-              fontFamily: theme.fonts.mono,
-            }}
-          >
-            {tag}
-          </div>
-        ))}
+        {tags.map((tag, i) => {
+          const tagSpring = spring({
+            frame: frame - tagBaseFrame - i * 8,
+            fps,
+            config: { damping: 12 },
+          });
+          return (
+            <div
+              key={tag}
+              style={{
+                padding: "14px 28px",
+                border: `2px solid ${theme.colors.accent}`,
+                borderRadius: 50,
+                fontSize: 26,
+                color: theme.colors.accent,
+                background: `${theme.colors.accent}15`,
+                fontFamily: theme.fonts.mono,
+                opacity: tagSpring,
+                transform: `translateY(${interpolate(tagSpring, [0, 1], [20, 0])}px)`,
+              }}
+            >
+              {tag}
+            </div>
+          );
+        })}
       </div>
     </AbsoluteFill>
   );
