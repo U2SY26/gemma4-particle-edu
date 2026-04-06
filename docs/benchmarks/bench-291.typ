@@ -4,23 +4,23 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #291]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Mars Surface Unmanned Rover Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[화성 표면 무인 탐사 로봇 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [화성 표면을 이동하며 조사하는 무인 탐사 로봇],
-  [Step 2: 재료], [aluminum],
+  [Step 1: 식별], [화성 표면을 탐사하는 무인 로봇 차량],
+  [Step 2: 재료], [Aluminum],
   [Step 3: 밀도], [2700 kg/m³],
   [Step 4: 중력], [-3.72 m/s²],
   [Step 5: 온도], [210 K],
   [Step 6: 특수], [```json
 {
-  "min_temperature_celsius": -],
+  "atmospheric_pressure": "ext],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

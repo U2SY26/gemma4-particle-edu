@@ -4,23 +4,21 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #179]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Whale Migration Path Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[고래 이동 경로 바닷물 흐름 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [고래의 이동 경로에 영향을 미치는 바닷물의 흐름],
+  [Step 1: 식별], [고래가 이동 시 경로로 이용하는 바닷물의 흐름],
   [Step 2: 재료], [water],
   [Step 3: 밀도], [1000 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
-  [Step 5: 온도], [277 K],
-  [Step 6: 특수], [```json
-{
-  "temperature_gradient": "hig],
+  [Step 5: 온도], [283 K],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)
@@ -29,7 +27,7 @@
   [stability], [안정 (y=3.71)], [PASS],
   [gravity_dir], [하강 OK (y=3.71)], [PASS],
   [damping], [damping=0.97 OK], [PASS],
-  [temperature], [277K OK], [PASS],
+  [temperature], [283K OK], [PASS],
   [particle_count], [25000 OK], [PASS],
 )
 
@@ -37,5 +35,5 @@
 정확도: ★★★★★ 100%
 파티클: 25000
 중력: -9.81 m/s²
-온도: 277 K
+온도: 283 K
 시뮬 안정성: ✓ 안정

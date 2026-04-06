@@ -4,24 +4,21 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #253]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[1912 Iceberg Maritime Disaster Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[1912년 타이타닉 빙산 충돌 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [1912년 빙산 충돌로 발생한 해상 재난],
-  [Step 2: 재료], [ice],
-  [Step 3: 밀도], [917 kg/m³],
+  [Step 1: 식별], [1912년 빙산 충돌로 발생한 대규모 해상 참사],
+  [Step 2: 재료], [steel],
+  [Step 3: 밀도], [7850 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
-  [Step 5: 온도], [273 K],
-  [Step 6: 특수], [```json
-{
-  "impact_velocity": "high",
- ],
+  [Step 5: 온도], [271 K],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)
@@ -30,7 +27,7 @@
   [stability], [안정 (y=3.71)], [PASS],
   [gravity_dir], [하강 OK (y=3.71)], [PASS],
   [damping], [damping=0.97 OK], [PASS],
-  [temperature], [273K OK], [PASS],
+  [temperature], [271K OK], [PASS],
   [particle_count], [25000 OK], [PASS],
 )
 
@@ -38,5 +35,5 @@
 정확도: ★★★★★ 100%
 파티클: 25000
 중력: -9.81 m/s²
-온도: 273 K
+온도: 271 K
 시뮬 안정성: ✓ 안정

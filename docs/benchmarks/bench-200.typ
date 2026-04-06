@@ -4,24 +4,24 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #200]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[CO2 Gas Bubble Nucleation Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[이산화 탄소 기포 생성 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [액체 속에 녹아 있는 이산화탄소가 기체로 변해 나타나는 작은 방울],
-  [Step 2: 재료], [gas],
-  [Step 3: 밀도], [1.2 kg/m³],
+  [Step 1: 식별], [액체 속에 녹아 있는 이산화 탄소가 기체 형태로 나타난 작은 방울.],
+  [Step 2: 재료], [CO2],
+  [Step 3: 밀도], [1.98 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
   [Step 6: 특수], [```json
 {
-  "pressure_drop": 10,
-  "temp],
+  "pressure": "decrease",
+  "s],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

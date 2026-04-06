@@ -4,23 +4,24 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #230]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Quantum Bit (Qubit) State Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[양자 정보 기본 단위(큐비트) 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [0과 1의 상태를 동시에 가질 수 있는 양자 정보의 기본 단위],
-  [Step 2: 재료], [qubit],
-  [Step 3: 밀도], [큐비트(qubit)는 정보의 단위인  kg/m³],
+  [Step 1: 식별], [양자 정보의 기본 단위],
+  [Step 2: 재료], [큐비트],
+  [Step 3: 밀도], [큐비트는 물질이 아니라 양자 정보의  kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [0.01 K],
   [Step 6: 특수], [```json
 {
-  "temperature": "ultra-low (n],
+  "temperature_mK": 10,
+  "vac],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

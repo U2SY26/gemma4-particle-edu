@@ -4,18 +4,18 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #191]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Aerodynamic Lift in Ski Jumping]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[스키 점퍼의 공기역학적 양력 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [스키 점프 비행 중 공기 역학적으로 발생하는 상승력],
+  [Step 1: 식별], [공기역학을 이용해 스키 점퍼의 몸을 위로 띄우는 힘.],
   [Step 2: 재료], [air],
-  [Step 3: 밀도], [1.2 kg/m³],
+  [Step 3: 밀도], [1.225 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [273 K],
   [Step 6: 특수], [```json

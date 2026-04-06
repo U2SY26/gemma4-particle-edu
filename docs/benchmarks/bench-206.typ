@@ -4,18 +4,18 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #206]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Paper Airplane Flight Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[종이 비행체 공중 활공 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [종이를 접어 만든 비행체가 공중을 가로지르는 움직임],
+  [Step 1: 식별], [종이로 접은 비행체의 공중 활공 활동],
   [Step 2: 재료], [paper],
-  [Step 3: 밀도], [1200 kg/m³],
+  [Step 3: 밀도], [800 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
   [Step 6: 특수], [{}],

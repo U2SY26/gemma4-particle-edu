@@ -4,21 +4,24 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #192]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Bobsleigh Curve Inertial Force Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[곡선 트랙 주행 시 썰매의 관성력 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [봅슬레이 곡선 구간 주행 시 썰매를 트랙 바깥쪽으로 밀어내는 물리적 힘],
+  [Step 1: 식별], [곡선 트랙 주행 시 썰매를 바깥쪽으로 밀어내는 힘],
   [Step 2: 재료], [Inertia],
-  [Step 3: 밀도], [7874 kg/m³],
+  [Step 3: 밀도], [관성은 물질이 아니라 물체가 자신의  kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [273 K],
-  [Step 6: 특수], [{}],
+  [Step 6: 특수], [```json
+{
+  "velocity": "v",
+  "mass": "],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

@@ -4,23 +4,21 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #185]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Bowling First Throw Strike Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[플라스마 볼링 스트라이크 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [볼링 첫 투구로 10개의 핀을 모두 쓰러뜨리는 것],
-  [Step 2: 재료], [strike],
-  [Step 3: 밀도], [? kg/m³],
+  [Step 1: 식별], [첫 번째 투구로 모든 핀을 쓰러뜨리는 것],
+  [Step 2: 재료], [plasma],
+  [Step 3: 밀도], [1025 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
-  [Step 6: 특수], [```json
-{}
-```],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

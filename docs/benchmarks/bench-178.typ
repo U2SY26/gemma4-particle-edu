@@ -4,23 +4,24 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #178]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Coral Colony Underwater Ecosystem Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[산호초 석회질 골격 해양 생태계 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [산호충이 군체를 이루어 형성한 수중 생태계],
+  [Step 1: 식별], [산호충이 석회질 골격을 쌓아 형성한 해양 생태계],
   [Step 2: 재료], [limestone],
   [Step 3: 밀도], [2500 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [298 K],
   [Step 6: 특수], [```json
 {
-  "temperature_celsius": "23-2],
+  "temperature": "20-29°C",
+  ],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

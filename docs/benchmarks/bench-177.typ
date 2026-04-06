@@ -4,20 +4,20 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #177]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Mangrove Root Tidal Flow Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[Text Simulation]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [맹그로브 숲의 뿌리 구조와 조석 작용으로 형성된 복잡한 물의 흐름],
-  [Step 2: 재료], [water],
-  [Step 3: 밀도], [1000 kg/m³],
+  [Step 1: 식별], [해당 용어는 일반적인 과학적·지리적 개념으로 존재하지 않는 용어입니다.],
+  [Step 2: 재료], [text],
+  [Step 3: 밀도], ['text'는 물리적인 물질이 아니므 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
-  [Step 5: 온도], ['맹그로브 해류'라는 용어는 과학적으 K],
+  [Step 5: 온도], [298 K],
   [Step 6: 특수], [{}],
 )
 
@@ -27,7 +27,7 @@
   [stability], [안정 (y=3.71)], [PASS],
   [gravity_dir], [하강 OK (y=3.71)], [PASS],
   [damping], [damping=0.97 OK], [PASS],
-  [temperature], [300K OK], [PASS],
+  [temperature], [298K OK], [PASS],
   [particle_count], [25000 OK], [PASS],
 )
 
@@ -35,5 +35,5 @@
 정확도: ★★★★★ 100%
 파티클: 25000
 중력: -9.81 m/s²
-온도: 300 K
+온도: 298 K
 시뮬 안정성: ✓ 안정

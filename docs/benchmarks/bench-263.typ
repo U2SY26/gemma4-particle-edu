@@ -4,16 +4,16 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #263]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[DNA 복제 Y-구조 시뮬레이션]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[DNA 복제 Y자형 구조 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [DNA 이중 나선이 풀리며 복제가 일어나는 Y자 모양의 구조],
+  [Step 1: 식별], [DNA 복제 시 이중 나선이 풀리며 형성되는 Y자형 구조],
   [Step 2: 재료], [DNA],
   [Step 3: 밀도], [1700 kg/m³],
   [Step 4: 중력], [0 m/s²],

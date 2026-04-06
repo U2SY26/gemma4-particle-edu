@@ -4,18 +4,18 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #234]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Silicon MEMS Sensor Motion & Tilt Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[초소형 반도체 기반 움직임 및 기울기 감지 센서 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [미세 기계 구조를 이용해 움직임과 기울기를 측정하는 초소형 센서],
+  [Step 1: 식별], [초소형 반도체 기반의 움직임 및 기울기 감지 센서],
   [Step 2: 재료], [Silicon],
-  [Step 3: 밀도], [2330 kg/m³],
+  [Step 3: 밀도], [2329 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
   [Step 6: 특수], [{}],

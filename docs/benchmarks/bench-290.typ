@@ -4,23 +4,23 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #290]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Hot Air Balloon Buoyancy Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[뜨거워진 공기의 상승 현상]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [뜨거운 공기를 이용해 기구가 공중으로 떠오르는 현상],
+  [Step 1: 식별], [뜨거워진 공기가 주변보다 가벼워져 위로 떠오르는 현상],
   [Step 2: 재료], [air],
   [Step 3: 밀도], [1.225 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [373 K],
   [Step 6: 특수], [```json
 {
-  "temperature_difference": ">],
+  "temperature_difference": "i],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

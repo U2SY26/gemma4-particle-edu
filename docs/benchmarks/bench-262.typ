@@ -4,23 +4,24 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #262]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Synaptic Neurotransmitter Diffusion Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[신경세포 시냅스 정보 전달 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [신경세포 사이에서 신호를 전달하는 연결 부위],
-  [Step 2: 재료], [neurotransmitter],
-  [Step 3: 밀도], [1000 kg/m³],
+  [Step 1: 식별], [신경세포 사이의 정보 전달 접점],
+  [Step 2: 재료], [Neurotransmitter],
+  [Step 3: 밀도], [1200 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [310 K],
   [Step 6: 특수], [```json
 {
-  "temperature": "36.5-37.5°C"],
+  "temperature_celsius": 37,
+ ],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

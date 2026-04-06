@@ -4,18 +4,18 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #282]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Electron Dynamics in Graphene]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[탄소 원자 격자 구조 내 전자의 초고속 이동 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [그래핀 내에서 전자가 이동하는 물리적 현상],
-  [Step 2: 재료], [graphene],
-  [Step 3: 밀도], [2260 kg/m³],
+  [Step 1: 식별], [탄소 원자 한 층의 격자 구조를 통한 전자의 초고속 이동 현상],
+  [Step 2: 재료], [Graphene],
+  [Step 3: 밀도], [2267 kg/m³],
   [Step 4: 중력], [0 m/s²],
   [Step 5: 온도], [293 K],
   [Step 6: 특수], [```json

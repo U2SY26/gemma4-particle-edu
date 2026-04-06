@@ -4,17 +4,17 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #298]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Australian Iconic Concrete Architecture Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[Sydney Opera House Concrete Simulation]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [호주의 상징적인 현대 건축물 및 공연 예술 센터],
-  [Step 2: 재료], [concrete],
+  [Step 1: 식별], [호주 시드니의 상징적인 공연 예술 센터],
+  [Step 2: 재료], [Concrete],
   [Step 3: 밀도], [2400 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],

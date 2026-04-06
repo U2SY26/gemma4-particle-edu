@@ -4,17 +4,17 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #265]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Protein Synthesis via mRNA Translation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[mRNA 기반 단백질 합성 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [mRNA의 유전 정보를 바탕으로 단백질을 합성하는 과정],
-  [Step 2: 재료], [amino acid],
+  [Step 1: 식별], [mRNA의 유전 정보를 바탕으로 단백질을 합성하는 과정.],
+  [Step 2: 재료], [아미노산],
   [Step 3: 밀도], [1400 kg/m³],
   [Step 4: 중력], [0 m/s²],
   [Step 5: 온도], [310 K],

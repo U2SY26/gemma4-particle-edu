@@ -4,23 +4,21 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #213]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Koch Snowflake Snow Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[코흐 눈송이 프랙탈 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [삼각형의 각 변을 반복적으로 분할하여 만드는 프랙탈 도형],
-  [Step 2: 재료], [snow],
-  [Step 3: 밀도], [100 kg/m³],
+  [Step 1: 식별], [무한한 둘레와 유한한 넓이를 가진 수학적 프랙탈 도형],
+  [Step 2: 재료], [Number],
+  [Step 3: 밀도], ['Number'는 물리적인 물질이 아 kg/m³],
   [Step 4: 중력], [0 m/s²],
-  [Step 5: 온도], [코흐 눈송이는 수학적 개념(프랙탈)으 K],
-  [Step 6: 특수], [```json
-{}
-```],
+  [Step 5: 온도], [코흐 눈송이는 수학적인 프랙탈 도형( K],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

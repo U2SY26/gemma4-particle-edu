@@ -4,18 +4,18 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #184]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Tennis Topspin Physics Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[고탄성 고무공의 전방 회전 및 고도 바운스 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [공의 상단에 회전을 주어 바닥에 맞은 후 급격히 떨어지게 하는 테니스 기술],
-  [Step 2: 재료], [Topspin],
-  [Step 3: 밀도], [1300 kg/m³],
+  [Step 1: 식별], [공이 앞으로 회전하며 빠르게 떨어지고 바운드 후 높게 튀어 오르는 타법.],
+  [Step 2: 재료], [rubber],
+  [Step 3: 밀도], [1100 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
   [Step 6: 특수], [{}],

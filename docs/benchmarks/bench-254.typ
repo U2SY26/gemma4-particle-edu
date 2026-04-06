@@ -4,18 +4,18 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #254]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[체르노빌 방사성 동위원소 확산 시뮬레이션]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[체르노빌 방사성 세슘 지표면 침강 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [체르노빌 원전 사고로 인해 대기 중으로 퍼진 방사성 물질],
-  [Step 2: 재료], [isotopes],
-  [Step 3: 밀도], [동위원소(isotopes)는 특정 물 kg/m³],
+  [Step 1: 식별], [체르노빌 원전 사고로 방출되어 대기 중에 퍼졌다가 지표면에 떨어진 방사성 물질.],
+  [Step 2: 재료], [Cesium],
+  [Step 3: 밀도], [1930 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
   [Step 6: 특수], [{}],

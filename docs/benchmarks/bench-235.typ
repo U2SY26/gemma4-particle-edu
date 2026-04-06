@@ -4,24 +4,24 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #235]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Inkjet Printing Droplet Ejection Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[Inkjet Printing Droplet Simulation]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [미세한 노즐을 통해 잉크 방울을 뿜어내는 인쇄 방식],
+  [Step 1: 식별], [미세한 잉크 방울을 뿜어내어 종이 등에 인쇄하는 방식.],
   [Step 2: 재료], [ink],
-  [Step 3: 밀도], [1000 kg/m³],
+  [Step 3: 밀도], [1050 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
   [Step 6: 특수], [```json
 {
-  "viscosity": "essential",
-  ],
+  "viscosity": "critical",
+  "],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

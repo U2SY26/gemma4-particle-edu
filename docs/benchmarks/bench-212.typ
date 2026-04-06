@@ -4,23 +4,21 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #212]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Sierpinski Triangle Fractal Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[자기 유사성 프랙탈 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [삼각형의 중심 부분을 반복적으로 제거하여 만드는 프랙탈 도형],
-  [Step 2: 재료], [triangle],
-  [Step 3: 밀도], [삼각형(triangle)은 물질이 아 kg/m³],
+  [Step 1: 식별], [자기 유사성을 가진 프랙탈 도형.],
+  [Step 2: 재료], [수학],
+  [Step 3: 밀도], [수학은 물리적인 물질이 아니라 추상적 kg/m³],
   [Step 4: 중력], [0 m/s²],
-  [Step 5: 온도], [0 K],
-  [Step 6: 특수], [```json
-{}
-```],
+  [Step 5: 온도], [시에르핀스키 삼각형은 수학적인 추상  K],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

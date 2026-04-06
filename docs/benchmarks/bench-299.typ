@@ -4,16 +4,16 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #299]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Structural Simulation of the Unfinished Cathedral in Barcelona]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[Sagrada Familia Stone Structure Simulation]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [스페인 바르셀로나의 미완성 가톨릭 대성당],
+  [Step 1: 식별], [스페인 바르셀로나에 있는 가우디 설계의 미완성 성당],
   [Step 2: 재료], [stone],
   [Step 3: 밀도], [2600 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],

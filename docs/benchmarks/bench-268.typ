@@ -4,24 +4,23 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #268]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Pumped-Storage Hydroelectric Energy Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[양수 발전소 수력 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [전력 수요에 따라 물을 상하 저수지 사이로 이동시켜 에너지를 저장하고 생산하는 발전 시설],
+  [Step 1: 식별], [남는 전기로 물을 상부 댐에 저장했다가 필요할 때 낙하시켜 전기를 생산하는 수력 발전소.],
   [Step 2: 재료], [water],
   [Step 3: 밀도], [1000 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
   [Step 6: 특수], [```json
 {
-  "head_difference": "high",
- ],
+  "elevation_difference": "hig],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)
@@ -31,12 +30,12 @@
   [gravity_dir], [하강 OK (y=3.71)], [PASS],
   [damping], [damping=0.97 OK], [PASS],
   [temperature], [293K OK], [PASS],
-  [particle_count], [50000 OK], [PASS],
+  [particle_count], [25000 OK], [PASS],
 )
 
 === 종합
 정확도: ★★★★★ 100%
-파티클: 50000
+파티클: 25000
 중력: -9.81 m/s²
 온도: 293 K
 시뮬 안정성: ✓ 안정

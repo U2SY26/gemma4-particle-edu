@@ -4,20 +4,20 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #217]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[도넛 모양의 토러스 매듭 시뮬레이션]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[플라즈마 토러스 매듭 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [도넛 모양의 토러스 표면을 따라 그려지는 수학적 매듭],
-  [Step 2: 재료], [None],
-  [Step 3: 밀도], ['None'은 물질의 이름이 아니므로 kg/m³],
+  [Step 1: 식별], [도넛 모양의 표면(토러스)을 따라 감겨 있는 매듭.],
+  [Step 2: 재료], [plasma],
+  [Step 3: 밀도], [10^-20 ~ 10^10 kg/m³],
   [Step 4: 중력], [0 m/s²],
-  [Step 5: 온도], [토러스 매듭(Torus knot)은  K],
+  [Step 5: 온도], [0 K],
   [Step 6: 특수], [{}],
 )
 

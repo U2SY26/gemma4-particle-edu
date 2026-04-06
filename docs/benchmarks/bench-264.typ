@@ -4,23 +4,21 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #264]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Immunoglobulin Protein Conformation Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[항원 식별 및 결합 면역 단백질 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [항원을 인식하고 결합하기 위해 최적화된 면역글로불린 단백질의 입체 구조],
-  [Step 2: 재료], [amino acid],
-  [Step 3: 밀도], [1400 kg/m³],
+  [Step 1: 식별], [항원을 식별하고 결합하는 면역 단백질의 형태],
+  [Step 2: 재료], [protein],
+  [Step 3: 밀도], [1350 kg/m³],
   [Step 4: 중력], [0 m/s²],
   [Step 5: 온도], [310 K],
-  [Step 6: 특수], [```json
-{}
-```],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

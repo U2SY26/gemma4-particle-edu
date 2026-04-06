@@ -4,18 +4,18 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #221]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Gear-shaped Art Tool Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[Steel Geometric Drafting Tool Simulation]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [기하학적인 무늬를 그리는 톱니바퀴 모양의 미술 도구],
-  [Step 2: 재료], [plastic],
-  [Step 3: 밀도], [1200 kg/m³],
+  [Step 1: 식별], [기하학적 곡선 문양을 그리는 제도 도구],
+  [Step 2: 재료], [steel],
+  [Step 3: 밀도], [7850 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
   [Step 6: 특수], [{}],

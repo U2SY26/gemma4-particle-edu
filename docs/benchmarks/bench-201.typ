@@ -4,20 +4,20 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #201]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Espresso Crema CO2 Micro-foam Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[에스프레소 크레마 층 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [에스프레소 상단에 형성되는 황금빛 미세 거품 층],
-  [Step 2: 재료], [CO2],
-  [Step 3: 밀도], [1.98 kg/m³],
+  [Step 1: 식별], [에스프레소 상단의 황금빛 갈색 거품 층.],
+  [Step 2: 재료], [커피],
+  [Step 3: 밀도], [1000 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
-  [Step 5: 온도], [338 K],
+  [Step 5: 온도], [365 K],
   [Step 6: 특수], [```json
 {
   "pressure_bar": 9,
@@ -30,7 +30,7 @@
   [stability], [안정 (y=3.71)], [PASS],
   [gravity_dir], [하강 OK (y=3.71)], [PASS],
   [damping], [damping=0.97 OK], [PASS],
-  [temperature], [338K OK], [PASS],
+  [temperature], [365K OK], [PASS],
   [particle_count], [25000 OK], [PASS],
 )
 
@@ -38,5 +38,5 @@
 정확도: ★★★★★ 100%
 파티클: 25000
 중력: -9.81 m/s²
-온도: 338 K
+온도: 365 K
 시뮬 안정성: ✓ 안정

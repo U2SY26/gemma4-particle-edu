@@ -4,23 +4,21 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #258]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Archimedes' Eureka Moment]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[아르키메데스의 부력 발견 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [아르키메데스가 부력의 원리를 발견하고 외친 감탄사],
+  [Step 1: 식별], [부력의 원리를 발견했을 때 외친 깨달음의 감탄사],
   [Step 2: 재료], [water],
   [Step 3: 밀도], [1000 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
-  [Step 6: 특수], [```json
-{}
-```],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

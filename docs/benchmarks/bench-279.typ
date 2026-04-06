@@ -4,16 +4,16 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #279]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Phase Change: Solid to Liquid (Water)]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[상태 변화: 얼음에서 물로]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [고체가 액체로 변하는 물리적 상태 변화],
+  [Step 1: 식별], [고체인 얼음이 액체인 물로 변하는 상태 변화입니다.],
   [Step 2: 재료], [water],
   [Step 3: 밀도], [1000 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],

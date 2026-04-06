@@ -4,18 +4,18 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #270]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Intelligent Smart Grid Power Optimization Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[IT 기술이 접목된 지능형 전력망 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [IT 기술을 접목해 전력 공급과 수요를 실시간으로 최적화하는 지능형 전력망],
-  [Step 2: 재료], [Data],
-  [Step 3: 밀도], [600 kg/m³],
+  [Step 1: 식별], [IT 기술이 접목된 지능형 전력망.],
+  [Step 2: 재료], [Silicon],
+  [Step 3: 밀도], [2329 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
   [Step 6: 특수], [{}],

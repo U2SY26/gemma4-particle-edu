@@ -4,18 +4,18 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #247]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Ideal Carnot Heat Engine Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[가상의 이상적 열기관 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [열역학적 최대 효율을 나타내는 이상적인 가상의 열기관],
+  [Step 1: 식별], [열역학적으로 최대 효율을 가지는 가상의 이상적 열기관],
   [Step 2: 재료], [gas],
-  [Step 3: 밀도], [1.2 kg/m³],
+  [Step 3: 밀도], [1.225 kg/m³],
   [Step 4: 중력], [0 m/s²],
   [Step 5: 온도], [293 K],
   [Step 6: 특수], [{}],

@@ -4,16 +4,16 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #196]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Heat Transfer via Temperature Difference in Water]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[온도 차이에 의한 액체의 순환 운동]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [액체 내부의 온도 차이로 인해 발생하는 열의 이동 현상],
+  [Step 1: 식별], [온도 차이에 의한 액체의 순환 운동],
   [Step 2: 재료], [water],
   [Step 3: 밀도], [1000 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],

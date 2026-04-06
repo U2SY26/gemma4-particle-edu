@@ -4,20 +4,20 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #211]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Mandelbrot Set Fractal Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[복소수 평면 프랙탈 집합 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [복소 함수를 반복 적용할 때 발산하지 않는 점들의 프랙탈 집합],
-  [Step 2: 재료], [Mandelbrot],
-  [Step 3: 밀도], [맨델브로 집합(Mandelbrot s kg/m³],
+  [Step 1: 식별], [복소수 평면에서 반복 함수를 통해 생성되는 프랙탈 집합],
+  [Step 2: 재료], [복소수],
+  [Step 3: 밀도], [복소수는 수학적 개념이므로 물리적인  kg/m³],
   [Step 4: 중력], [0 m/s²],
-  [Step 5: 온도], [줄리아 집합은 수학적 개념(프랙탈)이 K],
+  [Step 5: 온도], [줄리아 집합은 수학적인 프랙탈 집합( K],
   [Step 6: 특수], [{}],
 )
 

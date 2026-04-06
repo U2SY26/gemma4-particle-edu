@@ -4,18 +4,18 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #241]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Quantum Tunneling of Electron]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[반도체 내 양자 터널링 현상 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [입자가 에너지 장벽을 물리적으로 넘지 않고 통과하는 양자역학적 현상],
-  [Step 2: 재료], [electron],
-  [Step 3: 밀도], [9.7 \times 10^{12} kg/m³],
+  [Step 1: 식별], [입자가 에너지 장벽을 뚫고 지나가는 양자역학적 현상],
+  [Step 2: 재료], [반도체],
+  [Step 3: 밀도], [2330 kg/m³],
   [Step 4: 중력], [0 m/s²],
   [Step 5: 온도], [0 K],
   [Step 6: 특수], [{}],

@@ -4,18 +4,18 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #267]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Hybrid Renewable Energy Generation System Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[풍력-태양광 복합 재생에너지 시스템 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [풍력과 태양광 발전을 결합한 복합 재생 에너지 발전 시스템],
-  [Step 2: 재료], [silicon],
-  [Step 3: 밀도], [2330 kg/m³],
+  [Step 1: 식별], [풍력과 태양광 발전을 결합한 복합 재생에너지 시스템],
+  [Step 2: 재료], [Steel],
+  [Step 3: 밀도], [7850 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
   [Step 6: 특수], [{}],

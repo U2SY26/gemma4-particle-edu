@@ -4,38 +4,36 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #243]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Electromagnetic Induction Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[자기장의 변화로 인한 전기 발생 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [자기장의 변화로 인해 전류가 발생하는 현상],
-  [Step 2: 재료], [conductor],
+  [Step 1: 식별], [자기장의 변화로 전기가 발생하는 현상],
+  [Step 2: 재료], [Copper],
   [Step 3: 밀도], [8960 kg/m³],
-  [Step 4: 중력], [0 m/s²],
-  [Step 5: 온도], [전자기 유도는 물질이나 환경이 아니라 K],
-  [Step 6: 특수], [```json
-{}
-```],
+  [Step 4: 중력], [-9.81 m/s²],
+  [Step 5: 온도], [293 K],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)
 #table(columns: (auto, auto, auto), inset: 5pt,
   [검증 항목], [결과], [판정],
-  [stability], [안정 (y=10.00)], [PASS],
-  [gravity_dir], [무중력 OK (drift=0.000)], [PASS],
+  [stability], [안정 (y=3.71)], [PASS],
+  [gravity_dir], [하강 OK (y=3.71)], [PASS],
   [damping], [damping=0.97 OK], [PASS],
-  [temperature], [0K OK], [PASS],
+  [temperature], [293K OK], [PASS],
   [particle_count], [25000 OK], [PASS],
 )
 
 === 종합
 정확도: ★★★★★ 100%
 파티클: 25000
-중력: ? m/s²
-온도: ? K
+중력: -9.81 m/s²
+온도: 293 K
 시뮬 안정성: ✓ 안정

@@ -4,23 +4,21 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #186]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Three-Cushion Resin Billiards Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[세 번 이상의 쿠션 접촉 후 목적구 타격 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [세 번 이상의 쿠션을 거쳐 목적구를 맞히는 당구 경기 방식],
-  [Step 2: 재료], [resin],
-  [Step 3: 밀도], [1150 kg/m³],
+  [Step 1: 식별], [세 번 이상의 쿠션 접촉 후 목적구를 맞혀야 하는 당구 경기.],
+  [Step 2: 재료], [rubber],
+  [Step 3: 밀도], [1100 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
-  [Step 6: 특수], [```json
-{}
-```],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

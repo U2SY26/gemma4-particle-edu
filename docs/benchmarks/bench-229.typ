@@ -4,16 +4,16 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #229]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Silicon Material Simulation for Autonomous Driving LiDAR Sensor]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[레이저 기반 정밀 거리 측정 센서 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [레이저를 이용해 주변 환경을 3D로 인식하는 자율주행용 센서],
+  [Step 1: 식별], [레이저를 이용해 주변 환경을 3D로 인식하는 정밀 거리 측정 센서],
   [Step 2: 재료], [Silicon],
   [Step 3: 밀도], [2329 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],

@@ -4,23 +4,21 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #288]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Frontal Vehicle Collision Simulation (Steel)]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[두 차량의 정면 충돌 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [차량의 전면부가 서로 맞부딪히는 교통사고],
+  [Step 1: 식별], [마주 오는 두 차량의 앞부분이 서로 충돌하는 사고],
   [Step 2: 재료], [steel],
   [Step 3: 밀도], [7850 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
-  [Step 6: 특수], [```json
-{}
-```],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

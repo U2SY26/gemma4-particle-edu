@@ -4,24 +4,23 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #285]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Nanoparticle Self-Assembly Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[나노 입자의 자발적 자기조립 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [나노 입자들이 외부의 개입 없이 스스로 정교한 구조를 형성하는 현상],
-  [Step 2: 재료], [nanoparticles],
-  [Step 3: 밀도], [나노입자는 구성 물질(예: 금, 은, kg/m³],
+  [Step 1: 식별], [나노 입자들이 외부의 개입 없이 스스로 규칙적인 구조를 형성하는 과정입니다.],
+  [Step 2: 재료], [Nanoparticles],
+  [Step 3: 밀도], [나노입자의 밀도는 구성 물질(금, 은 kg/m³],
   [Step 4: 중력], [0 m/s²],
   [Step 5: 온도], [293 K],
   [Step 6: 특수], [```json
 {
-  "temperature": "required",
- ],
+  "temperature": "controlled",],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

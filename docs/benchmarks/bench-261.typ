@@ -4,23 +4,23 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #261]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Hemodynamics: Cardiac-Driven Blood Circulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[심장 박동에 의한 혈액 흐름 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [심장의 수축과 이완에 의해 혈관을 따라 흐르는 혈액의 움직임.],
-  [Step 2: 재료], [blood],
+  [Step 1: 식별], [심장 박동에 의해 추진되는 혈액의 흐름.],
+  [Step 2: 재료], [Blood],
   [Step 3: 밀도], [1060 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [310 K],
   [Step 6: 특수], [```json
-{}
-```],
+{
+  "viscosity": "non-Newtonian"],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

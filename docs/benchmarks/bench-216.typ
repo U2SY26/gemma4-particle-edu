@@ -4,18 +4,18 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #216]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Rössler Attractor Simulation (Deterministic Chaos)]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[카오스 이론: 뢰슬러 어트랙터 비선형 동역학 모델]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [결정론적 혼돈을 보여주는 비선형 미분 방정식 시스템],
+  [Step 1: 식별], [카오스 이론의 비선형 동역학 모델],
   [Step 2: 재료], [수학],
-  [Step 3: 밀도], [수학은 추상적인 개념이므로 물리적인  kg/m³],
+  [Step 3: 밀도], [0 kg/m³],
   [Step 4: 중력], [0 m/s²],
   [Step 5: 온도], [뢰슬러 어트랙터(Rössler att K],
   [Step 6: 특수], [{}],

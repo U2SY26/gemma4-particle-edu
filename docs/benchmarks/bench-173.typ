@@ -4,7 +4,7 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #173]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[일식 시 달의 그림자 시뮬레이션]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[일식 때 달이 지구 표면에 드리우는 그림자 시뮬레이션]
   #v(2pt)
   #text(size: 10pt)[Model: gemma4:31b]
 ]
@@ -13,11 +13,11 @@
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [일식 때 달이 지구에 드리우는 그림자],
+  [Step 1: 식별], [일식 때 달이 지구 표면에 드리우는 그림자],
   [Step 2: 재료], [없음],
   [Step 3: 밀도], [0 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
-  [Step 5: 온도], [293 K],
+  [Step 5: 온도], [2.7 K],
   [Step 6: 특수], [{}],
 )
 
@@ -27,7 +27,7 @@
   [stability], [안정 (y=3.71)], [PASS],
   [gravity_dir], [하강 OK (y=3.71)], [PASS],
   [damping], [damping=0.97 OK], [PASS],
-  [temperature], [293K OK], [PASS],
+  [temperature], [2.7K OK], [PASS],
   [particle_count], [25000 OK], [PASS],
 )
 
@@ -35,5 +35,5 @@
 정확도: ★★★★★ 100%
 파티클: 25000
 중력: -9.81 m/s²
-온도: 293 K
+온도: 2.7 K
 시뮬 안정성: ✓ 안정

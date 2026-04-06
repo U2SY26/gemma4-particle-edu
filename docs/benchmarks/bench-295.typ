@@ -4,38 +4,38 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #295]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Extreme Gamma-Ray Burst Plasma Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[초거대 질량 항성 붕괴 및 블랙홀 엔진 기반 고에너지 전자기 폭발 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [우주에서 발생하는 가장 강력한 에너지 방출 현상],
+  [Step 1: 식별], [우주에서 가장 강력한 고에너지 전자기 방사선 폭발],
   [Step 2: 재료], [plasma],
-  [Step 3: 밀도], [플라스마의 밀도는 고정된 하나의 값이 kg/m³],
-  [Step 4: 중력], [-10^{12} m/s²],
-  [Step 5: 온도], [10^{10} K],
+  [Step 3: 밀도], [1025 kg/m³],
+  [Step 4: 중력], [0 m/s²],
+  [Step 5: 온도], [1000000000 K],
   [Step 6: 특수], [```json
 {
-  "min_progenitor_mass_solar_m],
+  "stellar_mass": "extremely_h],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)
 #table(columns: (auto, auto, auto), inset: 5pt,
   [검증 항목], [결과], [판정],
-  [stability], [폭발 (y=-277777767.8)], [FAIL],
-  [gravity_dir], [하강 OK (y=-277777767.78)], [PASS],
+  [stability], [안정 (y=10.00)], [PASS],
+  [gravity_dir], [무중력 OK (drift=0.000)], [PASS],
   [damping], [damping=0.97 OK], [PASS],
-  [temperature], [10000000000K INVALID], [FAIL],
+  [temperature], [1000000000K INVALID], [FAIL],
   [particle_count], [25000 OK], [PASS],
 )
 
 === 종합
-정확도: ★★★☆☆ 60%
+정확도: ★★★★☆ 80%
 파티클: 25000
-중력: -1000000000000 m/s²
-온도: 10000000000 K
-시뮬 안정성: ✗ 폭발
+중력: ? m/s²
+온도: 1000000000 K
+시뮬 안정성: ✓ 안정

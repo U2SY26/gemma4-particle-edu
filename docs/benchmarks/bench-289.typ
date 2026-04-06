@@ -4,24 +4,23 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #289]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Underwater Submarine Motion Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[Steel Submarine Propulsion Simulation]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [잠수함이 수면 아래에서 위치를 옮기며 움직이는 과정],
-  [Step 2: 재료], [water],
-  [Step 3: 밀도], [1000 kg/m³],
+  [Step 1: 식별], [물속에서 추진력을 이용해 이동하는 잠수함의 운항],
+  [Step 2: 재료], [steel],
+  [Step 3: 밀도], [7850 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [277 K],
   [Step 6: 특수], [```json
 {
-  "density": 10,
-  "viscosity"],
+  "buoyancy": "neutral_balance],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

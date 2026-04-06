@@ -4,18 +4,18 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #244]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[LC Circuit Energy Exchange Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[플라스마 전기적 진동 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [인덕터와 커패시터 사이의 주기적인 에너지 교환 현상],
-  [Step 2: 재료], [Electricity],
-  [Step 3: 밀도], [전기는 질량과 부피를 가진 물리적 물 kg/m³],
+  [Step 1: 식별], [인덕터와 커패시터 사이의 에너지 교환으로 발생하는 전기적 진동.],
+  [Step 2: 재료], [plasma],
+  [Step 3: 밀도], [1025 kg/m³],
   [Step 4: 중력], [0 m/s²],
   [Step 5: 온도], [293 K],
   [Step 6: 특수], [{}],

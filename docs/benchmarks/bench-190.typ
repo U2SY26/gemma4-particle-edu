@@ -4,23 +4,21 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #190]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Butterfly Stroke Fluid Dynamics Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[양팔과 양다리 협응 수영 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [수영의 네 가지 영법 중 하나인 butterfly stroke.],
+  [Step 1: 식별], [양팔과 양다리를 동시에 움직여 나아가는 수영 영법.],
   [Step 2: 재료], [water],
   [Step 3: 밀도], [1000 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [300 K],
-  [Step 6: 특수], [```json
-{}
-```],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

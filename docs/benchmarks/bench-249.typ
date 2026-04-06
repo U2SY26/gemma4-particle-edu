@@ -4,18 +4,18 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #249]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Heat Transfer in Metal]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[금속 내 자유 전자를 통한 열전도 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [금속 내에서 열이 전달되는 성질.],
-  [Step 2: 재료], [metal],
-  [Step 3: 밀도], [7800 kg/m³],
+  [Step 1: 식별], [금속 내 자유 전자를 통한 열 에너지의 빠른 전달 현상.],
+  [Step 2: 재료], [Metal],
+  [Step 3: 밀도], [7850 kg/m³],
   [Step 4: 중력], [0 m/s²],
   [Step 5: 온도], [293 K],
   [Step 6: 특수], [{}],

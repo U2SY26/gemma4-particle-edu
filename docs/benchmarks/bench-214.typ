@@ -2,9 +2,9 @@
 #set page(margin: 1.5cm, height: auto)
 
 #align(center)[
-  #text(size: 16pt, weight: "bold")[벤치마크 #224]
+  #text(size: 16pt, weight: "bold")[벤치마크 #214]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[보이 곡면(Boy's Surface) 물리 시뮬레이션]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[격자 기반 셀룰러 오토마타 시뮬레이션]
   #v(2pt)
   #text(size: 10pt)[Model: gemma4:31b]
 ]
@@ -13,11 +13,11 @@
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [실투영평면을 3차원 공간에 구현한 수학적 곡면],
-  [Step 2: 재료], [steel],
-  [Step 3: 밀도], [7850 kg/m³],
+  [Step 1: 식별], [단순한 규칙으로 복잡한 패턴을 만들어내는 격자 기반의 수학적 모델],
+  [Step 2: 재료], [Cell],
+  [Step 3: 밀도], [1050 kg/m³],
   [Step 4: 중력], [0 m/s²],
-  [Step 5: 온도], [보이 곡면(Boy's surface) K],
+  [Step 5: 온도], [셀룰러 오토마타는 물리적인 실체가 없 K],
   [Step 6: 특수], [{}],
 )
 

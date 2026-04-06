@@ -4,18 +4,18 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #218]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Hilbert Curve 2D Plane-Filling Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[Steel Hilbert Curve Space-Filling Simulation]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [2차원 평면을 빈틈없이 채우는 프랙탈 곡선],
-  [Step 2: 재료], [Line],
-  [Step 3: 밀도], [3340 kg/m³],
+  [Step 1: 식별], [공간을 채우는 프랙탈 곡선],
+  [Step 2: 재료], [steel],
+  [Step 3: 밀도], [7850 kg/m³],
   [Step 4: 중력], [0 m/s²],
   [Step 5: 온도], [힐베르트 곡선은 수학적 개념(공간 채 K],
   [Step 6: 특수], [{}],

@@ -4,23 +4,21 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #278]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Candle Heat Convection Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[촛불 열에 의한 공기 상승 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [촛불의 열기에 의해 발생하는 공기의 순환 현상],
+  [Step 1: 식별], [촛불의 열로 데워진 공기가 위로 상승하며 발생하는 공기의 흐름.],
   [Step 2: 재료], [air],
   [Step 3: 밀도], [1.225 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [1400 K],
-  [Step 6: 특수], [```json
-{}
-```],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

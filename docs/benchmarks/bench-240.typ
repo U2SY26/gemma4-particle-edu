@@ -4,17 +4,17 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #240]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[UV Laser Resin 3D Printing Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[정밀 액체 레진 레이저 경화 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [자외선 레이저로 액체 수지를 굳혀 물체를 만드는 3D 프린팅 기술],
-  [Step 2: 재료], [resin],
+  [Step 1: 식별], [액체 레진을 레이저로 경화시켜 정밀하게 만드는 3D 프린팅 방식.],
+  [Step 2: 재료], [Resin],
   [Step 3: 밀도], [1200 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],

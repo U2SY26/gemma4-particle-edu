@@ -4,23 +4,21 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #215]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Conway's Game of Life Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[세포 자동자 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [특정 규칙에 따라 세포의 상태 변화를 시뮬레이션하는 세포 자동자 모델],
-  [Step 2: 재료], [cell],
-  [Step 3: 밀도], [1000 kg/m³],
+  [Step 1: 식별], [단순한 규칙으로 작동하는 세포 자동자 시뮬레이션.],
+  [Step 2: 재료], [세포],
+  [Step 3: 밀도], [1050 kg/m³],
   [Step 4: 중력], [0 m/s²],
-  [Step 5: 온도], [게임오브라이프(Conway's Gam K],
-  [Step 6: 특수], [```json
-{}
-```],
+  [Step 5: 온도], [0 K],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

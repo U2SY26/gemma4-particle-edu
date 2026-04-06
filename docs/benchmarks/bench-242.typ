@@ -4,23 +4,21 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #242]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Proton Quark Structure Model]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[양성자 구조 모델 시뮬레이션]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [쿼크로 구성된 양성자의 구조 모델],
-  [Step 2: 재료], [quarks],
-  [Step 3: 밀도], [2 \times 10^{17} kg/m³],
+  [Step 1: 식별], [두 개의 위 쿼크와 한 개의 아래 쿼크로 구성된 양성자 구조 모델.],
+  [Step 2: 재료], [쿼크],
+  [Step 3: 밀도], [10^17 kg/m³],
   [Step 4: 중력], [0 m/s²],
-  [Step 5: 온도], [10^12 K],
-  [Step 6: 특수], [```json
-{}
-```],
+  [Step 5: 온도], [2000000000000 K],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)
@@ -29,7 +27,7 @@
   [stability], [안정 (y=10.00)], [PASS],
   [gravity_dir], [무중력 OK (drift=0.000)], [PASS],
   [damping], [damping=0.97 OK], [PASS],
-  [temperature], [1000000000000K INVALID], [FAIL],
+  [temperature], [2000000000000K INVALID], [FAIL],
   [particle_count], [25000 OK], [PASS],
 )
 
@@ -37,5 +35,5 @@
 정확도: ★★★★☆ 80%
 파티클: 25000
 중력: ? m/s²
-온도: 1000000000000 K
+온도: 2000000000000 K
 시뮬 안정성: ✓ 안정

@@ -4,24 +4,21 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[벤치마크 #181]
   #v(2pt)
-  #text(size: 11pt, fill: rgb("#58a6ff"))[Soccer Ball Curve Kick Simulation]
+  #text(size: 11pt, fill: rgb("#58a6ff"))[공의 회전에 의한 궤적 휘어짐 시뮬레이션 (마그누스 효과)]
   #v(2pt)
-  #text(size: 10pt)[Model: gemma4:26b]
+  #text(size: 10pt)[Model: gemma4:31b]
 ]
 
 #v(8pt)
 
 === DAG 마이크로스텝
 #table(columns: (auto, auto), inset: 6pt,
-  [Step 1: 식별], [공의 회전으로 궤적이 휘어지는 축구의 킥 기술],
-  [Step 2: 재료], [air],
+  [Step 1: 식별], [공에 회전을 주어 궤적이 휘어지게 차는 기술],
+  [Step 2: 재료], [공기],
   [Step 3: 밀도], [1.225 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [293 K],
-  [Step 6: 특수], [```json
-{
-  "spinRate": 10,
-  "airDensit],
+  [Step 6: 특수], [{}],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)
