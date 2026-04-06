@@ -262,18 +262,21 @@ export class PhysicsEngine {
         }
 
         // Apply gravity + wind + environment
+        // Pre-compute turbulence offsets (LUT instead of per-particle Math.random)
+        const turbX = this.turbulence > 0 ? (Math.random() - 0.5) * this.turbulence : 0;
+        const turbY = this.turbulence > 0 ? (Math.random() - 0.5) * this.turbulence * 0.3 : 0;
+        const turbZ = this.turbulence > 0 ? (Math.random() - 0.5) * this.turbulence : 0;
+        const wxBase = this.windX + turbX;
+        const wyBase = this.windY + turbY;
+        const wzBase = this.windZ + turbZ;
+
         for (let i = 0; i < n; i++) {
             const idx = i * 3;
 
-            // Wind with turbulence
-            let wx = this.windX;
-            let wy = this.windY;
-            let wz = this.windZ;
-            if (this.turbulence > 0) {
-                wx += (Math.random() - 0.5) * this.turbulence;
-                wy += (Math.random() - 0.5) * this.turbulence * 0.3;
-                wz += (Math.random() - 0.5) * this.turbulence;
-            }
+            // Wind (shared turbulence per frame, not per particle)
+            const wx = wxBase;
+            const wy = wyBase;
+            const wz = wzBase;
 
             this.acc[idx] += wx + seismicX;
             this.acc[idx + 1] += this.GRAVITY + wy;
@@ -427,9 +430,11 @@ export class PhysicsEngine {
             }
         }
 
-        // Vibration noise
+        // Vibration noise (sample 1 in 4 particles for performance)
         const vibAmp = this.VIBRATION_AMP / dt;
-        for (let i = 0; i < n; i++) {
+        const vibOffset = this._vibFrame || 0;
+        this._vibFrame = (vibOffset + 1) % 4;
+        for (let i = vibOffset; i < n; i += 4) {
             if (this.hasTarget[i]) {
                 const idx = i * 3;
                 this.acc[idx] += (Math.random() - 0.5) * vibAmp;

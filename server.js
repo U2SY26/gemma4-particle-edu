@@ -142,6 +142,28 @@ app.post('/api/cards/:id/chat', (req, res) => {
     res.status(201).json(message);
 });
 
+// ==================== BENCHMARK RESULTS ====================
+
+app.get('/api/benchmarks', (req, res) => {
+    try {
+        const data = JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'benchmark-300.json'), 'utf-8'));
+        res.json(data);
+    } catch {
+        res.status(404).json({ error: 'Benchmark data not found' });
+    }
+});
+
+app.get('/api/benchmarks/:id', (req, res) => {
+    try {
+        const data = JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'benchmark-300.json'), 'utf-8'));
+        const scenario = data.scenarios.find(s => s.id === parseInt(req.params.id));
+        if (!scenario) return res.status(404).json({ error: 'Scenario not found' });
+        res.json(scenario);
+    } catch {
+        res.status(404).json({ error: 'Benchmark data not found' });
+    }
+});
+
 // ==================== SERVER STATUS ====================
 
 app.get('/api/status', async (req, res) => {

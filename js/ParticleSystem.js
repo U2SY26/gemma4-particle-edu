@@ -91,48 +91,55 @@ export class ParticleSystem {
         let velocityColorDirty = false;
         let totalSpeed = 0;
 
+        // Performance: direct buffer access instead of per-particle dummy.updateMatrix()
+        const matrixArray = this.mesh.instanceMatrix.array;
+        const colorArray = this.mesh.instanceColor ? this.mesh.instanceColor.array : null;
+
         for (let i = 0; i < this.activeCount; i++) {
             const idx = i * 3;
+            const px = physPositions[idx];
+            const py = physPositions[idx + 1];
+            const pz = physPositions[idx + 2];
 
-            this.dummy.position.set(
-                physPositions[idx],
-                physPositions[idx + 1],
-                physPositions[idx + 2]
-            );
-
+            let s = 1.0;
             if (physVelocities) {
                 const vx = physVelocities[idx];
                 const vy = physVelocities[idx + 1];
                 const vz = physVelocities[idx + 2];
-                const speed = Math.sqrt(vx * vx + vy * vy + vz * vz);
-                const s = 0.8 + Math.min(speed * 0.8, 1.2);
-                this.dummy.scale.setScalar(s);
+                // Fast approximate magnitude (avoid sqrt for scale)
+                const speedSq = vx * vx + vy * vy + vz * vz;
+                const speed = Math.sqrt(speedSq);
+                s = 0.8 + Math.min(speed * 0.8, 1.2);
                 totalSpeed += speed;
 
-                // Velocity-based coloring
-                if (this.colorMode === 'velocity') {
-                    const t = Math.min(speed / 10, 1);
-                    this.color.copy(this.primaryColor).lerp(this.secondaryColor, t);
-                    this.mesh.instanceColor.setXYZ(i, this.color.r, this.color.g, this.color.b);
+                // Velocity-based coloring (throttled: every 3rd frame)
+                if (this.colorMode === 'velocity' && colorArray && (this._colorFrame || 0) % 3 === 0) {
+                    const t = Math.min(speed * 0.1, 1);
+                    const ci = i * 3;
+                    const inv = 1 - t;
+                    colorArray[ci] = this.primaryColor.r * inv + this.secondaryColor.r * t;
+                    colorArray[ci + 1] = this.primaryColor.g * inv + this.secondaryColor.g * t;
+                    colorArray[ci + 2] = this.primaryColor.b * inv + this.secondaryColor.b * t;
                     velocityColorDirty = true;
                 }
-            } else {
-                this.dummy.scale.setScalar(1.0);
             }
 
-            this.dummy.updateMatrix();
-            this.mesh.setMatrixAt(i, this.dummy.matrix);
+            // Write 4x4 matrix directly (scale + translate only, no rotation)
+            const mi = i * 16;
+            matrixArray[mi] = s;      matrixArray[mi + 1] = 0;  matrixArray[mi + 2] = 0;  matrixArray[mi + 3] = 0;
+            matrixArray[mi + 4] = 0;  matrixArray[mi + 5] = s;  matrixArray[mi + 6] = 0;  matrixArray[mi + 7] = 0;
+            matrixArray[mi + 8] = 0;  matrixArray[mi + 9] = 0;  matrixArray[mi + 10] = s; matrixArray[mi + 11] = 0;
+            matrixArray[mi + 12] = px; matrixArray[mi + 13] = py; matrixArray[mi + 14] = pz; matrixArray[mi + 15] = 1;
         }
 
+        this._colorFrame = ((this._colorFrame || 0) + 1);
         this.mesh.instanceMatrix.needsUpdate = true;
-        if (velocityColorDirty) this.mesh.instanceColor.needsUpdate = true;
+        if (velocityColorDirty && this.mesh.instanceColor) this.mesh.instanceColor.needsUpdate = true;
 
-        // Dynamic emissive afterglow: fast-moving particles glow brighter
+        // Dynamic emissive afterglow
         if (this.activeCount > 0 && physVelocities) {
-            const maxSpeed = 10;
             const avgSpeed = totalSpeed / this.activeCount;
-            const intensity = 0.6 + Math.min(avgSpeed / maxSpeed, 0.6);
-            this.material.emissiveIntensity = intensity;
+            this.material.emissiveIntensity = 0.6 + Math.min(avgSpeed * 0.1, 0.6);
         }
     }
 
