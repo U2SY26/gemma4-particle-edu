@@ -113,6 +113,34 @@ npm run test:e2e   # E2E tests (Playwright)
 
 ---
 
+## Docker (One-Click Setup)
+
+```bash
+docker compose up
+# Open http://localhost:3000
+# Ollama + Gemma 4 + App — all included, GPU auto-detected
+```
+
+Requires NVIDIA GPU + Docker with GPU support. The compose file automatically pulls the Gemma 4 model on first run.
+
+---
+
+## Benchmark: 300 Scenarios, 99.4% Accuracy
+
+Validated with Gemma 4 31B across **300 physics scenarios** (17h 43m continuous run, RTX 5090):
+
+| Metric | Value |
+|--------|-------|
+| Total scenarios | 300 |
+| Perfect accuracy (100%) | 293 (97.7%) |
+| Average accuracy | 99.4% |
+| Materials identified | 138 unique types |
+| FAIL | 7 (extreme physics only: black holes, supernovas) |
+
+All practical educational domains achieved **100% accuracy**.
+
+---
+
 ## Deployment
 
 ### Vercel
@@ -133,8 +161,10 @@ For the full Gemma 4 AI experience, run the server locally with Ollama installed
 
 **[Kaggle Gemma 4 Good Hackathon](https://kaggle.com/competitions/gemma-4-good-hackathon)** -- $200,000 total prize pool
 
-- **Track**: Future of Education + Ollama Special Tech
+- **Track**: Future of Education + Ollama Special Tech + Main
 - **Goal**: Make science education interactive and accessible using Gemma 4
+- **Video**: [YouTube](https://youtu.be/RfKFMAT6lk0)
+- **Live Demo**: [gemma4-particle-edu.vercel.app](https://gemma4-particle-edu.vercel.app)
 - **Deadline**: 2026-05-18 (UTC 23:59)
 
 ---
