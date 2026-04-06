@@ -128,5 +128,7 @@ All modules follow strict interface contracts.
 
 ## Links
 
+- **Video**: [https://youtu.be/RfKFMAT6lk0](https://youtu.be/RfKFMAT6lk0)
 - **GitHub**: [https://github.com/U2SY26/gemma4-particle-edu](https://github.com/U2SY26/gemma4-particle-edu)
 - **Live Demo**: [https://gemma4-particle-edu.vercel.app](https://gemma4-particle-edu.vercel.app)
+- **Docker**: `docker compose up` → localhost:3000
