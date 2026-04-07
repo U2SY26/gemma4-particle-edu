@@ -442,33 +442,34 @@
                 </p>
                 <div class="param-group">
                     <label for="contrib-name" data-i18n="contributeName">Your Name</label>
-                    <input type="text" id="contrib-name" placeholder="Anonymous" class="text-input"/>
+                    <input type="text" id="contrib-name" placeholder="Anonymous" data-i18n-placeholder="contribAnonymous" class="text-input"/>
                 </div>
                 <div class="param-group">
                     <label for="contrib-domain" data-i18n="contributeDomain">Domain</label>
                     <select id="contrib-domain">
-                        <option value="architecture">Architecture</option>
-                        <option value="civil">Civil Engineering</option>
-                        <option value="mechanical">Mechanical Eng.</option>
-                        <option value="materials">Materials Science</option>
-                        <option value="semiconductor">Semiconductor</option>
-                        <option value="biomechanics">Biomechanics</option>
-                        <option value="other">Other</option>
+                        <option value="architecture" data-i18n="domArchitecture">Architecture</option>
+                        <option value="civil" data-i18n="domCivil">Civil Engineering</option>
+                        <option value="mechanical" data-i18n="domMechanical">Mechanical Eng.</option>
+                        <option value="materials" data-i18n="domMaterials">Materials Science</option>
+                        <option value="semiconductor" data-i18n="domSemiconductor">Semiconductor</option>
+                        <option value="biomechanics" data-i18n="domBiomechanics">Biomechanics</option>
+                        <option value="electromagnetism" data-i18n="domEM">Electromagnetism</option>
+                        <option value="other" data-i18n="domOther">Other</option>
                     </select>
                 </div>
                 <div class="param-group">
                     <label for="contrib-type" data-i18n="contributeType">Type</label>
                     <select id="contrib-type">
-                        <option value="material">New Material</option>
-                        <option value="preset">New Preset</option>
-                        <option value="correction">Parameter Correction</option>
-                        <option value="formula">Physics Formula</option>
+                        <option value="material" data-i18n="typeNewMaterial">New Material</option>
+                        <option value="preset" data-i18n="typeNewPreset">New Preset</option>
+                        <option value="correction" data-i18n="typeCorrection">Parameter Correction</option>
+                        <option value="formula" data-i18n="typeFormula">Physics Formula</option>
                     </select>
                 </div>
                 <div class="param-group">
                     <label for="contrib-content" data-i18n="contributeContent">Content</label>
                     <textarea id="contrib-content" rows="4" class="text-input"
-                              placeholder="Material name, properties (density, Young's modulus, etc.), references..."></textarea>
+                              placeholder="소재명, 물성치 (밀도, 영률 등), 참고자료..." data-i18n-placeholder="contribPlaceholder"></textarea>
                 </div>
                 <button id="contrib-submit-btn" data-i18n="contributeSubmit">SUBMIT CONTRIBUTION</button>
                 <div id="contrib-status" role="status" aria-live="polite"></div>
