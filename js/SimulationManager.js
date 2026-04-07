@@ -185,6 +185,7 @@ export class SimulationManager {
         this._initUI();
         this._checkServer();
         this._loadCards();
+        this._loadBenchmarkCatalog();
     }
 
     // ==================== SERVER ====================
@@ -486,6 +487,143 @@ export class SimulationManager {
             el.querySelector('.delete').addEventListener('click', () => this.deleteCard(card.id));
 
             list.appendChild(el);
+        }
+    }
+
+    // ==================== BENCHMARK CATALOG (300 scenarios) ====================
+
+    async _loadBenchmarkCatalog() {
+        try {
+            const res = await fetch('/data/benchmark-300.json');
+            if (!res.ok) return;
+            const data = await res.json();
+            this._benchmarkScenarios = data.scenarios || [];
+            this._renderBenchmarkCatalog(this._benchmarkScenarios);
+
+            // Setup UI
+            const section = document.getElementById('benchmark-section');
+            if (section) section.style.display = '';
+
+            const header = document.getElementById('benchmark-header');
+            const body = document.getElementById('benchmark-body');
+            const toggle = document.getElementById('benchmark-toggle');
+            if (header && body) {
+                header.addEventListener('click', () => {
+                    const open = body.style.display !== 'none';
+                    body.style.display = open ? 'none' : '';
+                    if (toggle) toggle.textContent = open ? '▼' : '▲';
+                });
+            }
+
+            // Search
+            const search = document.getElementById('benchmark-search');
+            if (search) {
+                search.addEventListener('input', () => {
+                    const q = search.value.toLowerCase().trim();
+                    const filtered = q
+                        ? this._benchmarkScenarios.filter(s =>
+                            s.title.toLowerCase().includes(q) ||
+                            (s.material || '').toLowerCase().includes(q))
+                        : this._benchmarkScenarios;
+                    this._renderBenchmarkCatalog(filtered);
+                });
+            }
+        } catch (err) {
+            console.warn('[Benchmark] Failed to load catalog:', err.message || err);
+        }
+    }
+
+    _renderBenchmarkCatalog(scenarios) {
+        const list = document.getElementById('benchmark-list');
+        if (!list) return;
+        list.innerHTML = '';
+
+        for (const s of scenarios) {
+            const el = document.createElement('div');
+            el.style.cssText = 'padding:6px 8px;margin:2px 0;border-radius:4px;cursor:pointer;font-size:11px;transition:background 0.15s;border-left:2px solid transparent';
+            el.onmouseenter = () => { el.style.background = 'rgba(88,166,255,0.08)'; el.style.borderLeftColor = 'var(--accent-blue)'; };
+            el.onmouseleave = () => { el.style.background = ''; el.style.borderLeftColor = 'transparent'; };
+
+            const stars = '★'.repeat(s.stars || 5) + '☆'.repeat(5 - (s.stars || 5));
+            const accColor = s.accuracy === 100 ? 'var(--accent-green)' : s.accuracy >= 80 ? 'var(--accent-yellow)' : 'var(--accent-red)';
+
+            el.innerHTML = `
+                <div style="font-weight:500;color:var(--text-primary);margin-bottom:2px">#${s.id} ${this._escapeHtml(s.title)}</div>
+                <div style="display:flex;gap:8px;color:var(--text-secondary);font-size:10px">
+                    <span>${this._escapeHtml(s.material || '')}</span>
+                    <span style="color:${accColor}">${s.accuracy}%</span>
+                    <span style="color:var(--accent-yellow)">${stars}</span>
+                </div>
+            `;
+
+            el.addEventListener('click', () => this._applyBenchmarkScenario(s));
+            list.appendChild(el);
+        }
+    }
+
+    async _applyBenchmarkScenario(scenario) {
+        // Parse physics from benchmark data
+        const parseNum = (str) => {
+            if (!str) return null;
+            const m = String(str).match(/-?[\d.]+(?:e[+-]?\d+)?/i);
+            return m ? parseFloat(m[0]) : null;
+        };
+
+        const density = parseNum(scenario.density);
+        const gravity = parseNum(scenario.gravity);
+        const temp = parseNum(scenario.temperature);
+
+        // Look up verified material physics
+        const matKey = (scenario.material || '').toLowerCase();
+        const verified = VERIFIED_MATERIALS[matKey] || {};
+
+        const physics = {
+            ...BASE_PHYSICS,
+            gravity: gravity ?? verified.gravity ?? -9.81,
+            density: density ? density / 1000 : (verified.density ? verified.density / 1000 : 2.4),
+            temperature: temp ?? verified.temp ?? 293,
+            springStiffness: verified.springK ?? 20,
+            viscosity: verified.viscosity ?? 0,
+            particleCount: scenario.particles || 25000,
+        };
+
+        // Map title keywords to prompt type
+        const title = scenario.title.toLowerCase();
+        let prompt = 'custom';
+        const keywordMap = {
+            '피라미드': 'pyramid', 'pyramid': 'pyramid', '타워': 'tower', 'tower': 'tower',
+            '다리': 'bridge', 'bridge': 'bridge', '돔': 'dome', 'dome': 'dome',
+            '성당': 'cathedral', 'cathedral': 'cathedral', '사원': 'temple', 'temple': 'temple',
+            '성': 'castle', 'castle': 'castle', '경기장': 'stadium', 'stadium': 'stadium',
+            '아치': 'arch', 'arch': 'arch', '벽': 'wall', 'wall': 'wall',
+            'dna': 'dna', '나선': 'dna', '태양계': 'solar_system', 'solar': 'solar_system',
+            '분자': 'molecule', 'molecule': 'molecule', '은하': 'galaxy', 'galaxy': 'galaxy',
+            '블랙홀': 'sphere', 'black hole': 'sphere', '토네이도': 'tornado', 'tornado': 'tornado',
+            '구름': 'cloud', 'cloud': 'cloud', '비': 'rain', 'rain': 'rain',
+            '자석': 'magnet', 'magnet': 'magnet', '전자': 'electron_cloud',
+            '건물': 'house', 'building': 'house', '주택': 'house', 'house': 'house',
+            '단백질': 'protein', 'protein': 'protein', '세포': 'sphere', 'cell': 'sphere',
+        };
+
+        for (const [kw, p] of Object.entries(keywordMap)) {
+            if (title.includes(kw)) { prompt = p; break; }
+        }
+
+        // Create a new card from this benchmark
+        await this.createCard(
+            `🏆 ${scenario.title}`,
+            prompt,
+            physics
+        );
+
+        // Send title to AI chat for full DAG pipeline processing
+        if (this._aiAvailable) {
+            const card = this.getActiveCard();
+            if (card) {
+                const input = document.getElementById('chat-input');
+                if (input) input.value = scenario.title;
+                this._handleChatSubmit();
+            }
         }
     }
 
