@@ -66,6 +66,15 @@ class App {
             (physics) => this._onPhysicsChange(physics),
         );
 
+        // Connect voice input to chat
+        this.xrController.setVoiceCallback((transcript) => {
+            const chatInput = document.getElementById('chat-input');
+            if (chatInput && this.simManager) {
+                chatInput.value = transcript;
+                this.simManager._handleChatSubmit();
+            }
+        });
+
         // UI
         this._setupUI();
 
