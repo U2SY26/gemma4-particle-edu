@@ -1,4 +1,4 @@
-#set text(font: "Noto Sans KR", size: 10pt)
+#set text(font: "Noto Sans CJK KR", size: 10pt)
 #set page(margin: (x: 2cm, y: 2cm))
 #set heading(numbering: "1.1")
 

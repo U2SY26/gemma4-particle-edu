@@ -15,7 +15,7 @@
 #table(columns: (auto, auto), inset: 6pt,
   [Step 1: 식별], [구의 표면에서 정의되는 라플라스 방정식의 해가 되는 특수 함수],
   [Step 2: 재료], [electron],
-  [Step 3: 밀도], [전자는 표준 모델에서 부피가 없는 * kg/m³],
+  [Step 3: 밀도], [전자는 표준 모델에서 부피가 없는 점입자 kg/m³],
   [Step 4: 중력], [0 m/s²],
   [Step 5: 온도], [구면 조화함수(Spherical Ha K],
   [Step 6: 특수], [{}],

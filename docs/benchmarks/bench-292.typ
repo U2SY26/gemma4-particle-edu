@@ -18,8 +18,7 @@
   [Step 3: 밀도], [0 kg/m³],
   [Step 4: 중력], [-8.7 m/s²],
   [Step 5: 온도], [3 K],
-  [Step 6: 특수], [```json
-{"orbital_velocity_ms": 7660, "a],
+  [Step 6: 특수], [특수 파라미터 있음],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

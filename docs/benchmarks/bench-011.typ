@@ -18,9 +18,7 @@
   [Step 3: 밀도], [1700 kg/m³],
   [Step 4: 중력], [0 m/s²],
   [Step 5: 온도], [310 K],
-  [Step 6: 특수], [```json
-{
-  "temperature": "approx 20-37],
+  [Step 6: 특수], [특수 파라미터 있음],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

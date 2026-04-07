@@ -18,10 +18,7 @@
   [Step 3: 밀도], [1000 kg/m³],
   [Step 4: 중력], [-9.81 m/s²],
   [Step 5: 온도], [290 K],
-  [Step 6: 특수], [```json
-{
-  "swell_energy": "required",
-],
+  [Step 6: 특수], [특수 파라미터 있음],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

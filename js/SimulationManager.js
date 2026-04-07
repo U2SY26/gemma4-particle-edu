@@ -30,6 +30,72 @@ const DOMAIN_PHYSICS = {
     mathematics:   { gravity: 0, damping: 0.999 },
 };
 
+// Verified material physics from 300-scenario benchmark (Gemma4 31B, 99.4% accuracy)
+// Used as reference data for web Gemini pipeline to prevent parameter hallucination
+const VERIFIED_MATERIALS = {
+    // Engineering (28+10+8+6+5 scenarios verified)
+    steel:     { density: 7850, gravity: -9.81, temp: 293, springK: 55 },
+    concrete:  { density: 2400, gravity: -9.81, temp: 293, springK: 35 },
+    iron:      { density: 7874, gravity: -9.81, temp: 293, springK: 50 },
+    wood:      { density: 700,  gravity: -9.81, temp: 293, springK: 12 },
+    limestone: { density: 2700, gravity: -9.81, temp: 293, springK: 30 },
+    stone:     { density: 2500, gravity: -9.81, temp: 293, springK: 35 },
+    brick:     { density: 1900, gravity: -9.81, temp: 279, springK: 25 },
+    glass:     { density: 2500, gravity: -9.81, temp: 293, springK: 15 },
+    aluminum:  { density: 2700, gravity: -9.81, temp: 219, springK: 40 },
+    copper:    { density: 8960, gravity: -9.81, temp: 293, springK: 45 },
+    titanium:  { density: 4506, gravity: -9.81, temp: 217, springK: 50 },
+    marble:    { density: 2700, gravity: -9.81, temp: 293, springK: 30 },
+    granite:   { density: 2700, gravity: -9.81, temp: 285, springK: 40 },
+    rubber:    { density: 1100, gravity: -9.81, temp: 293, springK: 5 },
+    plastic:   { density: 1100, gravity: -9.81, temp: 500, springK: 8 },
+    nylon:     { density: 1140, gravity: -9.81, temp: 293, springK: 10 },
+    ceramic:   { density: 2500, gravity: -9.81, temp: 1800, springK: 45 },
+    // Fluids / Gas (26+12 scenarios verified)
+    water:     { density: 1000, gravity: -9.81, temp: 293, springK: 5, viscosity: 1.0 },
+    air:       { density: 1.225, gravity: -9.81, temp: 293, springK: 1, viscosity: 0 },
+    co2:       { density: 1.98,  gravity: -9.81, temp: 293, springK: 1 },
+    lava:      { density: 2600, gravity: -9.81, temp: 1500, springK: 3, viscosity: 8 },
+    ice:       { density: 917,  gravity: -9.81, temp: 273, springK: 30 },
+    mud:       { density: 1600, gravity: -9.81, temp: 293, springK: 2, viscosity: 5 },
+    snow:      { density: 100,  gravity: -9.81, temp: 273, springK: 1 },
+    sand:      { density: 1600, gravity: -9.81, temp: 303, springK: 3 },
+    // Biology (39 scenarios verified)
+    dna:       { density: 1700, gravity: 0, temp: 310, springK: 30, viscosity: 0.5 },
+    protein:   { density: 1350, gravity: 0, temp: 310, springK: 20, viscosity: 0.5 },
+    blood:     { density: 1060, gravity: -9.81, temp: 310, springK: 5, viscosity: 3 },
+    cell:      { density: 1050, gravity: 0, temp: 310, springK: 8, viscosity: 1 },
+    cells:     { density: 1050, gravity: 0, temp: 310, springK: 8, viscosity: 1 },
+    bacteria:  { density: 1100, gravity: -9.81, temp: 310, springK: 5 },
+    lipid:     { density: 900,  gravity: 0, temp: 310, springK: 3, viscosity: 2 },
+    // Astronomy / Space
+    plasma:    { density: 1025, gravity: 0, temp: 5778, springK: 2, viscosity: 0 },
+    photon:    { density: 0,    gravity: 0, temp: 2.7, springK: 1 },
+    regolith:  { density: 1500, gravity: -1.62, temp: 400, springK: 10 },
+    // Advanced materials
+    graphene:  { density: 2267, gravity: 0, temp: 293, springK: 100 },
+    aerogel:   { density: 100,  gravity: 0, temp: 293, springK: 1 },
+    silicon:   { density: 2329, gravity: -9.81, temp: 293, springK: 40 },
+    carbon:    { density: 2260, gravity: 0, temp: 293, springK: 50 },
+    superconductor: { density: 6300, gravity: -9.81, temp: 77, springK: 45 },
+    ferrofluid:     { density: 1300, gravity: -9.81, temp: 293, springK: 5, viscosity: 3 },
+    nitinol:   { density: 6450, gravity: 0, temp: 373, springK: 30 },
+    // Korean materials
+    '강철': { density: 7850, gravity: -9.81, temp: 293, springK: 55 },
+    '콘크리트': { density: 2400, gravity: -9.81, temp: 293, springK: 35 },
+    '물': { density: 1000, gravity: -9.81, temp: 293, springK: 5, viscosity: 1 },
+    '공기': { density: 1.225, gravity: -9.81, temp: 293, springK: 1 },
+    '혈액': { density: 1060, gravity: -9.81, temp: 310, springK: 5, viscosity: 3 },
+    '단백질': { density: 1350, gravity: 0, temp: 310, springK: 20, viscosity: 0.5 },
+    '대리석': { density: 2700, gravity: -9.81, temp: 293, springK: 30 },
+};
+
+// Build reference string for LLM system prompt injection
+const MATERIAL_REFERENCE_TABLE = Object.entries(VERIFIED_MATERIALS)
+    .filter(([k]) => /^[a-z]/.test(k)) // English materials only for prompt
+    .map(([k, v]) => `${k}: density=${v.density}, gravity=${v.gravity}, temp=${v.temp}K, springK=${v.springK}${v.viscosity ? ', viscosity=' + v.viscosity : ''}`)
+    .join('\n');
+
 // Default physics presets for quick card creation
 const PRESETS = [
     // ========== BUILDINGS ==========
@@ -106,9 +172,15 @@ export class SimulationManager {
         this.activeCardId = null;
         this.serverOnline = false;
         this._ollamaAvailable = false;
+        this._aiAvailable = false;      // true if ANY provider (Ollama/Gemini/Claude) is online
+        this._currentStreamText = '';    // accumulated streaming text across DAG steps
         this._chatHistory = [];
         this.onCardSelect = onCardSelect;       // callback(card)
         this.onPhysicsChange = onPhysicsChange; // callback(physicsParams)
+
+        // Clear previous session data so each visit starts fresh
+        localStorage.removeItem('sim-cards');
+        localStorage.removeItem('sim-history');
 
         this._initUI();
         this._checkServer();
@@ -131,6 +203,7 @@ export class SimulationManager {
                 const ollamaInfo = data.ollama || {};
                 const providers = data.providers || {};
                 this._ollamaAvailable = ollamaInfo.ollama === true && ollamaInfo.model !== null;
+                this._aiAvailable = this._ollamaAvailable || !!providers.gemini || !!providers.claude;
 
                 // Determine the active provider label
                 if (this._ollamaAvailable) {
@@ -556,7 +629,7 @@ export class SimulationManager {
             // Try DAG agent workflow (5-step chain) for higher accuracy
             // Falls back to single-call _sendToOllama if DAG fails
             let ollamaResponse = null;
-            if (this._ollamaAvailable) {
+            if (this._aiAvailable) {
                 ollamaResponse = await this._dagAgentWorkflow(content);
             }
             if (!ollamaResponse) {
@@ -628,7 +701,7 @@ export class SimulationManager {
 
                         // === Gemma 4 Self-QA Loop ===
                         // After building, collect actual simulation state and ask Gemma to verify
-                        if (this._ollamaAvailable) {
+                        if (this._aiAvailable) {
                             await this._runSelfQA(content, simParams, card);
                         }
 
@@ -716,10 +789,15 @@ Correct? Reply ONLY \`\`\`json: {"qa":"pass","reason":"..."} or corrected simula
         return { activeParticles: card?.physics?.particleCount || 0, gravity: card?.physics?.gravity ?? -9.81, temperature: card?.physics?.temperature ?? 293 };
     }
 
-    async _callOllamaSync(prompt) {
+    /**
+     * Non-streaming provider call (for QA and validation).
+     * @param {string} prompt - User message
+     * @param {string} [systemPrompt] - System message (defaults to QA validator)
+     */
+    async _callOllamaSync(prompt, systemPrompt = 'QA validator. Reply ONLY ```json.') {
         try {
             const res = await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ messages: [{ role: 'system', content: 'QA validator. Reply ONLY ```json.' }, { role: 'user', content: prompt }] }) });
+                body: JSON.stringify({ messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: prompt }] }) });
             if (!res.ok) return null;
             const reader = res.body.getReader(); const decoder = new TextDecoder();
             let full = '', buffer = '';
@@ -731,28 +809,98 @@ Correct? Reply ONLY \`\`\`json: {"qa":"pass","reason":"..."} or corrected simula
         } catch { return null; }
     }
 
+    /**
+     * Streaming provider call — shows real-time LLM text in the chat UI.
+     * Used by DAG workflow to display actual reasoning process.
+     * @param {string} prompt - User message
+     * @param {string} systemPrompt - System prompt
+     * @returns {Promise<string|null>} Full accumulated response text
+     */
+    async _callProviderStreaming(prompt, systemPrompt) {
+        try {
+            const res = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    messages: [
+                        { role: 'system', content: systemPrompt },
+                        { role: 'user', content: prompt }
+                    ]
+                }),
+            });
+            if (!res.ok) return null;
+            const reader = res.body.getReader();
+            const decoder = new TextDecoder();
+            let stepText = '';
+            let buffer = '';
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                buffer += decoder.decode(value, { stream: true });
+                const lines = buffer.split('\n');
+                buffer = lines.pop() || '';
+
+                for (const line of lines) {
+                    if (!line.startsWith('data: ')) continue;
+                    try {
+                        const j = JSON.parse(line.slice(6));
+                        if (j.message?.content) {
+                            stepText += j.message.content;
+                            // Live update: show accumulated text across all DAG steps
+                            this._updateStreamingMessage(this._currentStreamText + stepText);
+                        }
+                    } catch {}
+                }
+            }
+
+            return stepText || null;
+        } catch { return null; }
+    }
+
     // ==================== GEMMA 4 DAG AGENT WORKFLOW ====================
 
     /**
      * Multi-step agent chain for higher quality simulations.
      * DAG: Analyze → Research → Design → Generate → Validate
      * Each step's output feeds the next step's input.
+     * All steps stream real-time LLM reasoning to the chat UI.
      * Falls back to single-call if any step fails.
      */
     async _dagAgentWorkflow(userMessage) {
-        // Step 1: ANALYZE — What is the user asking for?
+        // Reset streaming accumulator
+        this._currentStreamText = '';
+
+        // System prompts per DAG phase
+        const SYS_ANALYZE = 'You are a physics simulation expert. Analyze the user\'s request to identify the object, physical properties, science domain, and scale. Respond concisely in the user\'s language (Korean or English).';
+        const SYS_RESEARCH = 'You are a physics reference expert. Provide EXACT SI physical values with justification. Be PRECISE and QUANTITATIVE.\n\n' +
+            '## VERIFIED MATERIAL REFERENCE (benchmark-validated, use these EXACT values):\n' + MATERIAL_REFERENCE_TABLE + '\n\n' +
+            'If the material matches one above, use its EXACT values. For unlisted materials, derive from closest known material.';
+        const SYS_DESIGN = 'You are a particle simulation designer. Plan efficient particle layouts using available shapes (helix, sphere, grid, ring, wave, spiral, shell, cylinder, cone, torus, etc.) and connections (chain, grid, nearest:N, surface, none).';
+        const SYS_GENERATE = 'You are a simulation JSON generator. Synthesize the analysis, research, and design into a valid simulation JSON. Output MUST include a ```json block with {"simulation":{...}} format. Include prompt, title, domain, and physics fields.';
+        const SYS_VALIDATE = 'You are a physics QA validator. Check if the generated simulation JSON matches physical reality. If all values are correct, return the same JSON. If any are wrong, return CORRECTED JSON. ALWAYS include a ```json block.\n\n' +
+            '## VERIFIED REFERENCE VALUES:\n' + MATERIAL_REFERENCE_TABLE.split('\n').slice(0, 20).join('\n') + '\n...\nUse these to validate density, gravity, temperature accuracy.';
+
+        // ── Step 1: ANALYZE ──
         this._showWorkflowStep(1, '🔍', t('wfAnalyze'), '요청 분석 중...', 'running');
-        const step1 = await this._callOllamaSync(
+        this._currentStreamText = '🔍 ANALYZE\n';
+        this._updateStreamingMessage(this._currentStreamText);
+
+        const step1 = await this._callProviderStreaming(
             `[STEP 1: ANALYZE]\nUser request: "${userMessage}"\n\n` +
-            `Identify:\n1. What object/phenomenon to simulate\n2. Key physical properties needed\n3. Relevant science domain\n4. Scale (nano/human/planetary)\n\nRespond in 3-4 bullet points. Korean OK.`
+            `Identify:\n1. What object/phenomenon to simulate\n2. Key physical properties needed\n3. Relevant science domain (physics/chemistry/biology/astronomy/earth_science/engineering/mathematics/materials)\n4. Scale (nano/human/planetary)\n\nRespond in 3-4 bullet points.`,
+            SYS_ANALYZE
         );
         if (!step1) return null;
-        this._showWorkflowStep(1, '🔍', t('wfAnalyze'), step1.slice(0, 60), 'done');
-        this._updateStreamingMessage(step1);
+        this._currentStreamText += step1 + '\n\n';
+        this._showWorkflowStep(1, '🔍', t('wfAnalyze'), '분석 완료', 'done');
 
-        // Step 2: RESEARCH — Get accurate physical values
+        // ── Step 2: RESEARCH ──
         this._showWorkflowStep(2, '📚', t('wfResearch'), '물성치 조사 중...', 'running');
-        const step2 = await this._callOllamaSync(
+        this._currentStreamText += '📚 RESEARCH\n';
+        this._updateStreamingMessage(this._currentStreamText);
+
+        const step2 = await this._callProviderStreaming(
             `[STEP 2: RESEARCH PHYSICAL PROPERTIES]\n` +
             `Based on this analysis:\n${step1}\n\n` +
             `List the EXACT SI physical values needed:\n` +
@@ -762,61 +910,87 @@ Correct? Reply ONLY \`\`\`json: {"qa":"pass","reason":"..."} or corrected simula
             `- temperature (K): room=293, boiling=373, lava=1500, sun=5778\n` +
             `- viscosity (sim scale): air=0, water=1, honey=10\n` +
             `- seismic, windX, turbulence as needed\n\n` +
-            `List each value with justification. Be PRECISE.`
+            `List each value with justification. Be PRECISE.`,
+            SYS_RESEARCH
         );
         if (!step2) return null;
-        this._showWorkflowStep(2, '📚', t('wfResearch'), step2.slice(0, 60), 'done');
+        this._currentStreamText += step2 + '\n\n';
+        this._showWorkflowStep(2, '📚', t('wfResearch'), '조사 완료', 'done');
 
-        // Step 3: DESIGN — Plan particle layout
+        // ── Step 3: DESIGN ──
         this._showWorkflowStep(3, '📐', t('wfDesign'), '파티클 배치 설계 중...', 'running');
-        const step3 = await this._callOllamaSync(
+        this._currentStreamText += '📐 DESIGN\n';
+        this._updateStreamingMessage(this._currentStreamText);
+
+        const step3 = await this._callProviderStreaming(
             `[STEP 3: DESIGN PARTICLE LAYOUT]\n` +
             `Physical properties:\n${step2}\n\n` +
             `Design the particle simulation:\n` +
             `- How many particles? (20000-50000)\n` +
-            `- What shape/arrangement?\n` +
-            `- What connections between particles?\n` +
+            `- What shape/arrangement? (helix, sphere, grid, ring, wave, spiral, shell, cylinder, cone, torus, random_box, point_cloud)\n` +
+            `- What connections between particles? (chain, grid, nearest:N, all, surface, none)\n` +
             `- Which parts are structural vs ambient?\n\n` +
-            `Describe the layout plan briefly.`
+            `Describe the layout plan briefly.`,
+            SYS_DESIGN
         );
         if (!step3) return null;
-        this._showWorkflowStep(3, '📐', t('wfDesign'), step3.slice(0, 60), 'done');
+        this._currentStreamText += step3 + '\n\n';
+        this._showWorkflowStep(3, '📐', t('wfDesign'), '설계 완료', 'done');
 
-        // Step 4: GENERATE — Create the final JSON
+        // ── Step 4: GENERATE ──
         this._showWorkflowStep(4, '🔧', t('wfGenerate'), 'JSON 생성 중...', 'running');
-        const step4 = await this._callOllamaSync(
+        this._currentStreamText += '🔧 GENERATE\n';
+        this._updateStreamingMessage(this._currentStreamText);
+
+        const step4 = await this._callProviderStreaming(
             `[STEP 4: GENERATE SIMULATION JSON]\n` +
-            `Analysis: ${step1.slice(0, 200)}\n` +
-            `Physical values: ${step2.slice(0, 300)}\n` +
-            `Layout plan: ${step3.slice(0, 200)}\n\n` +
+            `Analysis: ${step1}\n\n` +
+            `Physical values: ${step2}\n\n` +
+            `Layout plan: ${step3}\n\n` +
             `Now generate the FINAL simulation JSON. Use the EXACT values from Step 2.\n` +
+            `Use particle groups (Option B) for complex simulations, simple prompt keyword (Option A) for basic structures.\n\n` +
             `MANDATORY format:\n` +
-            '```json\n{"simulation":{"prompt":"keyword","title":"...","domain":"...","physics":{"gravity":-9.81,"damping":0.97,"springStiffness":20,"particleCount":25000,"temperature":293,"density":2.4,"viscosity":0,"friction":0.8,"bounciness":0.3,"windX":0,"turbulence":0,"seismic":0}}}\n```'
+            '```json\n' +
+            '{"simulation":{"prompt":"custom","title":"...","domain":"...","physics":{"gravity":-9.81,"damping":0.97,"springStiffness":20,"particleCount":25000,"temperature":293,"density":2.4,"viscosity":0,"friction":0.8,"bounciness":0.3,"windX":0,"turbulence":0,"seismic":0},"particles":{"groups":[{"name":"...","count":N,"shape":"...","params":{...},"color":"cyan","role":2,"connect":"chain"}]}}}\n' +
+            '```\n' +
+            'Available shapes: helix, sphere, random_sphere, grid, ring, disk, line, wave, spiral, shell, cylinder, cone, torus, random_box, point_cloud\n' +
+            'Available connects: chain, grid, nearest:N, all, surface, none\n' +
+            'Available colors: cyan, magenta, lime, orange, purple, blue, pink, yellow, teal, indigo',
+            SYS_GENERATE
         );
         if (!step4) return null;
+        this._currentStreamText += step4 + '\n\n';
         this._showWorkflowStep(4, '🔧', t('wfGenerate'), 'JSON 생성 완료', 'done');
 
-        // Step 5: VALIDATE — Self-check
+        // ── Step 5: VALIDATE ──
         this._showWorkflowStep(5, '✅', t('wfValidate'), '검증 중...', 'running');
-        const step5 = await this._callOllamaSync(
+        this._currentStreamText += '✅ VALIDATE\n';
+        this._updateStreamingMessage(this._currentStreamText);
+
+        const step5 = await this._callProviderStreaming(
             `[STEP 5: VALIDATE]\n` +
             `Original request: "${userMessage}"\n` +
             `Generated JSON:\n${step4}\n\n` +
             `Check:\n1. Does gravity match the environment? (space=0, moon=-1.62, earth=-9.81)\n` +
             `2. Does density match the material?\n` +
             `3. Does temperature match the scenario?\n` +
-            `4. Are all physics values physically reasonable?\n\n` +
+            `4. Are all physics values physically reasonable?\n` +
+            `5. Does the particle layout make sense for this object?\n\n` +
             `If ALL correct: respond with the same JSON.\n` +
             `If ANY wrong: respond with CORRECTED JSON.\n` +
-            `ALWAYS include \`\`\`json block.`
+            `ALWAYS include \`\`\`json block.`,
+            SYS_VALIDATE
         );
+        if (step5) {
+            this._currentStreamText += step5;
+        }
         this._showWorkflowStep(5, '✅', t('wfValidate'), '검증 완료', 'done');
 
         // Use step5 (validated) or step4 (if step5 failed)
         const finalResponse = step5 || step4;
 
         // Compose a full response for chat display
-        const fullResponse = `${step1}\n\n📚 **물성치:**\n${step2}\n\n📐 **설계:**\n${step3}\n\n${finalResponse}`;
+        const fullResponse = `🔍 **분석:**\n${step1}\n\n📚 **물성치:**\n${step2}\n\n📐 **설계:**\n${step3}\n\n🔧 **생성:**\n${step4}\n\n✅ **검증:**\n${finalResponse}`;
         return fullResponse;
     }
 
@@ -1066,13 +1240,31 @@ For buildings and cities, use multiple particle groups for structural realism:
 - Details: point_cloud for windows/decorations, color=yellow, connect=none
 This creates much more detailed and realistic structural simulations with visible load-bearing elements.
 
+## VERIFIED MATERIAL PHYSICS (use these EXACT values when applicable)
+steel: density=7850, gravity=-9.81, temp=293K, springK=55
+concrete: density=2400, gravity=-9.81, temp=293K, springK=35
+iron: density=7874, gravity=-9.81, temp=293K, springK=50
+wood: density=700, gravity=-9.81, temp=293K, springK=12
+limestone: density=2700, gravity=-9.81, temp=293K, springK=30
+water: density=1000, gravity=-9.81, temp=293K, viscosity=1
+air: density=1.225, gravity=-9.81, temp=293K
+blood: density=1060, gravity=-9.81, temp=310K, viscosity=3
+dna: density=1700, gravity=0, temp=310K, springK=30
+protein: density=1350, gravity=0, temp=310K, springK=20
+plasma: density=1025, gravity=0, temp=5778K, springK=2
+graphene: density=2267, gravity=0, temp=293K, springK=100
+lava: density=2600, gravity=-9.81, temp=1500K, viscosity=8
+ice: density=917, gravity=-9.81, temp=273K, springK=30
+silicon: density=2329, gravity=-9.81, temp=293K, springK=40
+
 ## CRITICAL RULES
 - You MUST include a \`\`\`json block in EVERY response. Never skip it.
 - Respond in the same language as the user (Korean or English).
 - Always suggest follow-up experiments to spark curiosity.
 - Keep total particle count across all groups under 25000.
 - Use Option B (custom particles) for anything NOT in the built-in prompt list.
-- The JSON must contain "simulation" as the top-level key with at least "prompt" and "physics" fields.`;
+- The JSON must contain "simulation" as the top-level key with at least "prompt" and "physics" fields.
+- Use VERIFIED material values above. If material not listed, derive from closest match.`;
 
         // Build message history
         const messages = [
@@ -1157,9 +1349,16 @@ This creates much more detailed and realistic structural simulations with visibl
         if (!streamEl) {
             streamEl = document.createElement('div');
             streamEl.className = 'chat-msg assistant streaming-message';
+            streamEl.style.cssText = 'white-space:pre-wrap;word-break:break-word;font-size:0.88em;line-height:1.6;max-height:60vh;overflow-y:auto;';
             chatBox.appendChild(streamEl);
         }
-        streamEl.textContent = text;
+        // Simple markdown: bold (**text**) and headers (🔍 STEP)
+        let html = this._escapeHtml(text)
+            .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+            .replace(/^(🔍|📚|📐|🔧|✅)\s+(.+)$/gm, '<div style="color:var(--accent-blue);font-weight:bold;margin-top:0.8em;border-bottom:1px solid rgba(88,166,255,0.2);padding-bottom:0.3em">$1 $2</div>')
+            .replace(/```json\s*([\s\S]*?)```/g, '<pre style="background:rgba(0,0,0,0.3);padding:0.5em;border-radius:4px;font-size:0.85em;overflow-x:auto"><code>$1</code></pre>')
+            .replace(/\n/g, '<br>');
+        streamEl.innerHTML = html + '<span class="streaming-cursor">▊</span>';
         chatBox.scrollTop = chatBox.scrollHeight;
     }
 

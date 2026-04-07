@@ -12,6 +12,7 @@ const OLLAMA_BASE = process.env.OLLAMA_BASE || 'http://localhost:11434';
 const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'gemma4';
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY || '';
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-pro';
 const DATA_DIR = join(__dirname, 'data');
 const CARDS_FILE = join(DATA_DIR, 'cards.json');
 const PID_FILE = join(__dirname, '.server.pid');
@@ -378,7 +379,7 @@ app.post('/api/chat', async (req, res) => {
         return res.end();
     };
 
-    // 2. Try Gemini Pro
+    // 2. Try Gemini Pro (streaming)
     if (GEMINI_API_KEY) {
         try {
             const contents = messages
@@ -388,13 +389,17 @@ app.post('/api/chat', async (req, res) => {
                     parts: [{ text: m.content }]
                 }));
             const systemInstruction = messages.find(m => m.role === 'system');
-            const body = { contents };
+            const body = {
+                contents,
+                generationConfig: { temperature: 1.0, maxOutputTokens: 8192 },
+            };
             if (systemInstruction) {
                 body.systemInstruction = { parts: [{ text: systemInstruction.content }] };
             }
 
+            // Try streaming first
             const geminiRes = await fetch(
-                `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+                `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:streamGenerateContent?alt=sse&key=${GEMINI_API_KEY}`,
                 {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -402,7 +407,58 @@ app.post('/api/chat', async (req, res) => {
                 }
             );
             if (geminiRes.ok) {
-                const data = await geminiRes.json();
+                res.setHeader('Content-Type', 'text/event-stream');
+                res.setHeader('Cache-Control', 'no-cache');
+                res.setHeader('Connection', 'keep-alive');
+                res.flushHeaders();
+
+                const reader = geminiRes.body.getReader();
+                const decoder = new TextDecoder();
+                let buffer = '';
+                let sentAny = false;
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop() || '';
+
+                    for (const line of lines) {
+                        if (!line.startsWith('data: ')) continue;
+                        const payload = line.slice(6).trim();
+                        if (!payload || payload === '[DONE]') continue;
+                        try {
+                            const geminiData = JSON.parse(payload);
+                            const parts = geminiData.candidates?.[0]?.content?.parts;
+                            if (!parts) continue;
+                            for (const part of parts) {
+                                if (part.text) {
+                                    const ollamaChunk = JSON.stringify({
+                                        message: { role: 'assistant', content: part.text },
+                                        done: false, provider: 'gemini',
+                                    });
+                                    res.write(`data: ${ollamaChunk}\n\n`);
+                                    sentAny = true;
+                                }
+                            }
+                        } catch {}
+                    }
+                }
+
+                if (sentAny) {
+                    res.write(`data: ${JSON.stringify({ message: { role: 'assistant', content: '' }, done: true, provider: 'gemini' })}\n\n`);
+                    return res.end();
+                }
+            }
+
+            // Fallback: non-streaming Gemini
+            const fallbackRes = await fetch(
+                `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`,
+                { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
+            );
+            if (fallbackRes.ok) {
+                const data = await fallbackRes.json();
                 const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
                 if (text) return sendAsSSE(text, 'gemini');
             }
@@ -411,7 +467,7 @@ app.post('/api/chat', async (req, res) => {
         }
     }
 
-    // 3. Try Claude
+    // 3. Try Claude (fallback)
     if (ANTHROPIC_API_KEY) {
         try {
             const systemMsg = messages.find(m => m.role === 'system');

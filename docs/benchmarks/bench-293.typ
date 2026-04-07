@@ -18,9 +18,7 @@
   [Step 3: 밀도], [1410 kg/m³],
   [Step 4: 중력], [-10¹² m/s²],
   [Step 5: 온도], [1000000000 K],
-  [Step 6: 특수], [```json
-{
-  "min_stellar_mass_solar_mass],
+  [Step 6: 특수], [특수 파라미터 있음],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

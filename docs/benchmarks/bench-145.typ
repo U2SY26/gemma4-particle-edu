@@ -18,10 +18,7 @@
   [Step 3: 밀도], [2070 kg/m³],
   [Step 4: 중력], [-1.796 m/s²],
   [Step 5: 온도], [1600 K],
-  [Step 6: 특수], [```json
-{
-  "tidal_heating": "extreme",
-],
+  [Step 6: 특수], [특수 파라미터 있음],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

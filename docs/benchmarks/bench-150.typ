@@ -16,11 +16,9 @@
   [Step 1: 식별], [초거대 질량 블랙홀에서 뿜어져 나오는 고에너지 입자 흐름.],
   [Step 2: 재료], [plasma],
   [Step 3: 밀도], [1025 kg/m³],
-  [Step 4: 중력], [$-\infty$ m/s²],
+  [Step 4: 중력], [-infinity m/s²],
   [Step 5: 온도], [10^12 K],
-  [Step 6: 특수], [```json
-{
-  "supermassive_black_hole": "],
+  [Step 6: 특수], [특수 파라미터 있음],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

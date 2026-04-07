@@ -18,9 +18,7 @@
   [Step 3: 밀도], [나노입자의 밀도는 구성 물질(금, 은 kg/m³],
   [Step 4: 중력], [0 m/s²],
   [Step 5: 온도], [293 K],
-  [Step 6: 특수], [```json
-{
-  "temperature": "controlled",],
+  [Step 6: 특수], [특수 파라미터 있음],
 )
 
 === 물리 시뮬 검증 (Verlet 100프레임)

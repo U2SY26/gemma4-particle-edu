@@ -838,17 +838,14 @@ textarea.text-input {
 
 .chat-msg.streaming-message {
     border-style: dashed;
+    white-space: pre-wrap;
+    word-break: break-word;
 }
 
-.chat-msg.streaming-message::after {
-    content: '';
-    display: inline-block;
-    width: 6px;
-    height: 14px;
-    background: var(--accent-green);
-    margin-left: 2px;
-    vertical-align: text-bottom;
+.streaming-cursor {
+    color: var(--accent-green);
     animation: blink 0.8s step-end infinite;
+    font-size: 0.9em;
 }
 
 .chat-msg.system {
