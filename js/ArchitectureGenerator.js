@@ -187,6 +187,20 @@ export class ArchitectureGenerator {
             'magnet': 'magnet', '자석': 'magnet', '자기장': 'magnet',
             'electron': 'electron_cloud', 'electron_cloud': 'electron_cloud', '전자': 'electron_cloud',
             'transistor': 'transistor', '트랜지스터': 'transistor', 'mosfet': 'transistor', 'fet': 'transistor', '반도체': 'transistor',
+            // Missing keywords (audit fix)
+            'blackhole': 'sphere', 'black_hole': 'sphere', '블랙홀': 'sphere',
+            'pendulum': 'tower', '진자': 'tower', '추': 'tower',
+            'nebula': 'cloud', '성운': 'cloud',
+            'cell_division': 'sphere', '세포분열': 'sphere',
+            'volcano': 'cone', '화산': 'cone',
+            'atom': 'electron_cloud', '원자': 'electron_cloud',
+            'crystal': 'cube', '결정': 'cube', '격자': 'cube',
+            'comet': 'sphere', '혜성': 'sphere',
+            'supernova': 'sphere', '초신성': 'sphere',
+            'earthquake': 'house', '지진': 'house',
+            'star': 'sphere', '별': 'sphere', '항성': 'sphere',
+            'planet': 'sphere', '행성': 'sphere',
+            'rocket': 'tower', '로켓': 'tower',
             'circuit': 'circuit', '회로': 'circuit', '전기회로': 'circuit', '전류': 'circuit',
         };
 
@@ -3012,6 +3026,7 @@ export class ArchitectureGenerator {
 
         const positions = [];
         const roles = [];
+        const charges = [];
         const connections = [];
         const groupMeta = [];  // track start/end indices per group
 
@@ -3023,12 +3038,16 @@ export class ArchitectureGenerator {
             const shape = (group.shape || 'random_sphere').toLowerCase();
             const params = group.params || {};
             const role = (group.role !== undefined) ? group.role : 3;
+            const groupCharge = group.charge || 0; // Per-group charge value
 
             // Generate positions for this group
             this._generateShape(positions, roles, shape, params, count, role);
 
             const endIdx = positions.length / 3;
             const actualCount = endIdx - startIdx;
+
+            // Fill charges for this group's particles
+            for (let i = 0; i < actualCount; i++) charges.push(groupCharge);
 
             // Generate connections for this group
             const connect = (group.connect || 'none').toLowerCase();
@@ -3058,12 +3077,21 @@ export class ArchitectureGenerator {
         allLoads.fill(0);
         this._calculateLoads(allLoads, connections, allRoles, structCount);
 
+        // Build charges array (null if no group has nonzero charge)
+        const hasCharges = charges.some(c => c !== 0);
+        let allCharges = null;
+        if (hasCharges) {
+            allCharges = new Float32Array(totalParticles);
+            allCharges.set(new Float32Array(charges.slice(0, Math.min(structCount, totalParticles))));
+        }
+
         return {
             targets: new Float32Array(positions),
             assignments,
             connections,
             loads: allLoads,
             roles: allRoles,
+            charges: allCharges,
             metadata: {
                 type: 'custom',
                 particleCount: totalParticles,

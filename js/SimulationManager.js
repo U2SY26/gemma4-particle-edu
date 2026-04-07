@@ -1337,7 +1337,8 @@ For common structures use a prompt keyword:
   }
 }
 \`\`\`
-Available prompt types: house, tower, bridge, dome, pyramid, cathedral, temple, castle, wall, stadium, arch, sphere, cube, molecule, dna, protein, solar_system, galaxy, asteroid_field, cloud, tornado, rain, water_drop, river, ocean_wave, magnet, electron_cloud
+Available prompt types: house, tower, bridge, dome, pyramid, cathedral, temple, castle, wall, stadium, arch, sphere, cube, molecule, dna, protein, solar_system, galaxy, asteroid_field, cloud, tornado, rain, water_drop, river, ocean_wave, magnet, electron_cloud, transistor, circuit
+NOTE: For phenomena not in the list above (pendulum, wave interference, etc.), use Option B (custom particle groups) instead.
 
 ### Option B — Custom (define particle groups for ANY science domain)
 For anything beyond built-in templates, use the \`particles\` field:
@@ -1817,7 +1818,63 @@ silicon: density=2329, gravity=-9.81, temp=293K, springK=40
             return 'Temperature set to 10K, high damping. Near-frozen state.';
         }
 
-        return `I understood your request. Try commands like: "무중력", "강한 바람", "점성 유체", "탄성", "느리게", "빠르게", "뜨겁게", "차갑게", "리셋". Future updates will support full natural language AI processing.`;
+        // Structure generation from keywords (AI offline fallback)
+        const structureMap = {
+            '피라미드': 'pyramid', 'pyramid': 'pyramid',
+            '타워': 'tower', 'tower': 'tower', '탑': 'tower',
+            '다리': 'bridge', 'bridge': 'bridge',
+            '집': 'house', 'house': 'house', '건물': 'house', 'building': 'house',
+            '돔': 'dome', 'dome': 'dome',
+            '성당': 'cathedral', 'cathedral': 'cathedral',
+            '성': 'castle', 'castle': 'castle',
+            '경기장': 'stadium', 'stadium': 'stadium',
+            '아치': 'arch', 'arch': 'arch',
+            'dna': 'dna', '이중나선': 'dna', 'helix': 'dna',
+            '태양계': 'solar_system', 'solar': 'solar_system',
+            '은하': 'galaxy', 'galaxy': 'galaxy',
+            '토네이도': 'tornado', 'tornado': 'tornado',
+            '구름': 'cloud', 'cloud': 'cloud',
+            '블랙홀': 'sphere', 'black hole': 'sphere', 'blackhole': 'sphere',
+            '분자': 'molecule', 'molecule': 'molecule',
+            '자석': 'magnet', 'magnet': 'magnet',
+            '전자': 'electron_cloud', 'electron': 'electron_cloud',
+            '트랜지스터': 'transistor', 'transistor': 'transistor',
+            '회로': 'circuit', 'circuit': 'circuit',
+            '화산': 'tornado', 'volcano': 'tornado',
+            '파도': 'ocean_wave', 'wave': 'ocean_wave',
+            '단백질': 'protein', 'protein': 'protein',
+            '지진': 'house', 'earthquake': 'house',
+            '벽': 'wall', 'wall': 'wall',
+            '큐브': 'cube', 'cube': 'cube',
+            '구': 'sphere', 'sphere': 'sphere',
+        };
+
+        for (const [kw, prompt] of Object.entries(structureMap)) {
+            if (lower.includes(kw)) {
+                card.prompt = prompt;
+                card.particleSpec = null;
+                document.getElementById('prompt-input').value = prompt;
+                // Apply domain physics for certain types
+                if (['dna', 'protein', 'molecule', 'electron_cloud'].includes(prompt)) {
+                    card.physics.gravity = 0;
+                    card.physics.damping = 0.99;
+                } else if (['solar_system', 'galaxy', 'sphere'].includes(prompt) && lower.includes('블랙홀') || lower.includes('black')) {
+                    card.physics.gravity = 0;
+                    card.physics.damping = 0.999;
+                } else if (['transistor', 'circuit', 'magnet'].includes(prompt)) {
+                    card.physics.gravity = 0;
+                    card.physics.damping = 0.99;
+                    card.physics.electricFieldX = -3;
+                    card.physics.chargeStrength = 5;
+                }
+                this._syncPhysicsUI(card.physics);
+                if (this.onPhysicsChange) this.onPhysicsChange(card.physics);
+                if (this.onCardSelect) this.onCardSelect(card);
+                return `AI 오프라인 — "${prompt}" 프리셋으로 시뮬레이션을 생성합니다. AI 연결 시 더 정교한 시뮬레이션이 가능합니다.`;
+            }
+        }
+
+        return `AI 오프라인 — 키워드로 시뮬레이션을 생성할 수 있습니다: 피라미드, 다리, DNA, 태양계, 블랙홀, 토네이도, 트랜지스터, 회로. 물리 조작: 무중력, 강한 바람, 점성, 리셋.`;
     }
 
     // ==================== UI INITIALIZATION ====================
