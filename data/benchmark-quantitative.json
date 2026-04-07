@@ -1,0 +1,1623 @@
+{
+  "summary": {
+    "total": 300,
+    "matchedToReference": 179,
+    "referenceMaterials": 38,
+    "avgDensityErrorPct": 3.17,
+    "avgGravityErrorPct": 19.28,
+    "avgTempErrorPct": 227690.57
+  },
+  "perScenario": [
+    {
+      "id": 1,
+      "material": "limestone",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 2,
+      "material": "iron",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 3,
+      "material": "concrete",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 4,
+      "material": "steel",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 5,
+      "material": "concrete",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 1.023890784982935
+    },
+    {
+      "id": 6,
+      "material": "aluminum",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 25.25597269624573
+    },
+    {
+      "id": 7,
+      "material": "water",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 100,
+      "tempError": 0
+    },
+    {
+      "id": 10,
+      "material": "plasma",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 100,
+      "tempError": 17207.026652821045
+    },
+    {
+      "id": 14,
+      "material": "carbon",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 15,
+      "material": "plasma",
+      "accuracy": 80,
+      "exploded": true,
+      "densityError": 0,
+      "gravityError": 100,
+      "tempError": 172970.26652821046
+    },
+    {
+      "id": 16,
+      "material": "air",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 17,
+      "material": "lava",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 19,
+      "material": "water",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 5.460750853242321
+    },
+    {
+      "id": 20,
+      "material": "water",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 17.064846416382252
+    },
+    {
+      "id": 21,
+      "material": "plasma",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 99.02439024390245,
+      "gravityError": 0,
+      "tempError": 2595953.9979231567
+    },
+    {
+      "id": 23,
+      "material": "air",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 25,
+      "material": "steel",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 29,
+      "material": "dna",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 100,
+      "tempError": 0
+    },
+    {
+      "id": 30,
+      "material": "water",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 5.802047781569966
+    },
+    {
+      "id": 32,
+      "material": "granite",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 2.7303754266211606
+    },
+    {
+      "id": 33,
+      "material": "stone",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 34,
+      "material": "stone",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 8,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 35,
+      "material": "marble",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 36,
+      "material": "sand",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 3.4129692832764507
+    },
+    {
+      "id": 37,
+      "material": "wood",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 38,
+      "material": "steel",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 39,
+      "material": "limestone",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 40,
+      "material": "steel",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 1.7064846416382253
+    },
+    {
+      "id": 41,
+      "material": "brick",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 4.778156996587031
+    },
+    {
+      "id": 42,
+      "material": "brick",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 43,
+      "material": "steel",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 44,
+      "material": "glass",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 45,
+      "material": "steel",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 46,
+      "material": "wood",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 47,
+      "material": "stone",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 1.7064846416382253
+    },
+    {
+      "id": 48,
+      "material": "steel",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 49,
+      "material": "steel",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 50,
+      "material": "glass",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 51,
+      "material": "concrete",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 52,
+      "material": "steel",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 53,
+      "material": "concrete",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 6.825938566552901
+    },
+    {
+      "id": 54,
+      "material": "snow",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 55,
+      "material": "concrete",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 56,
+      "material": "steel",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 57,
+      "material": "concrete",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 58,
+      "material": "concrete",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 59,
+      "material": "concrete",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 5.460750853242321
+    },
+    {
+      "id": 62,
+      "material": "steel",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 63,
+      "material": "steel",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 6.143344709897611
+    },
+    {
+      "id": 64,
+      "material": "carbon",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 100,
+      "tempError": 0
+    },
+    {
+      "id": 65,
+      "material": "wood",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 66,
+      "material": "air",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 79.86348122866895
+    },
+    {
+      "id": 67,
+      "material": "water",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 3.4129692832764507
+    },
+    {
+      "id": 68,
+      "material": "air",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 70,
+      "material": "steel",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 71,
+      "material": "air",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 72,
+      "material": "water",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 73,
+      "material": "nylon",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 582.5938566552901
+    },
+    {
+      "id": 74,
+      "material": "aluminum",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 83.48623853211011,
+      "tempError": 65.8703071672355
+    },
+    {
+      "id": 75,
+      "material": "aluminum",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 100,
+      "tempError": 98.97610921501706
+    },
+    {
+      "id": 76,
+      "material": "steel",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 77,
+      "material": "steel",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 80,
+      "material": "steel",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 81,
+      "material": "protein",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 100,
+      "tempError": 0
+    },
+    {
+      "id": 86,
+      "material": "bacteria",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 88,
+      "material": "water",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 5.802047781569966
+    },
+    {
+      "id": 90,
+      "material": "protein",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 100,
+      "tempError": 0
+    },
+    {
+      "id": 91,
+      "material": "plasma",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 100,
+      "tempError": 94.63482173762547
+    },
+    {
+      "id": 98,
+      "material": "cells",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 100,
+      "tempError": 0
+    },
+    {
+      "id": 99,
+      "material": "dna",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 100,
+      "tempError": 0
+    },
+    {
+      "id": 100,
+      "material": "dna",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 100,
+      "tempError": 0
+    },
+    {
+      "id": 102,
+      "material": "protein",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 100,
+      "tempError": 0
+    },
+    {
+      "id": 106,
+      "material": "dna",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 100,
+      "tempError": 0
+    },
+    {
+      "id": 107,
+      "material": "dna",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 100,
+      "tempError": 0
+    },
+    {
+      "id": 111,
+      "material": "lithium",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 114,
+      "material": "carbon",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 119,
+      "material": "concrete",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 120,
+      "material": "chromium",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 100,
+      "tempError": 0
+    },
+    {
+      "id": 122,
+      "material": "carbon",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 100,
+      "tempError": 309.55631399317406
+    },
+    {
+      "id": 125,
+      "material": "carbon",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 73.72013651877133
+    },
+    {
+      "id": 133,
+      "material": "rubber",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 135,
+      "material": "plasma",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 100,
+      "tempError": 94.92904119072342
+    },
+    {
+      "id": 136,
+      "material": "plastic",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 70.64846416382252
+    },
+    {
+      "id": 139,
+      "material": "steel",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 3312.9692832764504
+    },
+    {
+      "id": 140,
+      "material": "plastic",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 143,
+      "material": "water",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 86.64627930682977,
+      "tempError": 65.18771331058021
+    },
+    {
+      "id": 146,
+      "material": "ice",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 100,
+      "tempError": 96.33699633699634
+    },
+    {
+      "id": 147,
+      "material": "ice",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 100,
+      "tempError": 85.34798534798534
+    },
+    {
+      "id": 149,
+      "material": "plasma",
+      "accuracy": 80,
+      "exploded": true,
+      "densityError": 0,
+      "gravityError": 100,
+      "tempError": 17207.026652821045
+    },
+    {
+      "id": 150,
+      "material": "plasma",
+      "accuracy": 60,
+      "exploded": true,
+      "densityError": 0,
+      "gravityError": null,
+      "tempError": 99.82692973347179
+    },
+    {
+      "id": 151,
+      "material": "plasma",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 99.82692973347179
+    },
+    {
+      "id": 153,
+      "material": "plasma",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 99.02439024390245,
+      "gravityError": 0,
+      "tempError": 99.95327102803738
+    },
+    {
+      "id": 154,
+      "material": "plasma",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 99.02439024390245,
+      "gravityError": 0,
+      "tempError": 99.95327102803738
+    },
+    {
+      "id": 158,
+      "material": "plasma",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 100,
+      "tempError": 17207.026652821045
+    },
+    {
+      "id": 159,
+      "material": "plasma",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 100,
+      "tempError": 30.77189338871582
+    },
+    {
+      "id": 160,
+      "material": "plasma",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": null,
+      "gravityError": 0,
+      "tempError": 99.95327102803738
+    },
+    {
+      "id": 161,
+      "material": "ice",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 163,
+      "material": "water",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 27.303754266211605
+    },
+    {
+      "id": 164,
+      "material": "limestone",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 1.7064846416382253
+    },
+    {
+      "id": 165,
+      "material": "mud",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 166,
+      "material": "water",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 167,
+      "material": "water",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 168,
+      "material": "water",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 1.7064846416382253
+    },
+    {
+      "id": 169,
+      "material": "water",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 170,
+      "material": "water",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 2.3890784982935154
+    },
+    {
+      "id": 172,
+      "material": "plasma",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 100,
+      "tempError": 48.07892004153687
+    },
+    {
+      "id": 174,
+      "material": "water",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 175,
+      "material": "limestone",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 178,
+      "material": "limestone",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 7.4074074074074066,
+      "gravityError": 0,
+      "tempError": 1.7064846416382253
+    },
+    {
+      "id": 179,
+      "material": "water",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 3.4129692832764507
+    },
+    {
+      "id": 183,
+      "material": "air",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 184,
+      "material": "rubber",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 185,
+      "material": "plasma",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 100,
+      "tempError": 94.92904119072342
+    },
+    {
+      "id": 186,
+      "material": "rubber",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 187,
+      "material": "water",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 189,
+      "material": "air",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 190,
+      "material": "water",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 2.3890784982935154
+    },
+    {
+      "id": 191,
+      "material": "air",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 6.825938566552901
+    },
+    {
+      "id": 193,
+      "material": "water",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 1.023890784982935
+    },
+    {
+      "id": 194,
+      "material": "rubber",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 195,
+      "material": "steel",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 196,
+      "material": "water",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 27.303754266211605
+    },
+    {
+      "id": 197,
+      "material": "steel",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 54.60750853242321
+    },
+    {
+      "id": 205,
+      "material": "wood",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 207,
+      "material": "wood",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 99.65870307167235
+    },
+    {
+      "id": 210,
+      "material": "air",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 214,
+      "material": "cell",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": null
+    },
+    {
+      "id": 217,
+      "material": "plasma",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 99.02439024390245,
+      "gravityError": 0,
+      "tempError": 100
+    },
+    {
+      "id": 218,
+      "material": "steel",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 100,
+      "tempError": null
+    },
+    {
+      "id": 221,
+      "material": "steel",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 223,
+      "material": "glass",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 100,
+      "tempError": 0
+    },
+    {
+      "id": 224,
+      "material": "steel",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 100,
+      "tempError": null
+    },
+    {
+      "id": 226,
+      "material": "tin",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 34029.69283276451
+    },
+    {
+      "id": 227,
+      "material": "silicon",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 228,
+      "material": "silicon",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 78.49829351535837
+    },
+    {
+      "id": 229,
+      "material": "silicon",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 231,
+      "material": "silicon",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 232,
+      "material": "silicon",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 233,
+      "material": "dna",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 5.483870967741936
+    },
+    {
+      "id": 234,
+      "material": "silicon",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 236,
+      "material": "plasma",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 100,
+      "tempError": 419.2107995846314
+    },
+    {
+      "id": 237,
+      "material": "steel",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 514.334470989761
+    },
+    {
+      "id": 239,
+      "material": "silicon",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 475.76791808873725
+    },
+    {
+      "id": 243,
+      "material": "copper",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 244,
+      "material": "plasma",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 94.92904119072342
+    },
+    {
+      "id": 251,
+      "material": "air",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 253,
+      "material": "steel",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 7.508532423208192
+    },
+    {
+      "id": 255,
+      "material": "wood",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 4.436860068259386
+    },
+    {
+      "id": 256,
+      "material": "wood",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 257,
+      "material": "wood",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 4.436860068259386
+    },
+    {
+      "id": 258,
+      "material": "water",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 261,
+      "material": "blood",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 263,
+      "material": "dna",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 264,
+      "material": "protein",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 266,
+      "material": "plasma",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 100,
+      "tempError": 2595953.9979231567
+    },
+    {
+      "id": 267,
+      "material": "steel",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 268,
+      "material": "water",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 270,
+      "material": "silicon",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 271,
+      "material": "plasma",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 99.02439024390245,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 276,
+      "material": "water",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 27.303754266211605
+    },
+    {
+      "id": 278,
+      "material": "air",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 377.81569965870307
+    },
+    {
+      "id": 279,
+      "material": "water",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 6.825938566552901
+    },
+    {
+      "id": 281,
+      "material": "water",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 100,
+      "tempError": 0
+    },
+    {
+      "id": 282,
+      "material": "graphene",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 283,
+      "material": "carbon",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 284,
+      "material": "water",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 286,
+      "material": "titanium",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 25.938566552901023
+    },
+    {
+      "id": 287,
+      "material": "steel",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 923.8907849829351
+    },
+    {
+      "id": 288,
+      "material": "steel",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 289,
+      "material": "steel",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 5.460750853242321
+    },
+    {
+      "id": 290,
+      "material": "air",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 27.303754266211605
+    },
+    {
+      "id": 291,
+      "material": "aluminum",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 62.07951070336391,
+      "tempError": 28.327645051194537
+    },
+    {
+      "id": 293,
+      "material": "plasma",
+      "accuracy": 60,
+      "exploded": true,
+      "densityError": 37.5609756097561,
+      "gravityError": 100,
+      "tempError": 17306926.652821045
+    },
+    {
+      "id": 295,
+      "material": "plasma",
+      "accuracy": 80,
+      "exploded": true,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 17306926.652821045
+    },
+    {
+      "id": 296,
+      "material": "marble",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 297,
+      "material": "stone",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 4,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 298,
+      "material": "concrete",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 0,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 299,
+      "material": "stone",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 4,
+      "gravityError": 0,
+      "tempError": 0
+    },
+    {
+      "id": 300,
+      "material": "stone",
+      "accuracy": 100,
+      "exploded": false,
+      "densityError": 8,
+      "gravityError": 0,
+      "tempError": 0
+    }
+  ]
+}
