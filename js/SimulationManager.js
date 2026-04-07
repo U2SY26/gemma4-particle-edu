@@ -269,6 +269,19 @@ const PRESETS = [
     { name: 'MOSFET 트랜지스터', prompt: 'transistor',            tags: ['em', 'transistor'],   physics: p({ gravity: 0, damping: 0.99, electricFieldX: -3, chargeStrength: 5, gateVoltage: 0 }) },
     { name: '전기 회로',        prompt: 'circuit',               tags: ['em', 'circuit'],      physics: p({ gravity: 0, damping: 0.98, electricFieldX: -2, chargeStrength: 3, gateVoltage: 1 }) },
     { name: '전자기장',         prompt: 'magnet',                tags: ['em', 'field'],        physics: p({ gravity: 0, damping: 0.99, chargeStrength: 8, gateVoltage: 1 }) },
+
+    // ========== EDUCATION CURRICULUM ==========
+    // AP Physics / 물리 교과과정 연계
+    { name: '자유낙하 실험',     prompt: 'sphere',                tags: ['edu', 'freefall'],    physics: p({ gravity: -9.81, damping: 0.999, springStiffness: 1, friction: 0, bounciness: 0.9 }) },
+    { name: '포물선 운동',       prompt: 'sphere',                tags: ['edu', 'projectile'],  physics: p({ gravity: -9.81, damping: 0.999, windX: 3, springStiffness: 1, friction: 0 }) },
+    { name: '진자 운동',         prompt: 'tower',                 tags: ['edu', 'pendulum'],    physics: p({ gravity: -9.81, damping: 0.998, springStiffness: 40, friction: 0.1 }) },
+    { name: '충돌과 운동량',     prompt: 'cube',                  tags: ['edu', 'collision'],   physics: p({ gravity: -9.81, damping: 0.999, bounciness: 0.95, friction: 0.01 }) },
+    { name: '파동과 간섭',       prompt: 'ocean_wave',            tags: ['edu', 'wave'],        physics: p({ gravity: -2.0, damping: 0.97, springStiffness: 15, viscosity: 0.3 }) },
+    { name: '부력 실험',         prompt: 'sphere',                tags: ['edu', 'buoyancy'],    physics: p({ gravity: -9.81, damping: 0.95, floodLevel: 5, viscosity: 1.0, density: 1.0 }) },
+    { name: '열역학 (팽창)',     prompt: 'cube',                  tags: ['edu', 'thermo'],      physics: p({ gravity: -9.81, damping: 0.97, temperature: 500, springStiffness: 15 }) },
+    { name: '전기장과 전하',     prompt: 'electron_cloud',        tags: ['edu', 'efield'],      physics: p({ gravity: 0, damping: 0.99, electricFieldX: -5, chargeStrength: 8 }) },
+    { name: '달 표면 중력',      prompt: 'sphere',                tags: ['edu', 'moon'],        physics: p({ gravity: -1.62, damping: 0.999, springStiffness: 1, friction: 0.5 }) },
+    { name: '목성 대기',         prompt: 'cloud',                 tags: ['edu', 'jupiter'],     physics: p({ gravity: -24.79, damping: 0.92, turbulence: 5, windX: 10 }) },
 ];
 
 export class SimulationManager {
