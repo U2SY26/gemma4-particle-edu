@@ -547,8 +547,12 @@ export class SimulationManager {
             const stars = '★'.repeat(s.stars || 5) + '☆'.repeat(5 - (s.stars || 5));
             const accColor = s.accuracy === 100 ? 'var(--accent-green)' : s.accuracy >= 80 ? 'var(--accent-yellow)' : 'var(--accent-red)';
 
+            const pdfId = String(s.id).padStart(3, '0');
             el.innerHTML = `
-                <div style="font-weight:500;color:var(--text-primary);margin-bottom:2px">#${s.id} ${this._escapeHtml(s.title)}</div>
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
+                    <span style="font-weight:500;color:var(--text-primary);flex:1">#${s.id} ${this._escapeHtml(s.title)}</span>
+                    <a href="/docs/benchmarks/bench-${pdfId}.pdf" target="_blank" class="bench-pdf-btn" title="PDF 보고서 보기" style="font-size:10px;color:var(--accent-blue);text-decoration:none;padding:2px 6px;border:1px solid rgba(88,166,255,0.3);border-radius:3px;white-space:nowrap">📄 PDF</a>
+                </div>
                 <div style="display:flex;gap:8px;color:var(--text-secondary);font-size:10px">
                     <span>${this._escapeHtml(s.material || '')}</span>
                     <span style="color:${accColor}">${s.accuracy}%</span>
@@ -556,7 +560,10 @@ export class SimulationManager {
                 </div>
             `;
 
-            el.addEventListener('click', () => this._applyBenchmarkScenario(s));
+            el.addEventListener('click', (e) => {
+                if (e.target.closest('.bench-pdf-btn')) return; // Don't trigger sim on PDF click
+                this._applyBenchmarkScenario(s);
+            });
             list.appendChild(el);
         }
     }
