@@ -227,6 +227,19 @@ class App {
                 enterSimPage(prompt);
             });
         }
+
+        // URL query parameter support (?prompt=pyramid&lang=ko)
+        // Enables embedding from 3dweb and direct link sharing
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlPrompt = urlParams.get('prompt');
+        const urlLang = urlParams.get('lang');
+        if (urlLang && ['ko', 'en'].includes(urlLang)) {
+            setLang(urlLang);
+        }
+        if (urlPrompt) {
+            // Auto-enter sim page with the URL prompt, skip landing
+            setTimeout(() => enterSimPage(urlPrompt), 300);
+        }
     }
 
     _initMobileToggle() {
