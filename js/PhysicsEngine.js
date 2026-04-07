@@ -17,6 +17,7 @@ export class PhysicsEngine {
         // Per-particle properties
         this.mass = new Float32Array(maxCount).fill(1.0);
         this.invMass = new Float32Array(maxCount).fill(1.0);
+        this.charge = new Float32Array(maxCount); // Electric charge (-1, 0, +1 or continuous)
 
         // Spring connections
         this.springs = [];
@@ -66,6 +67,14 @@ export class PhysicsEngine {
         this.seismicFreq = 2.0;     // Hz
         this.snowLoad = 0;          // kN/m² (→ N/m²×1000)
         this.floodLevel = 0;        // m above ground
+
+        // Electromagnetic parameters
+        this.electricFieldX = 0;    // V/m — uniform E-field (force on unit charge)
+        this.electricFieldY = 0;
+        this.electricFieldZ = 0;
+        this.chargeStrength = 0;    // Coulomb multiplier (0 = disabled, >0 = inter-particle charge forces)
+        this.gateVoltage = 0;       // 0-1 — transistor gate control (0=blocked, 1=conducting)
+        this._emCellSize = 1.5;     // spatial hash cell size for Particle-in-Cell Coulomb
 
         // Derived (updated when material changes)
         this._particleMass = 1.0;
@@ -282,6 +291,14 @@ export class PhysicsEngine {
             this.acc[idx + 1] += this.GRAVITY + wy;
             this.acc[idx + 2] += wz + seismicZ;
 
+            // Electric field force: F = q * E (Lorentz force, magnetic component omitted)
+            const qi = this.charge[i];
+            if (qi !== 0) {
+                this.acc[idx]     += qi * this.electricFieldX;
+                this.acc[idx + 1] += qi * this.electricFieldY;
+                this.acc[idx + 2] += qi * this.electricFieldZ;
+            }
+
             // Snow load (downward force on particles above ground)
             if (this.snowLoad > 0 && this.pos[idx + 1] > 1.0) {
                 this.acc[idx + 1] -= this.snowLoad * 0.5;
@@ -313,6 +330,32 @@ export class PhysicsEngine {
                 this.acc[idx] += (Math.random() - 0.5) * thermalK;
                 this.acc[idx + 1] += (Math.random() - 0.5) * thermalK;
                 this.acc[idx + 2] += (Math.random() - 0.5) * thermalK;
+            }
+        }
+
+        // ==================== ELECTROMAGNETIC FORCES ====================
+        // Particle-in-Cell Coulomb: O(n) cell-averaged inter-charge forces
+        if (this.chargeStrength > 0) {
+            this._applyPICCoulomb(n);
+        }
+
+        // Gate voltage barrier (transistor simulation)
+        // Role 3 (beam) particles in gate region get high viscosity when gate is closed
+        if (this.gateVoltage < 1.0) {
+            const gateDamping = (1.0 - this.gateVoltage) * 15.0; // 0=free, 15=blocked
+            for (let i = 0; i < n; i++) {
+                // Gate barrier applies to charged channel particles (role-based targeting)
+                // Channel particles have charge != 0 and are in the mid-region
+                if (this.charge[i] !== 0 && this.hasTarget[i]) {
+                    const idx = i * 3;
+                    const tx = this.targetPos[idx]; // Use target X as region indicator
+                    // Channel region: center third of the structure
+                    if (Math.abs(tx) < 3.0) {
+                        this.acc[idx]     -= this.vel[idx] * gateDamping;
+                        this.acc[idx + 1] -= this.vel[idx + 1] * gateDamping;
+                        this.acc[idx + 2] -= this.vel[idx + 2] * gateDamping;
+                    }
+                }
             }
         }
 
@@ -510,6 +553,98 @@ export class PhysicsEngine {
                     this.prevPos[idx + k] = -bound;
                 }
             }
+        }
+    }
+
+    // ==================== PARTICLE-IN-CELL COULOMB ====================
+    // Divides space into cells, accumulates charge per cell,
+    // then applies inter-cell Coulomb forces. O(n) complexity.
+    // Physics: F = k_e * q1 * q2 / r² (cell-averaged approximation)
+
+    _applyPICCoulomb(n) {
+        const cellSize = this._emCellSize;
+        const invCell = 1.0 / cellSize;
+        const k = this.chargeStrength; // Coulomb multiplier (sim-scale, not SI k_e=8.99e9)
+        const softening = 0.5; // Prevents singularity at r→0
+
+        // Step 1: Build charge grid — accumulate charge and center-of-charge per cell
+        const grid = new Map();
+        for (let i = 0; i < n; i++) {
+            const qi = this.charge[i];
+            if (qi === 0) continue;
+            const idx = i * 3;
+            const cx = Math.floor(this.pos[idx] * invCell);
+            const cy = Math.floor(this.pos[idx + 1] * invCell);
+            const cz = Math.floor(this.pos[idx + 2] * invCell);
+            const key = (cx + 500) * 1000000 + (cy + 500) * 1000 + (cz + 500);
+
+            let cell = grid.get(key);
+            if (!cell) {
+                cell = { qSum: 0, px: 0, py: 0, pz: 0, count: 0 };
+                grid.set(key, cell);
+            }
+            cell.qSum += qi;
+            cell.px += this.pos[idx];
+            cell.py += this.pos[idx + 1];
+            cell.pz += this.pos[idx + 2];
+            cell.count++;
+        }
+
+        // Finalize charge centers
+        for (const cell of grid.values()) {
+            if (cell.count > 0) {
+                cell.px /= cell.count;
+                cell.py /= cell.count;
+                cell.pz /= cell.count;
+            }
+        }
+
+        // Step 2: For each charged particle, sum Coulomb forces from 27 neighboring cells
+        for (let i = 0; i < n; i++) {
+            const qi = this.charge[i];
+            if (qi === 0) continue;
+            const idx = i * 3;
+            const px = this.pos[idx];
+            const py = this.pos[idx + 1];
+            const pz = this.pos[idx + 2];
+            const cx = Math.floor(px * invCell);
+            const cy = Math.floor(py * invCell);
+            const cz = Math.floor(pz * invCell);
+
+            let fx = 0, fy = 0, fz = 0;
+
+            for (let dx = -1; dx <= 1; dx++) {
+                for (let dy = -1; dy <= 1; dy++) {
+                    for (let dz = -1; dz <= 1; dz++) {
+                        const nkey = (cx + dx + 500) * 1000000 + (cy + dy + 500) * 1000 + (cz + dz + 500);
+                        const neighbor = grid.get(nkey);
+                        if (!neighbor || neighbor.qSum === 0) continue;
+
+                        const ddx = px - neighbor.px;
+                        const ddy = py - neighbor.py;
+                        const ddz = pz - neighbor.pz;
+                        const r2 = ddx * ddx + ddy * ddy + ddz * ddz + softening;
+
+                        // Coulomb: F = k * qi * qj / r² (repulsion for same sign)
+                        const force = k * qi * neighbor.qSum / r2;
+                        const invR = 1.0 / Math.sqrt(r2);
+                        fx += force * ddx * invR;
+                        fy += force * ddy * invR;
+                        fz += force * ddz * invR;
+                    }
+                }
+            }
+
+            // Cap force to prevent instability
+            const fMag = Math.sqrt(fx * fx + fy * fy + fz * fz);
+            if (fMag > 50) {
+                const scale = 50 / fMag;
+                fx *= scale; fy *= scale; fz *= scale;
+            }
+
+            this.acc[idx] += fx * this.invMass[i];
+            this.acc[idx + 1] += fy * this.invMass[i];
+            this.acc[idx + 2] += fz * this.invMass[i];
         }
     }
 }

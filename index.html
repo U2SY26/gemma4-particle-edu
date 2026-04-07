@@ -322,6 +322,43 @@
             </div>
         </div>
 
+        <!-- Electromagnetic Parameters -->
+        <div id="em-section">
+            <h3 class="section-title" data-toggle="em-params" role="button" aria-expanded="true" tabindex="0">
+                <span class="toggle-icon" aria-hidden="true">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><path d="M2 3.5L5 7l3-3.5H2z"/></svg>
+                </span>
+                <span data-i18n="electromagnetic">ELECTROMAGNETIC</span>
+            </h3>
+            <div id="em-params">
+                <div class="param-group">
+                    <label for="param-electricFieldX" data-i18n="electricFieldX">E-Field X</label>
+                    <input type="range" id="param-electricFieldX" min="-10" max="10" step="0.5" value="0"/>
+                    <span class="param-value" data-for="param-electricFieldX">0.0</span>
+                </div>
+                <div class="param-group">
+                    <label for="param-electricFieldY" data-i18n="electricFieldY">E-Field Y</label>
+                    <input type="range" id="param-electricFieldY" min="-10" max="10" step="0.5" value="0"/>
+                    <span class="param-value" data-for="param-electricFieldY">0.0</span>
+                </div>
+                <div class="param-group">
+                    <label for="param-electricFieldZ" data-i18n="electricFieldZ">E-Field Z</label>
+                    <input type="range" id="param-electricFieldZ" min="-10" max="10" step="0.5" value="0"/>
+                    <span class="param-value" data-for="param-electricFieldZ">0.0</span>
+                </div>
+                <div class="param-group">
+                    <label for="param-chargeStrength" data-i18n="chargeStrength">Charge Force</label>
+                    <input type="range" id="param-chargeStrength" min="0" max="20" step="0.5" value="0"/>
+                    <span class="param-value" data-for="param-chargeStrength">0.0</span>
+                </div>
+                <div class="param-group">
+                    <label for="param-gateVoltage" data-i18n="gateVoltage">Gate Voltage</label>
+                    <input type="range" id="param-gateVoltage" min="0" max="1" step="0.01" value="1"/>
+                    <span class="param-value" data-for="param-gateVoltage">1.00</span>
+                </div>
+            </div>
+        </div>
+
         <!-- Visual Settings -->
         <div id="visual-section">
             <h3 class="section-title" data-toggle="visual-params" role="button" aria-expanded="true" tabindex="0">

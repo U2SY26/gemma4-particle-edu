@@ -572,6 +572,13 @@ class App {
         this.physics.snowLoad = p.snowLoad || 0;         // kN/m²
         this.physics.floodLevel = p.floodLevel || 0;     // m
 
+        // Electromagnetic parameters
+        this.physics.electricFieldX = p.electricFieldX || 0;  // V/m
+        this.physics.electricFieldY = p.electricFieldY || 0;
+        this.physics.electricFieldZ = p.electricFieldZ || 0;
+        this.physics.chargeStrength = p.chargeStrength || 0;  // Coulomb multiplier
+        this.physics.gateVoltage = p.gateVoltage ?? 1;       // 0=blocked, 1=conducting
+
         // Recalculate all derived quantities (mass, spring K, damping)
         this.physics.updateDerivedPhysics();
     }
@@ -618,6 +625,14 @@ class App {
             this.physics.setSprings(structure.connections);
             this.physics.setLoadBearing(structure.loads);
             this.particleSystem.setParticleColors(structure.roles, structure.loads);
+
+            // Apply per-particle charge data from EM templates (transistor, circuit, etc.)
+            if (structure.charges) {
+                this.physics.charge.fill(0); // Reset all charges
+                this.physics.charge.set(structure.charges.subarray(0, needed));
+            } else {
+                this.physics.charge.fill(0);
+            }
 
             // Re-apply neon mode after structure colors if that's the user's preference
             const colorModeSelect = document.getElementById('color-mode');

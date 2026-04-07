@@ -141,6 +141,13 @@ const LANG = {
         serverGemma4: '온라인 (Gemma 4)',
         serverGemini: '온라인 (Gemini)',
         serverClaude: '온라인 (Claude)',
+        // Electromagnetic
+        electromagnetic: '전자기',
+        electricFieldX: '전기장 X',
+        electricFieldY: '전기장 Y',
+        electricFieldZ: '전기장 Z',
+        chargeStrength: '전하 힘',
+        gateVoltage: '게이트 전압',
         // Workflow steps
         wfAnalyze: '분석',
         wfResearch: '조사',
@@ -277,6 +284,13 @@ const LANG = {
         serverGemma4: 'ONLINE (Gemma 4)',
         serverGemini: 'ONLINE (Gemini)',
         serverClaude: 'ONLINE (Claude)',
+        // Electromagnetic
+        electromagnetic: 'ELECTROMAGNETIC',
+        electricFieldX: 'E-Field X',
+        electricFieldY: 'E-Field Y',
+        electricFieldZ: 'E-Field Z',
+        chargeStrength: 'Charge Force',
+        gateVoltage: 'Gate Voltage',
         // Workflow steps
         wfAnalyze: 'Analyze',
         wfResearch: 'Research',

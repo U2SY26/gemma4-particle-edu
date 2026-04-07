@@ -15,6 +15,8 @@ const BASE_PHYSICS = {
     viscosity: 0, temperature: 293,
     foundation: 5.0, density: 2.4, elasticity: 0.3, yieldStrength: 50,
     seismic: 0, seismicFreq: 2.0, snowLoad: 0, floodLevel: 0,
+    electricFieldX: 0, electricFieldY: 0, electricFieldZ: 0,
+    chargeStrength: 0, gateVoltage: 1,
 };
 
 const p = (overrides) => ({ ...BASE_PHYSICS, ...overrides });
@@ -27,7 +29,8 @@ const DOMAIN_PHYSICS = {
     astronomy:     { gravity: 0, damping: 0.999, turbulence: 0.5 },
     earth_science: { gravity: -9.81, damping: 0.90 },
     engineering:   { gravity: -9.81, damping: 0.97 },
-    mathematics:   { gravity: 0, damping: 0.999 },
+    mathematics:      { gravity: 0, damping: 0.999 },
+    electromagnetism: { gravity: 0, damping: 0.99, chargeStrength: 5, electricFieldX: -3 },
 };
 
 // Reference material physics from 300-scenario benchmark (Gemma4 31B, 99.4% pass/fail completion)
@@ -164,6 +167,11 @@ const PRESETS = [
     { name: '극저온 동결',       prompt: 'cube',                  tags: ['cryo', 'frozen'],     physics: p({ temperature: 5, damping: 0.999, springStiffness: 50, friction: 0.99, bounciness: 0.01 }) },
     { name: '슬로우모션',       prompt: 'tower',                 tags: ['slow', 'cinematic'],  physics: p({ timeScale: 0.2, springStiffness: 20 }) },
     { name: '고속 시뮬',        prompt: 'tower',                 tags: ['fast', 'speed'],      physics: p({ timeScale: 3.0, springStiffness: 20 }) },
+
+    // ========== ELECTROMAGNETISM ==========
+    { name: 'MOSFET 트랜지스터', prompt: 'transistor',            tags: ['em', 'transistor'],   physics: p({ gravity: 0, damping: 0.99, electricFieldX: -3, chargeStrength: 5, gateVoltage: 0 }) },
+    { name: '전기 회로',        prompt: 'circuit',               tags: ['em', 'circuit'],      physics: p({ gravity: 0, damping: 0.98, electricFieldX: -2, chargeStrength: 3, gateVoltage: 1 }) },
+    { name: '전자기장',         prompt: 'magnet',                tags: ['em', 'field'],        physics: p({ gravity: 0, damping: 0.99, chargeStrength: 8, gateVoltage: 1 }) },
 ];
 
 export class SimulationManager {
@@ -684,6 +692,11 @@ export class SimulationManager {
             'param-seismicFreq': physics.seismicFreq,
             'param-snowLoad': physics.snowLoad,
             'param-floodLevel': physics.floodLevel,
+            'param-electricFieldX': physics.electricFieldX || 0,
+            'param-electricFieldY': physics.electricFieldY || 0,
+            'param-electricFieldZ': physics.electricFieldZ || 0,
+            'param-chargeStrength': physics.chargeStrength || 0,
+            'param-gateVoltage': physics.gateVoltage ?? 1,
         };
 
         for (const [id, val] of Object.entries(paramMap)) {
@@ -720,6 +733,11 @@ export class SimulationManager {
             seismicFreq: g('param-seismicFreq'),
             snowLoad: g('param-snowLoad'),
             floodLevel: g('param-floodLevel'),
+            electricFieldX: g('param-electricFieldX'),
+            electricFieldY: g('param-electricFieldY'),
+            electricFieldZ: g('param-electricFieldZ'),
+            chargeStrength: g('param-chargeStrength'),
+            gateVoltage: g('param-gateVoltage'),
         };
     }
 

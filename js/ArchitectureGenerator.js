@@ -48,6 +48,8 @@ export class ArchitectureGenerator {
             // Electromagnetic domain
             case 'magnet': return this._templateMagnet(params);
             case 'electron_cloud': return this._templateElectronCloud(params);
+            case 'transistor': return this._templateTransistor(params);
+            case 'circuit': return this._templateCircuit(params);
             default: return this._templateHouse(params);
         }
     }
@@ -112,12 +114,20 @@ export class ArchitectureGenerator {
         // Reset for next call
         this.spacing = baseSpacing;
 
+        // Carry per-particle charge data from EM templates (null for non-EM templates)
+        let allCharges = null;
+        if (structure.charges) {
+            allCharges = new Float32Array(totalParticles);
+            allCharges.set(structure.charges.subarray(0, Math.min(structCount, totalParticles)));
+        }
+
         return {
             targets: structure.positions,
             assignments,
             connections: structure.connections,
             loads: allLoads,
             roles: allRoles,
+            charges: allCharges,
             metadata: {
                 type: params.type,
                 particleCount: totalParticles,
@@ -176,6 +186,8 @@ export class ArchitectureGenerator {
             // Electromagnetic domain
             'magnet': 'magnet', '자석': 'magnet', '자기장': 'magnet',
             'electron': 'electron_cloud', 'electron_cloud': 'electron_cloud', '전자': 'electron_cloud',
+            'transistor': 'transistor', '트랜지스터': 'transistor', 'mosfet': 'transistor', 'fet': 'transistor', '반도체': 'transistor',
+            'circuit': 'circuit', '회로': 'circuit', '전기회로': 'circuit', '전류': 'circuit',
         };
 
         // Size modifiers
@@ -2746,6 +2758,236 @@ export class ArchitectureGenerator {
             roles: new Uint8Array(roles),
             loads: new Float32Array(roles.length),
             connections,
+        };
+    }
+
+    // ==================== TRANSISTOR TEMPLATE ====================
+    // Water-pipe analogy: electrons (particles) flow from Source to Drain
+    // Gate voltage controls a barrier in the channel region
+    // Based on MOSFET operating principle
+
+    _templateTransistor(params) {
+        const s = params.scale || 1;
+        const positions = [];
+        const roles = [];
+        const charges = [];
+        const connections = [];
+        let idx = 0;
+
+        const addParticle = (x, y, z, role, charge) => {
+            positions.push(x, y, z);
+            roles.push(role);
+            charges.push(charge);
+            return idx++;
+        };
+
+        const cy = 4 * s; // center height
+
+        // Source region (left reservoir) — electrons waiting to flow
+        const srcStart = idx;
+        const srcW = 3 * s, srcH = 2 * s, srcD = 2 * s;
+        for (let i = 0; i < 600; i++) {
+            const x = -6 * s + (Math.random() - 0.5) * srcW;
+            const y = cy + (Math.random() - 0.5) * srcH;
+            const z = (Math.random() - 0.5) * srcD;
+            addParticle(x, y, z, 1, -1); // electrons = negative charge
+        }
+        const srcEnd = idx;
+        // Grid connections within source
+        for (let i = srcStart; i < srcEnd; i++) {
+            for (let j = i + 1; j < Math.min(i + 8, srcEnd); j++) {
+                const dx = positions[i*3] - positions[j*3];
+                const dy = positions[i*3+1] - positions[j*3+1];
+                const dz = positions[i*3+2] - positions[j*3+2];
+                const d = Math.sqrt(dx*dx + dy*dy + dz*dz);
+                if (d < 0.8 * s) connections.push({ i, j, restLength: d, stiffness: 15, damping: 2 });
+            }
+        }
+
+        // Channel (narrow passage between source and drain)
+        const chStart = idx;
+        const chLen = 6 * s, chW = 0.6 * s;
+        for (let i = 0; i < 300; i++) {
+            const t = i / 299;
+            const x = (-3 + t * chLen) * s;
+            const y = cy + (Math.random() - 0.5) * chW;
+            const z = (Math.random() - 0.5) * chW;
+            addParticle(x, y, z, 3, -1);
+        }
+        const chEnd = idx;
+        // Chain connections along channel
+        for (let i = chStart; i < chEnd - 1; i++) {
+            const d = Math.sqrt(
+                (positions[i*3]-positions[(i+1)*3])**2 +
+                (positions[i*3+1]-positions[(i+1)*3+1])**2 +
+                (positions[i*3+2]-positions[(i+1)*3+2])**2
+            );
+            connections.push({ i, j: i+1, restLength: d, stiffness: 10, damping: 2 });
+        }
+
+        // Drain region (right reservoir) — electrons arrive here
+        const drnStart = idx;
+        for (let i = 0; i < 600; i++) {
+            const x = 6 * s + (Math.random() - 0.5) * srcW;
+            const y = cy + (Math.random() - 0.5) * srcH;
+            const z = (Math.random() - 0.5) * srcD;
+            addParticle(x, y, z, 2, -1);
+        }
+        const drnEnd = idx;
+        for (let i = drnStart; i < drnEnd; i++) {
+            for (let j = i + 1; j < Math.min(i + 8, drnEnd); j++) {
+                const dx = positions[i*3] - positions[j*3];
+                const dy = positions[i*3+1] - positions[j*3+1];
+                const dz = positions[i*3+2] - positions[j*3+2];
+                const d = Math.sqrt(dx*dx + dy*dy + dz*dz);
+                if (d < 0.8 * s) connections.push({ i, j, restLength: d, stiffness: 15, damping: 2 });
+            }
+        }
+
+        // Gate electrode (above channel) — positive charge attracts/repels electrons
+        const gateStart = idx;
+        for (let i = 0; i < 200; i++) {
+            const x = (Math.random() - 0.5) * 4 * s;
+            const y = cy + 2.5 * s + (Math.random() - 0.5) * 0.3 * s;
+            const z = (Math.random() - 0.5) * 1.5 * s;
+            addParticle(x, y, z, 4, +1); // gate = positive charge
+        }
+        const gateEnd = idx;
+        for (let i = gateStart; i < gateEnd; i++) {
+            for (let j = i + 1; j < Math.min(i + 6, gateEnd); j++) {
+                const dx = positions[i*3] - positions[j*3];
+                const dy = positions[i*3+1] - positions[j*3+1];
+                const dz = positions[i*3+2] - positions[j*3+2];
+                const d = Math.sqrt(dx*dx + dy*dy + dz*dz);
+                if (d < 1.0 * s) connections.push({ i, j, restLength: d, stiffness: 40, damping: 4 });
+            }
+        }
+
+        // Gate oxide (insulator between gate and channel)
+        const oxStart = idx;
+        for (let i = 0; i < 100; i++) {
+            const x = (Math.random() - 0.5) * 4 * s;
+            const y = cy + 1.8 * s;
+            const z = (Math.random() - 0.5) * 1.5 * s;
+            addParticle(x, y, z, 5, 0); // insulator = no charge
+        }
+        const oxEnd = idx;
+        for (let i = oxStart; i < oxEnd; i++) {
+            for (let j = i + 1; j < Math.min(i + 4, oxEnd); j++) {
+                const dx = positions[i*3] - positions[j*3];
+                const dy = positions[i*3+1] - positions[j*3+1];
+                const dz = positions[i*3+2] - positions[j*3+2];
+                const d = Math.sqrt(dx*dx + dy*dy + dz*dz);
+                if (d < 0.8 * s) connections.push({ i, j, restLength: d, stiffness: 60, damping: 5 });
+            }
+        }
+
+        return {
+            positions: new Float32Array(positions),
+            roles: new Uint8Array(roles),
+            loads: new Float32Array(roles.length),
+            connections,
+            charges: new Float32Array(charges),
+        };
+    }
+
+    // ==================== CIRCUIT TEMPLATE ====================
+    // Simple conductor loop with battery driving electron flow
+
+    _templateCircuit(params) {
+        const s = params.scale || 1;
+        const positions = [];
+        const roles = [];
+        const charges = [];
+        const connections = [];
+        let idx = 0;
+
+        const addParticle = (x, y, z, role, charge) => {
+            positions.push(x, y, z);
+            roles.push(role);
+            charges.push(charge);
+            return idx++;
+        };
+
+        const cy = 4 * s;
+        const radius = 5 * s;
+
+        // Wire loop (ring shape)
+        const wireStart = idx;
+        const wireCount = 500;
+        for (let i = 0; i < wireCount; i++) {
+            const angle = (i / wireCount) * Math.PI * 2;
+            const x = Math.cos(angle) * radius;
+            const z = Math.sin(angle) * radius;
+            const y = cy + (Math.random() - 0.5) * 0.2 * s;
+            addParticle(x, y, z, 2, 0); // wire itself is neutral
+        }
+        const wireEnd = idx;
+        // Chain connections around the loop
+        for (let i = wireStart; i < wireEnd; i++) {
+            const j = i + 1 < wireEnd ? i + 1 : wireStart; // wrap around
+            const dx = positions[i*3] - positions[j*3];
+            const dy = positions[i*3+1] - positions[j*3+1];
+            const dz = positions[i*3+2] - positions[j*3+2];
+            const d = Math.sqrt(dx*dx + dy*dy + dz*dz);
+            connections.push({ i, j, restLength: d, stiffness: 30, damping: 3 });
+        }
+
+        // Free electrons flowing through the wire
+        const eStart = idx;
+        for (let i = 0; i < 800; i++) {
+            const angle = (i / 800) * Math.PI * 2 + (Math.random() - 0.5) * 0.3;
+            const r = radius + (Math.random() - 0.5) * 0.4 * s;
+            const x = Math.cos(angle) * r;
+            const z = Math.sin(angle) * r;
+            const y = cy + (Math.random() - 0.5) * 0.3 * s;
+            addParticle(x, y, z, 5, -1); // electrons
+        }
+        const eEnd = idx;
+
+        // Battery positive terminal (right side of loop)
+        for (let i = 0; i < 80; i++) {
+            const x = radius + (Math.random() - 0.5) * 0.8 * s;
+            const y = cy + 1.5 * s + (Math.random() - 0.5) * 0.8 * s;
+            const z = (Math.random() - 0.5) * 0.8 * s;
+            addParticle(x, y, z, 1, +1);
+        }
+
+        // Battery negative terminal (right side, below)
+        for (let i = 0; i < 80; i++) {
+            const x = radius + (Math.random() - 0.5) * 0.8 * s;
+            const y = cy - 1.5 * s + (Math.random() - 0.5) * 0.8 * s;
+            const z = (Math.random() - 0.5) * 0.8 * s;
+            addParticle(x, y, z, 1, -1);
+        }
+
+        // Resistor section (denser, higher stiffness — left side of loop)
+        const resStart = idx;
+        for (let i = 0; i < 150; i++) {
+            const angle = Math.PI + (Math.random() - 0.5) * 0.6;
+            const r = radius + (Math.random() - 0.5) * 0.3 * s;
+            const x = Math.cos(angle) * r;
+            const z = Math.sin(angle) * r;
+            const y = cy + (Math.random() - 0.5) * 0.5 * s;
+            addParticle(x, y, z, 3, 0); // resistor body
+        }
+        const resEnd = idx;
+        for (let i = resStart; i < resEnd; i++) {
+            for (let j = i + 1; j < Math.min(i + 6, resEnd); j++) {
+                const dx = positions[i*3] - positions[j*3];
+                const dy = positions[i*3+1] - positions[j*3+1];
+                const dz = positions[i*3+2] - positions[j*3+2];
+                const d = Math.sqrt(dx*dx + dy*dy + dz*dz);
+                if (d < 0.5 * s) connections.push({ i, j, restLength: d, stiffness: 50, damping: 4 });
+            }
+        }
+
+        return {
+            positions: new Float32Array(positions),
+            roles: new Uint8Array(roles),
+            loads: new Float32Array(roles.length),
+            connections,
+            charges: new Float32Array(charges),
         };
     }
 
