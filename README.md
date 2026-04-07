@@ -19,7 +19,7 @@ Free, open-source 3D physics simulation platform powered by **Gemma 4** and **Ol
 - **Verlet integration physics** -- SI-unit parameters (gravity, density, temperature, viscosity, etc.)
 - **Electromagnetic physics** -- Coulomb force (Particle-in-Cell), electric field, gate voltage control
 - **28 structure templates** -- Buildings, bridges, DNA, galaxies, transistors, circuits, weather
-- **~90 physical materials** -- Steel, water, graphene, plasma, DNA, superconductors, etc.
+- **138 physical materials** -- Steel, water, graphene, plasma, DNA, superconductors, etc.
 - **Neon bloom WebGL** -- Three.js with HDR post-processing at 60fps
 - **Korean / English i18n** -- Full bilingual support
 - **Ollama local-first** -- No cloud API keys required. Works offline.
@@ -140,7 +140,7 @@ Evaluation: **pass/fail** per physics parameter (gravity direction, damping rang
 |--------|-------|
 | Scenarios | 300 |
 | Passed all checks | 293 (99.4%) |
-| Unique physical materials | ~90 |
+| Unique physical materials | 138 |
 | Failures | 7 (extreme astrophysics only) |
 | JSON parse success | 100% |
 
