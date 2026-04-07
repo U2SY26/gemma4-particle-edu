@@ -84,10 +84,15 @@ async function tryGeminiStream(messages, res) {
     // Convert messages to Gemini format
     const contents = messages
       .filter(m => m.role !== 'system')
-      .map(m => ({
-        role: m.role === 'assistant' ? 'model' : 'user',
-        parts: [{ text: m.content }]
-      }));
+      .map(m => {
+        const parts = [{ text: m.content }];
+        if (m.images && Array.isArray(m.images)) {
+          for (const img of m.images) {
+            parts.push({ inline_data: { mime_type: 'image/jpeg', data: img } });
+          }
+        }
+        return { role: m.role === 'assistant' ? 'model' : 'user', parts };
+      });
 
     const systemInstruction = messages.find(m => m.role === 'system');
 
@@ -185,10 +190,15 @@ async function tryGeminiFallback(messages, res) {
   try {
     const contents = messages
       .filter(m => m.role !== 'system')
-      .map(m => ({
-        role: m.role === 'assistant' ? 'model' : 'user',
-        parts: [{ text: m.content }]
-      }));
+      .map(m => {
+        const parts = [{ text: m.content }];
+        if (m.images && Array.isArray(m.images)) {
+          for (const img of m.images) {
+            parts.push({ inline_data: { mime_type: 'image/jpeg', data: img } });
+          }
+        }
+        return { role: m.role === 'assistant' ? 'model' : 'user', parts };
+      });
 
     const systemInstruction = messages.find(m => m.role === 'system');
     const body = {

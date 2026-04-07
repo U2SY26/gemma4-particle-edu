@@ -118,6 +118,10 @@
                         </div>
                     </div>
                     <div id="chat-input-area">
+                        <input type="file" id="chat-image-input" accept="image/*" style="display:none" aria-hidden="true"/>
+                        <button id="chat-image-btn" aria-label="Upload image for vision analysis" title="Upload image" style="background:none;border:none;color:var(--text-secondary);cursor:pointer;padding:6px;font-size:16px;opacity:0.7;transition:opacity 0.15s" onmouseenter="this.style.opacity=1" onmouseleave="this.style.opacity=0.7">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M14 2H2a1 1 0 00-1 1v10a1 1 0 001 1h12a1 1 0 001-1V3a1 1 0 00-1-1zm-1 10H3l3-4 2 2.5L11 7l2 5zM5.5 7a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/></svg>
+                        </button>
                         <input type="text" id="chat-input"
                                placeholder="물리법칙을 자연어로 설명해보세요..." data-i18n-placeholder="chatPlaceholder"
                                autocomplete="off" aria-label="Chat message input"/>

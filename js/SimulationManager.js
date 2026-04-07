@@ -1541,10 +1541,17 @@ silicon: density=2329, gravity=-9.81, temp=293K, springK=40
 - Use REFERENCE material values above. If material not listed, derive from closest match.`;
 
         // Build message history
+        const userMsg = { role: 'user', content: userMessage };
+        // Attach image for Gemma 4 Vision if pending
+        if (this._pendingImage) {
+            userMsg.images = [this._pendingImage.base64];
+            userMsg.content = `[Analyzing uploaded image: ${this._pendingImage.name}]\n\n${userMessage}`;
+            this._pendingImage = null;
+        }
         const messages = [
             { role: 'system', content: SYSTEM_PROMPT },
-            ...this._chatHistory.slice(-10), // Keep last 10 messages for context
-            { role: 'user', content: userMessage }
+            ...this._chatHistory.slice(-10),
+            userMsg
         ];
 
         try {
@@ -1939,6 +1946,31 @@ silicon: density=2329, gravity=-9.81, temp=293K, springK=40
         document.getElementById('chat-input').addEventListener('keydown', (e) => {
             if (e.key === 'Enter') this._handleChatSubmit();
         });
+
+        // Image upload for Gemma 4 Vision
+        const imageBtn = document.getElementById('chat-image-btn');
+        const imageInput = document.getElementById('chat-image-input');
+        if (imageBtn && imageInput) {
+            imageBtn.addEventListener('click', () => imageInput.click());
+            imageInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const base64 = reader.result.split(',')[1]; // strip data:image/...;base64,
+                    this._pendingImage = { base64, mimeType: file.type, name: file.name };
+                    // Show preview in chat
+                    this.addChatMessage('user', `[Image: ${file.name}]`);
+                    // Auto-submit with image context
+                    const chatInput = document.getElementById('chat-input');
+                    const prompt = chatInput.value.trim() || 'Analyze this image and create a physics simulation based on what you see.';
+                    chatInput.value = prompt;
+                    this._handleChatSubmit();
+                };
+                reader.readAsDataURL(file);
+                imageInput.value = ''; // reset for next upload
+            });
+        }
 
         // Suggestion chips
         const chips = document.querySelectorAll('.suggestion-chip');
