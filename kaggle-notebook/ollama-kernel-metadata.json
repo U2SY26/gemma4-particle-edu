@@ -1,0 +1,22 @@
+{
+  "id": "syu21125/gemma-4-ollama-live-demo",
+  "title": "Gemma 4 Ollama Live Demo",
+  "code_file": "ollama-live-demo.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": true,
+  "dataset_sources": [
+    "syu21125/gemma4-particle-edu-benchmark-300"
+  ],
+  "competition_sources": [
+    "gemma-4-good-hackathon"
+  ],
+  "keywords": [
+    "ollama",
+    "education",
+    "physics"
+  ]
+}
