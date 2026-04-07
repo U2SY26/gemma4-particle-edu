@@ -104,7 +104,7 @@ We validated Gemma 4 31B across **300 physics scenarios** spanning 12 domains us
 | Total scenarios | 300 |
 | 100% accuracy | 293 (97.7%) |
 | Average accuracy | 99.4% |
-| Materials identified | 138 unique types |
+| Materials identified | ~90 unique physical materials |
 | FAIL scenarios | 7 (extreme physics only) |
 
 The 7 failures occurred exclusively in extreme physics domains: black hole accretion disks, supernova explosions, relativistic plasma jets, pulsar electromagnetic pulses, gamma-ray bursts, quark structure modeling, and ultra-strong magnetic fields. All practical educational domains -- structural mechanics, fluid dynamics, thermodynamics, atmospheric science, biology, chemistry, materials science, and engineering -- achieved **100% accuracy**.

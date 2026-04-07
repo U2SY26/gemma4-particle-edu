@@ -1,0 +1,22 @@
+{
+  "id": "syu21125/gemma-4-particle-edu-3d-physics-simulation",
+  "title": "Gemma 4 Particle Edu 3D Physics Simulation",
+  "code_file": "gemma4-particle-edu-writeup.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": false,
+  "enable_tpu": false,
+  "enable_internet": true,
+  "dataset_sources": [
+    "syu21125/gemma4-particle-edu-benchmark-300"
+  ],
+  "competition_sources": [
+    "gemma-4-good-hackathon"
+  ],
+  "keywords": [
+    "education",
+    "physics",
+    "benchmark"
+  ]
+}

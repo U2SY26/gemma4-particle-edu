@@ -134,7 +134,7 @@ Validated with Gemma 4 31B across **300 physics scenarios** (17h 43m continuous 
 | Total scenarios | 300 |
 | Perfect accuracy (100%) | 293 (97.7%) |
 | Average accuracy | 99.4% |
-| Materials identified | 138 unique types |
+| Materials identified | ~90 unique physical materials |
 | FAIL | 7 (extreme physics only: black holes, supernovas) |
 
 All practical educational domains achieved **100% accuracy**.

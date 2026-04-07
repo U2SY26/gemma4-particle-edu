@@ -1,0 +1,33 @@
+{
+  "title": "Gemma 4 Particle Edu - 300 Benchmark Results",
+  "id": "syu21125/gemma4-particle-edu-benchmark-300",
+  "licenses": [
+    {
+      "name": "CC-BY-4.0"
+    }
+  ],
+  "keywords": [
+    "gemma",
+    "gemma4",
+    "physics",
+    "simulation",
+    "benchmark",
+    "education",
+    "particle",
+    "ollama"
+  ],
+  "resources": [
+    {
+      "path": "benchmark-300.json",
+      "description": "300 physics simulation benchmark results from Gemma 4 31B (Q4_K_M). Includes scenario title, material, density, gravity, temperature, accuracy, stability for each scenario."
+    },
+    {
+      "path": "final-benchmark-report.pdf",
+      "description": "31-page comprehensive benchmark analysis report. Covers domain analysis, material analysis, physics parameters, failure analysis, and model comparison."
+    },
+    {
+      "path": "benchmark-report.pdf",
+      "description": "Original summary benchmark report with domain-specific accuracy breakdown."
+    }
+  ]
+}

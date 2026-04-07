@@ -1,0 +1,520 @@
+- generic [ref=e2]:
+  - navigation "Main Kaggle page navigation" [ref=e3]:
+    - generic [ref=e5]:
+      - button "Navigation menu" [ref=e7] [cursor=pointer]: menu
+      - link "Skip to content" [ref=e8] [cursor=pointer]:
+        - /url: "#site-content"
+        - text: Skip to
+        - text: content
+      - link "Return to Kaggle home page" [ref=e10] [cursor=pointer]:
+        - /url: /
+        - img "Kaggle" [ref=e11]
+    - button "Create" [ref=e13] [cursor=pointer]:
+      - img [ref=e14]
+      - generic [ref=e19]: Create
+    - generic [ref=e20]:
+      - generic [ref=e22]:
+        - list [ref=e23]:
+          - listitem "Home List Item" [ref=e24]:
+            - link "Home" [ref=e26] [cursor=pointer]:
+              - /url: /
+              - generic [ref=e27]:
+                - generic [ref=e30]: explore
+                - paragraph [ref=e32]: Home
+          - listitem "Competitions List Item" [ref=e33]:
+            - link "Competitions" [ref=e35] [cursor=pointer]:
+              - /url: /competitions
+              - generic [ref=e36]:
+                - generic [ref=e39]: emoji_events
+                - paragraph [ref=e41]: Competitions
+          - listitem "Datasets List Item" [ref=e43]:
+            - link "Datasets" [ref=e45] [cursor=pointer]:
+              - /url: /datasets
+              - generic [ref=e46]:
+                - generic [ref=e49]: table_chart
+                - paragraph [ref=e51]: Datasets
+          - listitem "Models List Item" [ref=e52]:
+            - link "Models" [ref=e54] [cursor=pointer]:
+              - /url: /models
+              - generic [ref=e55]:
+                - generic [ref=e58]: tenancy
+                - paragraph [ref=e60]: Models
+          - listitem "Benchmarks List Item" [ref=e61]:
+            - link "Benchmarks" [ref=e63] [cursor=pointer]:
+              - /url: /benchmarks
+              - generic [ref=e64]:
+                - generic [ref=e67]: leaderboard
+                - paragraph [ref=e69]: Benchmarks
+          - listitem "Game Arena List Item" [ref=e70]:
+            - link "Game Arena" [ref=e72] [cursor=pointer]:
+              - /url: /game-arena
+              - generic [ref=e73]:
+                - generic [ref=e76]: smart_toy
+                - paragraph [ref=e78]: Game Arena
+          - listitem "Code List Item" [ref=e79]:
+            - link "Code" [ref=e81] [cursor=pointer]:
+              - /url: /code
+              - generic [ref=e82]:
+                - generic [ref=e85]: code
+                - paragraph [ref=e87]: Code
+          - listitem "Discussions List Item" [ref=e88]:
+            - link "Discussions" [ref=e90] [cursor=pointer]:
+              - /url: /discussions
+              - generic [ref=e91]:
+                - generic [ref=e94]: comment
+                - paragraph [ref=e96]: Discussions
+          - listitem "Kaggle Learn List Item" [ref=e97]:
+            - link "Kaggle Learn" [ref=e99] [cursor=pointer]:
+              - /url: /learn
+              - generic [ref=e100]:
+                - generic [ref=e103]: school
+                - paragraph [ref=e105]: Learn
+        - list [ref=e106]:
+          - listitem "More on Kaggle List Item" [ref=e107]:
+            - link "More on Kaggle" [ref=e109] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e110]:
+                - generic [ref=e113]: expand_more
+                - paragraph [ref=e115]: More
+      - button "View Active Events" [ref=e117] [cursor=pointer]:
+        - generic [ref=e119]: auto_awesome_motion
+        - paragraph [ref=e120]: View Active Events
+  - navigation "Main menu, search and your account" [ref=e121]:
+    - generic [ref=e122]:
+      - generic [ref=e126]:
+        - generic [ref=e127]: search
+        - textbox "Search" [ref=e128]
+        - group
+      - generic [ref=e130]:
+        - link "Sign In" [ref=e132] [cursor=pointer]:
+          - /url: /account/login?phase=startSignInTab&returnUrl=%2Fcompetitions%2Fgemma-4-good-hackathon
+          - button "Sign In" [ref=e133]:
+            - generic [ref=e134]: Sign In
+        - link "Register" [ref=e136] [cursor=pointer]:
+          - /url: /account/login?phase=startRegisterTab&returnUrl=%2Fcompetitions%2Fgemma-4-good-hackathon
+          - button "Register" [ref=e137]:
+            - generic [ref=e138]: Register
+  - main [ref=e139]:
+    - generic [ref=e141]:
+      - generic [ref=e142]: Kaggle uses cookies from Google to deliver and enhance the quality of its services and to analyze traffic.
+      - generic [ref=e143]:
+        - link "Learn more" [ref=e144] [cursor=pointer]:
+          - /url: /cookies
+          - generic [ref=e145]: Learn more
+        - generic [ref=e146] [cursor=pointer]: OK, Got it.
+    - generic [ref=e149]:
+      - generic [ref=e151]:
+        - generic [ref=e152]:
+          - link "Google DeepMind's profile" [ref=e153] [cursor=pointer]:
+            - /url: /organizations/deepmind
+            - generic "Google DeepMind" [ref=e154]
+            - img [ref=e155]
+          - generic [ref=e158]:
+            - generic [ref=e160]: Google DeepMind
+            - generic [ref=e161]: · Featured Hackathon · a month to go
+          - generic [ref=e162]:
+            - button "Join Hackathon" [ref=e164] [cursor=pointer]:
+              - generic [ref=e165]: Join Hackathon
+            - button "Competition options menu collapsed" [ref=e167] [cursor=pointer]: more_horiz
+        - generic [ref=e169]:
+          - heading "The Gemma 4 Good Hackathon" [level=1] [ref=e170]
+          - paragraph [ref=e172]: Harness the power of Gemma 4 to drive positive change and global impact.
+      - generic [ref=e176]:
+        - tablist [ref=e183]:
+          - tab "Overview, 1 of 6" [selected] [ref=e184] [cursor=pointer]:
+            - generic [ref=e185]: Overview
+          - tab "Writeups, 2 of 6" [ref=e186] [cursor=pointer]:
+            - generic [ref=e187]: Writeups
+          - tab "Data, 3 of 6" [ref=e188] [cursor=pointer]:
+            - generic [ref=e189]: Data
+          - tab "Code, 4 of 6" [ref=e190] [cursor=pointer]:
+            - generic [ref=e191]: Code
+          - tab "Discussion, 5 of 6" [ref=e192] [cursor=pointer]:
+            - generic [ref=e193]: Discussion
+          - tab "Rules, 6 of 6" [ref=e194] [cursor=pointer]:
+            - generic [ref=e195]: Rules
+        - separator [ref=e197]
+      - generic [ref=e199]:
+        - generic [ref=e200]:
+          - generic [ref=e201]:
+            - heading "Overview" [level=2] [ref=e205]
+            - paragraph [ref=e208]: Your mission is to create a solution that addresses a real-world challenge using Gemma 4 models, whether that’s an application that helps millions or a specialized model that could exponentially scale innovation.
+          - generic [ref=e212]:
+            - generic [ref=e213]:
+              - paragraph [ref=e214]: Start
+              - generic [ref=e215]: 3 days ago
+            - generic [ref=e216]:
+              - paragraph [ref=e217]: Close
+              - generic [ref=e218]: a month to go
+        - generic [ref=e228]:
+          - generic [ref=e230]:
+            - generic [ref=e231] [cursor=pointer]:
+              - generic [ref=e233]:
+                - heading "Description" [level=3] [ref=e236]
+                - button "Copy link" [ref=e237]: link
+              - button "Collapse" [expanded] [ref=e238]: keyboard_arrow_up
+            - generic [ref=e241]:
+              - paragraph [ref=e242]: Every challenge has a perfect match, and the clock is ticking. Real innovation happens when we build for the places that need it most. This might be a classroom with spotty internet, a medical site far from a data center, or a community where privacy is non-negotiable.
+              - paragraph [ref=e243]:
+                - text: With the release of
+                - link "Gemma 4 (opens in a new tab)" [ref=e244] [cursor=pointer]:
+                  - /url: https://www.kaggle.com/models/google/gemma-4
+                  - text: Gemma 4
+                - text: ", a new family of open models is officially in your hands. Leverage local frontier intelligence, native function calling, and multimodal understanding to tackle the issues that affect your community."
+              - paragraph [ref=e245]: "We challenge you to use this groundbreaking technology to build solutions that create meaningful, positive change in the world. This is your opportunity to drive impact in areas like:"
+              - list [ref=e246]:
+                - listitem [ref=e247]:
+                  - strong [ref=e248]: "Health & Sciences:"
+                  - text: Bridge the gap between humans and data. Build tools that accelerate discovery or democratize knowledge.
+                - listitem [ref=e249]:
+                  - strong [ref=e250]: "Global Resilience:"
+                  - text: Build the systems of tomorrow—from offline, edge-based disaster response to long-range climate mitigation—that anticipate, mitigate, and respond to the world’s most pressing challenges.
+                - listitem [ref=e251]:
+                  - strong [ref=e252]: "Future of Education:"
+                  - text: Reimagine the learning journey by building multi-tool agents that adapt to the individual and empower the educator through seamless integration.
+                - listitem [ref=e253]:
+                  - strong [ref=e254]: "Digital Equity & Inclusivity:"
+                  - text: Break down barriers through linguistic diversity, intuitive interfaces, and tools that help close the AI skills gap.
+                - listitem [ref=e255]:
+                  - strong [ref=e256]: "Safety & Trust:"
+                  - text: Pioneer frameworks for transparency and reliability, ensuring AI remains grounded and explainable.
+              - paragraph [ref=e257]: We want to see how you enhance Gemma 4 models through post-training, domain adaptation, and agentic retrieval to ensure accurate, grounded outputs. Whether you’re optimizing E2B and E4B models for edge-based solutions or deploying the 26B and 31B weights for complex tasks, every contribution pushes the boundaries of what AI can achieve.
+              - paragraph [ref=e258]:
+                - text: See the
+                - link "naming guidelines (opens in a new tab)" [ref=e259] [cursor=pointer]:
+                  - /url: https://ai.google/documents/32/External_Gemma_Model_Variant_Guidelines.pdf
+                  - text: naming guidelines
+                - text: for Gemma model variants and assets you can use in your submission videos.
+              - list [ref=e260]:
+                - listitem [ref=e261]: If training a model, publish your weights and benchmarks.
+                - listitem [ref=e262]: If building an app, explain your architecture and demonstrate real-world utility via a functional demo.
+              - paragraph [ref=e263]: This is more than just a competition; it is a chance to show the world that when the right tools are accessible to everyone, the possibilities for positive change are truly endless.
+              - heading "Your Goal" [level=3] [ref=e264]
+              - paragraph [ref=e265]:
+                - strong [ref=e266]: Tell a story.
+                - text: Show us the problem and how your Gemma 4 application solves it in a powerful way.
+              - paragraph [ref=e267]:
+                - text: We want to see the "wow" factor. While your technical execution is vital, the ability to communicate your vision through a compelling video and writeup is what will set the winners apart. Explore the
+                - link "winners and finalists (opens in a new tab)" [ref=e268] [cursor=pointer]:
+                  - /url: https://blog.google/innovation-and-ai/technology/developers-tools/developers-changing-lives-with-gemma-3n/
+                  - text: winners and finalists
+                - text: of the Gemma 3n Impact Challenge for examples of submissions that left the judges inspired.
+          - generic [ref=e270]:
+            - generic [ref=e271] [cursor=pointer]:
+              - generic [ref=e273]:
+                - heading "Submission Requirements" [level=3] [ref=e276]
+                - button "Copy link" [ref=e277]: link
+              - button "Collapse" [expanded] [ref=e278]: keyboard_arrow_up
+            - generic [ref=e281]:
+              - paragraph [ref=e282]: "A valid submission must contain the following:"
+              - list [ref=e283]:
+                - listitem [ref=e284]:
+                  - text: Kaggle Writeup
+                  - list [ref=e285]:
+                    - listitem [ref=e286]: Attached Public Video
+                    - listitem [ref=e287]: Attached Public Code Repository
+                    - listitem [ref=e288]: Attached Live Demo
+                    - listitem [ref=e289]: Media Gallery
+              - paragraph [ref=e290]:
+                - strong [ref=e291]: Your final Submission must be made prior to the deadline. Any un-submitted or draft Writeups by the hackathon deadline will not be considered by the Judges.
+              - paragraph [ref=e292]:
+                - text: To create a new Writeup, click on the "New Writeup" button
+                - link "here (opens in a new tab)" [ref=e293] [cursor=pointer]:
+                  - /url: https://www.kaggle.com/competitions/gemma-4-good-hackathon/projects
+                  - text: here
+                - text: . After you have saved your Writeup, you should see a "Submit" button in the top right corner.
+              - paragraph [ref=e294]: Each team is limited to submitting only a single Writeup, but that same Writeup can be un-submitted, edited, and re-submitted as many times as you'd like. Your Writeup should contain a summary of your overall project along with links to supporting resources.
+              - paragraph [ref=e295]: "Note: If you attach a private Kaggle Resource to your public Kaggle Writeup, your private Resource will automatically be made public after the deadline."
+              - heading "1. Kaggle Writeup" [level=3] [ref=e296]
+              - paragraph [ref=e297]: The Proof of Work. This paper- or blog-style report is your technical verification. It must clearly explain the architecture of your app, how you specifically used Gemma 4, the challenges you overcame, and why your technical choices were the right ones. Its primary purpose is to prove to the judges that your video demo is backed by real engineering.
+              - paragraph [ref=e298]: The Kaggle Writeup serves as your project report. This should include a title, subtitle, and a detailed analysis of your submission. You must select a Track for your Writeup in order to submit.
+              - paragraph [ref=e299]: Your Writeup should not exceed 1,500 words. Submissions over this limit may be subject to penalty.
+              - paragraph [ref=e300]: The below assets must be attached to the Writeup to be eligible.
+              - heading "a. Video" [level=4] [ref=e301]
+              - paragraph [ref=e302]: Attach your video to the Media Gallery. Videos must be 3 minutes or less, and should be published to YouTube. This is the most important part of your submission. Create a dynamic, engaging, and high-quality video that demonstrates your project in action.
+              - list [ref=e303]:
+                - listitem [ref=e304]: "Your Goal: Tell a story. Show us the problem and how your Gemma 4 app solves it in a powerful way."
+                - listitem [ref=e305]: "Format: You have to post your video on YouTube and provide a direct link to the video. It must be viewable by the judges without requiring a login."
+              - heading "b. Public Code Repository" [level=4] [ref=e306]
+              - paragraph [ref=e307]: The "Source of Truth". Provide a link to a public repository (e.g., GitHub, Kaggle Notebook). The code must be well-documented and clearly show the implementation of Gemma 4. This is non-negotiable and will be used to validate the authenticity of your project. Your code repository should be publicly accessible and not require a login or paywall. If you use a private Kaggle Notebook, it will automatically be made public after the deadline.
+              - paragraph [ref=e308]: You should provide a link to your public code in the section "Attachments" of your writeup, under "Project Links".
+              - heading "c. Live Demo" [level=4] [ref=e309]
+              - paragraph [ref=e310]: A URL or files for your working demo. This allows judges to experience your project firsthand, if applicable. It should be publicly accessible and not require a login or paywall.
+              - list [ref=e311]:
+                - listitem [ref=e312]: If you are providing a link, you can do so in the section "Attachments" of your writeup, under "Project Links".
+                - listitem [ref=e313]: If you are providing files, you can do so in the section "Attachments" of your writeup, under "Files".
+              - heading "d. Media Gallery" [level=4] [ref=e314]
+              - paragraph [ref=e315]: This is where you should attach any images and/or videos associated with your submission. A cover image is required to submit your Writeup.
+          - generic [ref=e317]:
+            - generic [ref=e318] [cursor=pointer]:
+              - generic [ref=e320]:
+                - heading "Tracks and Awards" [level=3] [ref=e323]
+                - button "Copy link" [ref=e324]: link
+              - button "Collapse undefined" [expanded] [ref=e325]: keyboard_arrow_up
+            - generic [ref=e328]:
+              - generic [ref=e329]:
+                - heading "Main Track · $100,000" [level=4] [ref=e331]
+                - generic [ref=e332]:
+                  - paragraph [ref=e334]: These prizes are awarded to the best overall projects that demonstrate exceptional vision, technical execution, and potential for real-world impact.
+                  - heading "Track Awards" [level=5] [ref=e335]
+                  - list [ref=e336]:
+                    - listitem [ref=e337]:
+                      - separator [ref=e338]
+                      - generic [ref=e339]:
+                        - generic [ref=e340]:
+                          - heading "First Prize" [level=6] [ref=e341]
+                          - paragraph
+                        - heading "$50,000" [level=6] [ref=e342]
+                    - listitem [ref=e343]:
+                      - separator [ref=e344]
+                      - generic [ref=e345]:
+                        - generic [ref=e346]:
+                          - heading "Second Prize" [level=6] [ref=e347]
+                          - paragraph
+                        - heading "$25,000" [level=6] [ref=e348]
+                    - listitem [ref=e349]:
+                      - separator [ref=e350]
+                      - generic [ref=e351]:
+                        - generic [ref=e352]:
+                          - heading "Third Prize" [level=6] [ref=e353]
+                          - paragraph
+                        - heading "$15,000" [level=6] [ref=e354]
+                    - listitem [ref=e355]:
+                      - separator [ref=e356]
+                      - generic [ref=e357]:
+                        - generic [ref=e358]:
+                          - heading "Fourth Prize" [level=6] [ref=e359]
+                          - paragraph
+                        - heading "$10,000" [level=6] [ref=e360]
+              - generic [ref=e361]:
+                - heading "Impact Track · $50,000" [level=4] [ref=e363]
+                - generic [ref=e364]:
+                  - paragraph [ref=e366]: "The Impact Track will award prizes that drive impact in the following areas:"
+                  - heading "Track Awards" [level=5] [ref=e367]
+                  - list [ref=e368]:
+                    - listitem [ref=e369]:
+                      - separator [ref=e370]
+                      - generic [ref=e371]:
+                        - generic [ref=e372]:
+                          - heading "Health & Sciences" [level=6] [ref=e373]
+                          - paragraph [ref=e374]: Bridge the gap between humans and data. Build tools that accelerate discovery or democratize knowledge.
+                        - heading "$10,000" [level=6] [ref=e375]
+                    - listitem [ref=e376]:
+                      - separator [ref=e377]
+                      - generic [ref=e378]:
+                        - generic [ref=e379]:
+                          - heading "Global Resilience" [level=6] [ref=e380]
+                          - paragraph [ref=e381]: Build the systems of tomorrow—from offline, edge-based disaster response to long-range climate mitigation—that anticipate, mitigate, and respond to the world’s most pressing challenges.
+                        - heading "$10,000" [level=6] [ref=e382]
+                    - listitem [ref=e383]:
+                      - separator [ref=e384]
+                      - generic [ref=e385]:
+                        - generic [ref=e386]:
+                          - heading "Future of Education" [level=6] [ref=e387]
+                          - paragraph [ref=e388]: Reimagine the learning journey by building multi-tool agents that adapt to the individual and empower the educator through seamless integration.
+                        - heading "$10,000" [level=6] [ref=e389]
+                    - listitem [ref=e390]:
+                      - separator [ref=e391]
+                      - generic [ref=e392]:
+                        - generic [ref=e393]:
+                          - heading "Digital Equity & Inclusivity" [level=6] [ref=e394]
+                          - paragraph [ref=e395]: Break down barriers through linguistic diversity, intuitive interfaces, and tools that help close the AI skills gap.
+                        - heading "$10,000" [level=6] [ref=e396]
+                    - listitem [ref=e397]:
+                      - separator [ref=e398]
+                      - generic [ref=e399]:
+                        - generic [ref=e400]:
+                          - heading "Safety & Trust" [level=6] [ref=e401]
+                          - paragraph [ref=e402]: Pioneer frameworks for transparency and reliability, ensuring AI remains grounded and explainable.
+                        - heading "$10,000" [level=6] [ref=e403]
+              - generic [ref=e404]:
+                - heading "Special Technology Track · $50,000" [level=4] [ref=e406]
+                - generic [ref=e407]:
+                  - paragraph [ref=e409]: These five prizes recognize outstanding technical achievement using specific tools and frameworks within the ecosystem. Projects are eligible to win both a Main Track Prize and a Special Technology Prize.
+                  - heading "Track Awards" [level=5] [ref=e410]
+                  - list [ref=e411]:
+                    - listitem [ref=e412]:
+                      - separator [ref=e413]
+                      - generic [ref=e414]:
+                        - generic [ref=e415]:
+                          - heading "Cactus" [level=6] [ref=e416]
+                          - paragraph [ref=e417]: For the best local-first mobile or wearable application that intelligently routes tasks between models.
+                        - heading "$10,000" [level=6] [ref=e418]
+                    - listitem [ref=e419]:
+                      - separator [ref=e420]
+                      - generic [ref=e421]:
+                        - generic [ref=e422]:
+                          - heading "LiteRT" [level=6] [ref=e423]
+                          - paragraph [ref=e424]: For the most compelling and effective use case built using Google AI Edge’s LiteRT implementation of Gemma 4.
+                        - heading "$10,000" [level=6] [ref=e425]
+                    - listitem [ref=e426]:
+                      - separator [ref=e427]
+                      - generic [ref=e428]:
+                        - generic [ref=e429]:
+                          - heading "llama.cpp" [level=6] [ref=e430]
+                          - paragraph [ref=e431]: For the best innovative implementation of Gemma 4 on resource-constrained hardware.
+                        - heading "$10,000" [level=6] [ref=e432]
+                    - listitem [ref=e433]:
+                      - separator [ref=e434]
+                      - generic [ref=e435]:
+                        - generic [ref=e436]:
+                          - heading "Ollama" [level=6] [ref=e437]
+                          - paragraph [ref=e438]: For the best project that utilizes and showcases the capabilities of Gemma 4 running locally via Ollama.
+                        - heading "$10,000" [level=6] [ref=e439]
+                    - listitem [ref=e440]:
+                      - separator [ref=e441]
+                      - generic [ref=e442]:
+                        - generic [ref=e443]:
+                          - heading "Unsloth" [level=6] [ref=e444]
+                          - paragraph [ref=e445]: For the best fine-tuned Gemma 4 model created using Unsloth, optimized for a specific, impactful task.
+                        - heading "$10,000" [level=6] [ref=e446]
+          - generic [ref=e448]:
+            - generic [ref=e449] [cursor=pointer]:
+              - generic [ref=e451]:
+                - heading "Evaluation" [level=3] [ref=e454]
+                - button "Copy link" [ref=e455]: link
+              - button "Collapse" [expanded] [ref=e456]: keyboard_arrow_up
+            - generic [ref=e459]:
+              - paragraph [ref=e460]: Your project will be judged primarily on your video demo. This is your chance to create something exciting, compelling, and with the potential to be seen by millions. Your video should tell a story, demonstrate the real-world impact of your product, and leave the judges inspired.
+              - paragraph [ref=e461]: While the video is the star of the show, all projects must be backed by real, functional technology. The accompanying writeup and code repository will be used by our judges to verify that your product is not just a concept but a working proof-of-concept built on Gemma 4.
+              - paragraph [ref=e462]: "Submissions are evaluated on the following criteria:"
+              - table [ref=e463]:
+                - rowgroup [ref=e464]:
+                  - row "Criteria (points) Description" [ref=e465]:
+                    - columnheader "Criteria (points)" [ref=e466]
+                    - columnheader "Description" [ref=e467]
+                - rowgroup [ref=e468]:
+                  - row "Impact & Vision (40 points) As demonstrated in your video, how clearly and compellingly does your project address a significant real-world problem? Is the vision inspiring and does the solution have a tangible potential for positive change?" [ref=e469]:
+                    - cell "Impact & Vision (40 points)" [ref=e470]:
+                      - strong [ref=e471]: Impact & Vision
+                      - text: (40 points)
+                    - cell "As demonstrated in your video, how clearly and compellingly does your project address a significant real-world problem? Is the vision inspiring and does the solution have a tangible potential for positive change?" [ref=e472]
+                  - row "Video Pitch & Storytelling (30 points) How exciting, engaging, and well-produced is the video? Does it tell a powerful story that captures the viewer's imagination?" [ref=e473]:
+                    - cell "Video Pitch & Storytelling (30 points)" [ref=e474]:
+                      - strong [ref=e475]: Video Pitch & Storytelling
+                      - text: (30 points)
+                    - cell "How exciting, engaging, and well-produced is the video? Does it tell a powerful story that captures the viewer's imagination?" [ref=e476]
+                  - row "Technical Depth & Execution (30 points) As verified by the code repository and writeup, how innovative is the use of Gemma 4’s unique features? Is the technology real, functional, well-engineered, and not just faked for the demo?" [ref=e477]:
+                    - cell "Technical Depth & Execution (30 points)" [ref=e478]:
+                      - strong [ref=e479]: Technical Depth & Execution
+                      - text: (30 points)
+                    - cell "As verified by the code repository and writeup, how innovative is the use of Gemma 4’s unique features? Is the technology real, functional, well-engineered, and not just faked for the demo?" [ref=e480]
+          - generic [ref=e482]:
+            - generic [ref=e483] [cursor=pointer]:
+              - generic [ref=e485]:
+                - heading "Timeline" [level=3] [ref=e488]
+                - button "Copy link" [ref=e489]: link
+              - button "Collapse" [expanded] [ref=e490]: keyboard_arrow_up
+            - generic [ref=e493]:
+              - list [ref=e494]:
+                - listitem [ref=e495]:
+                  - strong [ref=e496]: April 2, 2026
+                  - text: "- Start Date."
+                - listitem [ref=e497]:
+                  - strong [ref=e498]: May 18, 2026
+                  - text: "- Final Submission Deadline."
+              - paragraph [ref=e499]: All deadlines are at 11:59 PM UTC on the corresponding day unless otherwise noted. The competition organizers reserve the right to update the contest timeline if they deem it necessary.
+          - generic [ref=e501]:
+            - generic [ref=e502] [cursor=pointer]:
+              - generic [ref=e504]:
+                - heading "Judges" [level=3] [ref=e507]
+                - button "Copy link" [ref=e508]: link
+              - button "Collapse undefined" [expanded] [ref=e509]: keyboard_arrow_up
+            - list [ref=e512]:
+              - listitem "Glenn Cameron List Item" [ref=e513]:
+                - link "Glenn Cameron" [ref=e515] [cursor=pointer]:
+                  - generic [ref=e516]:
+                    - generic "Glenn Cameron" [ref=e519]:
+                      - generic "Glenn Cameron" [ref=e520]
+                      - img [ref=e521]
+                    - generic [ref=e524]:
+                      - generic [ref=e525]: Glenn Cameron
+                      - generic [ref=e526]: Sr. PMM, Google
+              - listitem "Kristen Quan List Item" [ref=e527]:
+                - link "Kristen Quan" [ref=e529] [cursor=pointer]:
+                  - generic [ref=e530]:
+                    - generic "Kristen Quan" [ref=e533]:
+                      - generic "Kristen Quan" [ref=e534]
+                      - img [ref=e535]
+                    - generic [ref=e538]: Kristen Quan
+              - listitem "Gusthema List Item" [ref=e539]:
+                - link "Gusthema" [ref=e541] [cursor=pointer]:
+                  - generic [ref=e542]:
+                    - generic "Gusthema" [ref=e545]:
+                      - generic "Gusthema" [ref=e546]
+                      - img [ref=e547]
+                    - generic [ref=e550]:
+                      - generic [ref=e551]: Gusthema
+                      - generic [ref=e552]: Product Manager, Google
+              - listitem "Ian Ballantyne List Item" [ref=e553]:
+                - link "Ian Ballantyne" [ref=e555] [cursor=pointer]:
+                  - generic [ref=e556]:
+                    - generic "Ian Ballantyne" [ref=e559]:
+                      - generic "Ian Ballantyne" [ref=e560]
+                      - img [ref=e561]
+                    - generic [ref=e564]: Ian Ballantyne
+          - generic [ref=e566]:
+            - generic [ref=e567] [cursor=pointer]:
+              - generic [ref=e569]:
+                - heading "Citation" [level=3] [ref=e572]
+                - button "Copy link" [ref=e573]: link
+              - button "Collapse Citation" [expanded] [ref=e574]: keyboard_arrow_up
+            - generic [ref=e576]:
+              - paragraph [ref=e577]: Ian Ballantyne, Glenn Cameron, María Cruz, Olivier Lacombe, Kristen Quan, and Omar Sanseviero. The Gemma 4 Good Hackathon. https://kaggle.com/competitions/gemma-4-good-hackathon, 2026. Kaggle.
+              - button "Cite" [ref=e578] [cursor=pointer]:
+                - generic [ref=e579]: Cite
+        - generic [ref=e580]:
+          - generic [ref=e581]:
+            - generic [ref=e582]:
+              - generic [ref=e583]:
+                - heading "Competition Host" [level=2] [ref=e584]
+                - paragraph [ref=e585]: Google DeepMind
+              - link "Google DeepMind's profile" [ref=e587] [cursor=pointer]:
+                - /url: /organizations/deepmind
+                - generic "Google DeepMind" [ref=e588]
+                - img [ref=e589]
+            - generic [ref=e593]:
+              - heading "Prizes & Awards" [level=2] [ref=e594]
+              - generic [ref=e595]:
+                - paragraph [ref=e597]: $200,000
+                - paragraph [ref=e598]: Does not award Points or Medals
+            - generic [ref=e600]:
+              - heading "Participation" [level=2] [ref=e601]
+              - paragraph [ref=e602]: 3,369 Entrants
+              - paragraph [ref=e603]: 18 Participants
+              - paragraph [ref=e604]: 18 Teams
+              - paragraph [ref=e605]: 19 Submissions
+            - generic [ref=e607]:
+              - heading "Tags" [level=2] [ref=e608]
+              - group "Tags" [ref=e610]:
+                - link "Tabular opens in new window" [ref=e611] [cursor=pointer]:
+                  - /url: /competitions?tagIds=14101-Tabular
+                  - generic [ref=e612]: Tabular
+                - link "Text opens in new window" [ref=e613] [cursor=pointer]:
+                  - /url: /competitions?tagIds=14104-Text
+                  - generic [ref=e614]: Text
+                - link "Artificial Intelligence opens in new window" [ref=e615] [cursor=pointer]:
+                  - /url: /competitions?tagIds=12101-Artificial+Intelligence
+                  - generic [ref=e616]: Artificial Intelligence
+          - complementary [ref=e617]:
+            - generic [ref=e618]:
+              - generic [ref=e619]: Table of Contents
+              - button "Collapse all sections" [ref=e620] [cursor=pointer]: collapse_all
+            - tablist [ref=e624]:
+              - tab "Overview, 1 of 8" [selected] [ref=e625] [cursor=pointer]:
+                - generic [ref=e626]: Overview
+              - tab "Description, 2 of 8" [ref=e627] [cursor=pointer]:
+                - generic [ref=e628]: Description
+              - tab "Submission Requirements, 3 of 8" [ref=e629] [cursor=pointer]:
+                - generic [ref=e630]: Submission Requirements
+              - tab "Tracks and Awards, 4 of 8" [ref=e631] [cursor=pointer]:
+                - generic [ref=e632]: Tracks and Awards
+              - tab "Evaluation, 5 of 8" [ref=e633] [cursor=pointer]:
+                - generic [ref=e634]: Evaluation
+              - tab "Timeline, 6 of 8" [ref=e635] [cursor=pointer]:
+                - generic [ref=e636]: Timeline
+              - tab "Judges, 7 of 8" [ref=e637] [cursor=pointer]:
+                - generic [ref=e638]: Judges
+              - tab "Citation, 8 of 8" [ref=e639] [cursor=pointer]:
+                - generic [ref=e640]: Citation
+  - alert [ref=e643]

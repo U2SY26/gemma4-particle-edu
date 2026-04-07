@@ -30,10 +30,10 @@ const DOMAIN_PHYSICS = {
     mathematics:   { gravity: 0, damping: 0.999 },
 };
 
-// Verified material physics from 300-scenario benchmark (Gemma4 31B, 99.4% accuracy)
-// Used as reference data for web Gemini pipeline to prevent parameter hallucination
-const VERIFIED_MATERIALS = {
-    // Engineering (28+10+8+6+5 scenarios verified)
+// Reference material physics from 300-scenario benchmark (Gemma4 31B, 99.4% pass/fail completion)
+// Used as reference guide for web Gemini pipeline
+const REFERENCE_MATERIALS = {
+    // Engineering (28+10+8+6+5 benchmark scenarios)
     steel:     { density: 7850, gravity: -9.81, temp: 293, springK: 55 },
     concrete:  { density: 2400, gravity: -9.81, temp: 293, springK: 35 },
     iron:      { density: 7874, gravity: -9.81, temp: 293, springK: 50 },
@@ -51,7 +51,7 @@ const VERIFIED_MATERIALS = {
     plastic:   { density: 1100, gravity: -9.81, temp: 500, springK: 8 },
     nylon:     { density: 1140, gravity: -9.81, temp: 293, springK: 10 },
     ceramic:   { density: 2500, gravity: -9.81, temp: 1800, springK: 45 },
-    // Fluids / Gas (26+12 scenarios verified)
+    // Fluids / Gas (26+12 benchmark scenarios)
     water:     { density: 1000, gravity: -9.81, temp: 293, springK: 5, viscosity: 1.0 },
     air:       { density: 1.225, gravity: -9.81, temp: 293, springK: 1, viscosity: 0 },
     co2:       { density: 1.98,  gravity: -9.81, temp: 293, springK: 1 },
@@ -60,7 +60,7 @@ const VERIFIED_MATERIALS = {
     mud:       { density: 1600, gravity: -9.81, temp: 293, springK: 2, viscosity: 5 },
     snow:      { density: 100,  gravity: -9.81, temp: 273, springK: 1 },
     sand:      { density: 1600, gravity: -9.81, temp: 303, springK: 3 },
-    // Biology (39 scenarios verified)
+    // Biology (39 benchmark scenarios)
     dna:       { density: 1700, gravity: 0, temp: 310, springK: 30, viscosity: 0.5 },
     protein:   { density: 1350, gravity: 0, temp: 310, springK: 20, viscosity: 0.5 },
     blood:     { density: 1060, gravity: -9.81, temp: 310, springK: 5, viscosity: 3 },
@@ -91,7 +91,7 @@ const VERIFIED_MATERIALS = {
 };
 
 // Build reference string for LLM system prompt injection
-const MATERIAL_REFERENCE_TABLE = Object.entries(VERIFIED_MATERIALS)
+const MATERIAL_REFERENCE_TABLE = Object.entries(REFERENCE_MATERIALS)
     .filter(([k]) => /^[a-z]/.test(k)) // English materials only for prompt
     .map(([k, v]) => `${k}: density=${v.density}, gravity=${v.gravity}, temp=${v.temp}K, springK=${v.springK}${v.viscosity ? ', viscosity=' + v.viscosity : ''}`)
     .join('\n');
@@ -580,17 +580,17 @@ export class SimulationManager {
         const gravity = parseNum(scenario.gravity);
         const temp = parseNum(scenario.temperature);
 
-        // Look up verified material physics
+        // Look up reference material physics
         const matKey = (scenario.material || '').toLowerCase();
-        const verified = VERIFIED_MATERIALS[matKey] || {};
+        const reference = REFERENCE_MATERIALS[matKey] || {};
 
         const physics = {
             ...BASE_PHYSICS,
-            gravity: gravity ?? verified.gravity ?? -9.81,
-            density: density ? density / 1000 : (verified.density ? verified.density / 1000 : 2.4),
-            temperature: temp ?? verified.temp ?? 293,
-            springStiffness: verified.springK ?? 20,
-            viscosity: verified.viscosity ?? 0,
+            gravity: gravity ?? reference.gravity ?? -9.81,
+            density: density ? density / 1000 : (reference.density ? reference.density / 1000 : 2.4),
+            temperature: temp ?? reference.temp ?? 293,
+            springStiffness: reference.springK ?? 20,
+            viscosity: reference.viscosity ?? 0,
             particleCount: scenario.particles || 25000,
         };
 
@@ -1019,12 +1019,12 @@ Correct? Reply ONLY \`\`\`json: {"qa":"pass","reason":"..."} or corrected simula
         // System prompts per DAG phase
         const SYS_ANALYZE = 'You are a physics simulation expert. Analyze the user\'s request to identify the object, physical properties, science domain, and scale. Respond concisely in the user\'s language (Korean or English).';
         const SYS_RESEARCH = 'You are a physics reference expert. Provide EXACT SI physical values with justification. Be PRECISE and QUANTITATIVE.\n\n' +
-            '## VERIFIED MATERIAL REFERENCE (benchmark-validated, use these EXACT values):\n' + MATERIAL_REFERENCE_TABLE + '\n\n' +
+            '## REFERENCE MATERIAL DATA (benchmark-derived, suggested values):\n' + MATERIAL_REFERENCE_TABLE + '\n\n' +
             'If the material matches one above, use its EXACT values. For unlisted materials, derive from closest known material.';
         const SYS_DESIGN = 'You are a particle simulation designer. Plan efficient particle layouts using available shapes (helix, sphere, grid, ring, wave, spiral, shell, cylinder, cone, torus, etc.) and connections (chain, grid, nearest:N, surface, none).';
         const SYS_GENERATE = 'You are a simulation JSON generator. Synthesize the analysis, research, and design into a valid simulation JSON. Output MUST include a ```json block with {"simulation":{...}} format. Include prompt, title, domain, and physics fields.';
         const SYS_VALIDATE = 'You are a physics QA validator. Check if the generated simulation JSON matches physical reality. If all values are correct, return the same JSON. If any are wrong, return CORRECTED JSON. ALWAYS include a ```json block.\n\n' +
-            '## VERIFIED REFERENCE VALUES:\n' + MATERIAL_REFERENCE_TABLE.split('\n').slice(0, 20).join('\n') + '\n...\nUse these to validate density, gravity, temperature accuracy.';
+            '## REFERENCE VALUES:\n' + MATERIAL_REFERENCE_TABLE.split('\n').slice(0, 20).join('\n') + '\n...\nUse these to validate density, gravity, temperature accuracy.';
 
         // ── Step 1: ANALYZE ──
         this._showWorkflowStep(1, '🔍', t('wfAnalyze'), '요청 분석 중...', 'running');
@@ -1385,7 +1385,7 @@ For buildings and cities, use multiple particle groups for structural realism:
 - Details: point_cloud for windows/decorations, color=yellow, connect=none
 This creates much more detailed and realistic structural simulations with visible load-bearing elements.
 
-## VERIFIED MATERIAL PHYSICS (use these EXACT values when applicable)
+## REFERENCE MATERIAL PHYSICS (suggested values from benchmark data)
 steel: density=7850, gravity=-9.81, temp=293K, springK=55
 concrete: density=2400, gravity=-9.81, temp=293K, springK=35
 iron: density=7874, gravity=-9.81, temp=293K, springK=50
@@ -1409,7 +1409,7 @@ silicon: density=2329, gravity=-9.81, temp=293K, springK=40
 - Keep total particle count across all groups under 25000.
 - Use Option B (custom particles) for anything NOT in the built-in prompt list.
 - The JSON must contain "simulation" as the top-level key with at least "prompt" and "physics" fields.
-- Use VERIFIED material values above. If material not listed, derive from closest match.`;
+- Use REFERENCE material values above. If material not listed, derive from closest match.`;
 
         // Build message history
         const messages = [
