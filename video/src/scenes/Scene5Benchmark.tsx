@@ -1,7 +1,7 @@
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { theme } from "../theme";
 
-const R = { total: 300, pass: 293, accuracy: 99.4, materials: 138, fail: 7 };
+const R = { total: 300, pass: 293, passRate: 99.4, materials: 90, fail: 7 };
 
 export const Scene5Benchmark: React.FC = () => {
   const frame = useCurrentFrame();
@@ -11,7 +11,7 @@ export const Scene5Benchmark: React.FC = () => {
   const countProgress = interpolate(frame, [30, 180], [0, 1], { extrapolateRight: "clamp" });
   const count = Math.floor(countProgress * R.total);
   const passCount = Math.floor(countProgress * R.pass);
-  const accCount = (countProgress * R.accuracy).toFixed(1);
+  const accCount = (countProgress * R.passRate).toFixed(1);
 
   // 재료 바
   const materials = [
@@ -45,8 +45,8 @@ export const Scene5Benchmark: React.FC = () => {
       <div style={{ display: "flex", padding: "50px 60px 0", gap: 40 }}>
         <StatBlock value={String(count)} suffix="/300" label="SCENARIOS" color={theme.colors.accent} frame={frame} startFrame={30} fps={fps} />
         <StatBlock value={String(passCount)} suffix="" label="PERFECT" color={theme.colors.success} frame={frame} startFrame={60} fps={fps} />
-        <StatBlock value={accCount} suffix="%" label="ACCURACY" color={theme.colors.gemma} frame={frame} startFrame={90} fps={fps} />
-        <StatBlock value="138" suffix="" label="MATERIALS" color="#a855f7" frame={frame} startFrame={120} fps={fps} />
+        <StatBlock value={accCount} suffix="%" label="PASS RATE" color={theme.colors.gemma} frame={frame} startFrame={90} fps={fps} />
+        <StatBlock value="~90" suffix="" label="MATERIALS" color="#a855f7" frame={frame} startFrame={120} fps={fps} />
       </div>
 
       {/* 중단: 재료 바 그래프 */}
@@ -100,7 +100,7 @@ export const Scene5Benchmark: React.FC = () => {
         </div>
         {frame > 950 && (
           <div style={{ fontSize: 48, color: theme.colors.success, fontWeight: 900, marginTop: 16 }}>
-            FOR EDUCATION — NEAR-PERFECT RELIABILITY.
+            FOR EDUCATION — RELIABLE ACROSS 300 SCENARIOS.
           </div>
         )}
       </div>

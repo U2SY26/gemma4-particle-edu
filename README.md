@@ -1,25 +1,29 @@
 # Gemma 4 Particle Edu
 
-### Interactive 3D Physics Simulation Education Platform / 대화형 3D 물리 시뮬레이션 교육 플랫폼
+### Interactive 3D Physics Simulation Education Platform
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Free, interactive 3D physics simulation education platform powered by **Gemma 4** and **Ollama**. The open-source alternative to paid interactive simulations like Claude Artifacts.
+Free, open-source 3D physics simulation platform powered by **Gemma 4** and **Ollama**. Students describe physical phenomena in natural language and watch them come to life through real-time particle simulations.
 
-Students can describe physical phenomena in natural language and watch them come to life through real-time particle simulations with neon bloom rendering.
+**Live Demo**: [gemma4-particle-edu.vercel.app](https://gemma4-particle-edu.vercel.app)
+**Video**: [YouTube (3 min)](https://youtu.be/3e-LZPHBA2M)
+**Benchmark Dataset**: [Kaggle](https://www.kaggle.com/datasets/syu21125/gemma4-particle-edu-benchmark-300)
 
 ---
 
 ## Features
 
-- **Chat-first interface** -- Ask physics questions in natural language and get real-time 3D simulations
-- **Real-time 3D simulation** -- Verlet integration physics engine with SI-unit accuracy
-- **5 procedural structure types** -- Bridge, building, tower, wall, arch
-- **10 real materials** -- Steel, wood, concrete, rubber, glass and more with real SI-unit properties
-- **Neon bloom WebGL rendering** -- Stunning visual effects powered by Three.js
-- **WebXR VR support** -- Immersive physics exploration in virtual reality
-- **Korean / English i18n** -- Full multilingual support
-- **Works offline with Ollama** -- No cloud API keys or subscriptions required
+- **Chat-first interface** -- Describe physics in natural language, get real-time 3D simulations
+- **5-step DAG reasoning pipeline** -- Analyze, Research, Design, Generate, Validate (visible to students)
+- **Verlet integration physics** -- SI-unit parameters (gravity, density, temperature, viscosity, etc.)
+- **Electromagnetic physics** -- Coulomb force (Particle-in-Cell), electric field, gate voltage control
+- **28 structure templates** -- Buildings, bridges, DNA, galaxies, transistors, circuits, weather
+- **~90 physical materials** -- Steel, water, graphene, plasma, DNA, superconductors, etc.
+- **Neon bloom WebGL** -- Three.js with HDR post-processing at 60fps
+- **Korean / English i18n** -- Full bilingual support
+- **Ollama local-first** -- No cloud API keys required. Works offline.
+- **Web fallback** -- Gemini 2.5 Pro streaming when Ollama unavailable
 
 ---
 
@@ -33,9 +37,7 @@ npm start
 # Open http://localhost:3000
 ```
 
-### With Gemma 4 (Full AI Features)
-
-To unlock AI-powered natural language physics simulation, install and run [Ollama](https://ollama.com/) with the Gemma 4 model:
+### With Gemma 4 (Full AI)
 
 ```bash
 ollama pull gemma4
@@ -43,7 +45,7 @@ ollama serve
 npm start
 ```
 
-The server automatically detects Ollama at `http://localhost:11434`. To use a custom Ollama host, set the environment variable:
+The server detects Ollama at `http://localhost:11434`. Custom host:
 
 ```bash
 OLLAMA_BASE=http://your-ollama-host:11434 npm start
@@ -51,7 +53,44 @@ OLLAMA_BASE=http://your-ollama-host:11434 npm start
 
 ### Demo Mode
 
-Without Ollama, the app works with **preset simulations** and **keyword-based NLP fallback**. No setup required -- just run `npm start` and explore the built-in physics demos.
+Without Ollama, the app works with **50 preset simulations** and **keyword-based NLP fallback** plus **300 benchmark scenarios** browsable from the sidebar.
+
+---
+
+## How Gemma 4 is Used
+
+Gemma 4 31B runs locally via Ollama and powers a 5-step DAG pipeline:
+
+| Step | Name | Role |
+|------|------|------|
+| 1 | ANALYZE | Identify object, domain, scale from user input |
+| 2 | RESEARCH | Look up SI physical values (with reference material table) |
+| 3 | DESIGN | Plan particle layout using 15 shapes + 6 connection types |
+| 4 | GENERATE | Produce simulation JSON with all parameters |
+| 5 | VALIDATE | Self-check physics accuracy, correct errors |
+
+Single-call mode: 84% pass rate. 5-step DAG: 99.4% pass rate.
+
+The reasoning process is visible to students in real-time, modeling scientific thinking.
+
+---
+
+## Physics Engine
+
+**Verlet Integration** with these force systems:
+
+| Force | Implementation |
+|-------|---------------|
+| Gravity | Per-particle, configurable (Earth -9.81, Moon -1.62, Mars -3.72, etc.) |
+| Spring connections | Hooke's law with damping, 6 connection types |
+| Wind / Turbulence | Uniform + random perturbation |
+| Viscosity | Velocity-proportional drag |
+| Thermal agitation | Brownian motion above 300K |
+| Seismic | Sinusoidal ground acceleration |
+| Flood buoyancy | Depth-proportional upward force |
+| **Electric field** | F = q * E per charged particle |
+| **Coulomb force** | Particle-in-Cell approximation, O(n) spatial hash |
+| **Gate barrier** | Transistor channel conductivity control |
 
 ---
 
@@ -59,85 +98,55 @@ Without Ollama, the app works with **preset simulations** and **keyword-based NL
 
 | Technology | Purpose |
 |---|---|
-| **Vanilla JS** | Frontend -- no framework overhead |
-| **Three.js** | WebGL 3D rendering with bloom post-processing |
-| **Express.js** | Backend server and Ollama proxy |
-| **Gemma 4** | AI model for natural language understanding (via Ollama) |
-| **Verlet Integration** | Physics engine with SI-unit accuracy |
+| **Vanilla JS** | Frontend (no framework) |
+| **Three.js** | WebGL 3D rendering + bloom |
+| **Express.js** | Server + Ollama proxy |
+| **Gemma 4 31B** | AI via Ollama (local) |
+| **Gemini 2.5 Pro** | Web fallback via streaming SSE |
+| **Verlet Integration** | Physics engine with SI units |
+
+~14,000 lines of code across 20 files.
 
 ---
 
 ## Architecture
 
 ```
-+--------------------------------------------------+
-|                   Browser                        |
-|                                                  |
-|  +------------------+  +---------------------+   |
-|  |   Chat Panel     |  |  3D Simulation      |   |
-|  |   (Left Side)    |  |  (Right Side)       |   |
-|  |                  |  |                     |   |
-|  |  User input      |  |  Three.js WebGL     |   |
-|  |  AI responses    |  |  Bloom renderer     |   |
-|  |  NLP fallback    |  |  Verlet physics     |   |
-|  +--------+---------+  +----------+----------+   |
-|           |                       |              |
-+-----------+-----------+-----------+--------------+
-            |                       |
-            v                       v
-+--------------------------------------------------+
-|              Express.js Server                   |
-|                                                  |
-|  GET  /api/status  -- Ollama health check        |
-|  POST /api/chat    -- SSE streaming proxy        |
-|  Static files      -- index.html, js/, css/      |
-+---------------------------+----------------------+
-                            |
-                            v
-                  +-------------------+
-                  |  Ollama (local)   |
-                  |  Gemma 4 model    |
-                  +-------------------+
+User Input (natural language)
+       |
+       v
+DAG Pipeline (5 steps, streamed to UI)
+  ANALYZE -> RESEARCH -> DESIGN -> GENERATE -> VALIDATE
+       |
+       v
+Physics Engine (Verlet + Coulomb + E-field)
+  25,000 particles, SI units
+       |
+       v
+Three.js WebGL Renderer (neon bloom, 60fps)
 ```
 
-**Chat-First Layout**: Left panel for natural language chat, right panel for real-time 3D physics simulation. The Express.js server proxies chat requests to Ollama with SSE streaming for responsive AI interactions.
+Provider fallback: Ollama (local) -> Gemini Pro (web) -> Claude (last resort)
 
 ---
 
-## Testing
+## Benchmark: 300 Scenarios
 
-```bash
-npm test           # Unit tests (Vitest)
-npm run test:e2e   # E2E tests (Playwright)
-```
+Ran 300 physics scenarios locally via Ollama (Gemma 4 31B, RTX 5090, 17h 43m).
 
----
-
-## Docker (One-Click Setup)
-
-```bash
-docker compose up
-# Open http://localhost:3000
-# Ollama + Gemma 4 + App — all included, GPU auto-detected
-```
-
-Requires NVIDIA GPU + Docker with GPU support. The compose file automatically pulls the Gemma 4 model on first run.
-
----
-
-## Benchmark: 300 Scenarios, 99.4% Accuracy
-
-Validated with Gemma 4 31B across **300 physics scenarios** (17h 43m continuous run, RTX 5090):
+Evaluation: **pass/fail** per physics parameter (gravity direction, damping range, temperature, stability). Measures completion robustness, not fine-grained accuracy.
 
 | Metric | Value |
 |--------|-------|
-| Total scenarios | 300 |
-| Perfect accuracy (100%) | 293 (97.7%) |
-| Average accuracy | 99.4% |
-| Materials identified | ~90 unique physical materials |
-| FAIL | 7 (extreme physics only: black holes, supernovas) |
+| Scenarios | 300 |
+| Passed all checks | 293 (99.4%) |
+| Unique physical materials | ~90 |
+| Failures | 7 (extreme astrophysics only) |
+| JSON parse success | 100% |
 
-All practical educational domains achieved **100% accuracy**.
+Limitations: Binary pass/fail evaluation. Reference material table injected into prompts. No testing of novel materials outside the reference table.
+
+Dataset: [Kaggle](https://www.kaggle.com/datasets/syu21125/gemma4-particle-edu-benchmark-300) (includes 31-page PDF report)
 
 ---
 
@@ -145,27 +154,27 @@ All practical educational domains achieved **100% accuracy**.
 
 ### Vercel
 
-This project includes a `vercel.json` configuration for one-click deployment:
-
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/U2SY26/gemma4-particle-edu)
 
-> **Note**: Vercel deployment runs the app in demo mode (keyword-based NLP fallback) since Ollama requires a local GPU. For full AI features, run locally with Ollama.
+Web deployment uses Gemini 2.5 Pro as AI provider. For local Gemma 4, run with Ollama.
 
-### Local with Ollama
+### Docker
 
-For the full Gemma 4 AI experience, run the server locally with Ollama installed. See [Quick Start](#quick-start) above.
+```bash
+docker compose up
+# Ollama + Gemma 4 + App, GPU auto-detected
+```
 
 ---
 
 ## Competition
 
-**[Kaggle Gemma 4 Good Hackathon](https://kaggle.com/competitions/gemma-4-good-hackathon)** -- $200,000 total prize pool
+**[Kaggle Gemma 4 Good Hackathon](https://kaggle.com/competitions/gemma-4-good-hackathon)** -- $200,000 prize pool
 
-- **Track**: Future of Education + Ollama Special Tech + Main
-- **Goal**: Make science education interactive and accessible using Gemma 4
-- **Video**: [YouTube](https://youtu.be/RfKFMAT6lk0)
+- **Tracks**: Future of Education + Ollama Special Tech + Main
+- **Video**: [YouTube](https://youtu.be/3e-LZPHBA2M)
 - **Live Demo**: [gemma4-particle-edu.vercel.app](https://gemma4-particle-edu.vercel.app)
-- **Deadline**: 2026-05-18 (UTC 23:59)
+- **Deadline**: 2026-05-18
 
 ---
 
@@ -177,10 +186,10 @@ For the full Gemma 4 AI experience, run the server locally with Ollama installed
 
 ## Attribution
 
-- **[Gemma 4](https://ai.google.dev/gemma)** by Google DeepMind (Apache 2.0 License)
-- **[Three.js](https://threejs.org/)** (MIT License)
-- **[Ollama](https://ollama.com/)** (MIT License)
-- **[Express.js](https://expressjs.com/)** (MIT License)
+- **[Gemma 4](https://ai.google.dev/gemma)** by Google DeepMind (Apache 2.0)
+- **[Three.js](https://threejs.org/)** (MIT)
+- **[Ollama](https://ollama.com/)** (MIT)
+- **[Express.js](https://expressjs.com/)** (MIT)
 
 ---
 
