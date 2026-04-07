@@ -151,6 +151,9 @@ const LANG = {
         serverGemma4: '온라인 (Gemma 4)',
         serverGemini: '온라인 (Gemini)',
         serverClaude: '온라인 (Claude)',
+        // Benchmark
+        benchReport: '31p 보고서',
+        benchSearch: '시나리오 검색...',
         // Electromagnetic
         electromagnetic: '전자기',
         electricFieldX: '전기장 X',
@@ -303,6 +306,9 @@ const LANG = {
         serverGemma4: 'ONLINE (Gemma 4)',
         serverGemini: 'ONLINE (Gemini)',
         serverClaude: 'ONLINE (Claude)',
+        // Benchmark
+        benchReport: '31p Report',
+        benchSearch: 'Search scenarios...',
         // Electromagnetic
         electromagnetic: 'ELECTROMAGNETIC',
         electricFieldX: 'E-Field X',
