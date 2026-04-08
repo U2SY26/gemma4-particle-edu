@@ -28,15 +28,18 @@ from pathlib import Path
 # CONFIG
 # ═══════════════════════════════════════════
 
-MODEL_NAME = os.environ.get("MODEL", "google/gemma-4-31B-it")  # Gemma 4 31B Dense
-MAX_SEQ_LEN = 2048
-LORA_RANK = 16
-LORA_ALPHA = 32
+MODEL_NAME = os.environ.get("MODEL", "google/gemma-4-E4B-it")
+IS_31B = "31B" in MODEL_NAME or "31b" in MODEL_NAME
+
+# 31B vs E4B 자동 분기 — 31B는 H100 80GB에서 OOM 방지 설정
+MAX_SEQ_LEN = 1024 if IS_31B else 2048
+LORA_RANK = 8 if IS_31B else 16
+LORA_ALPHA = 16 if IS_31B else 32
 LORA_DROPOUT = 0.05
-LEARNING_RATE = 2e-4
-EPOCHS = 3
-BATCH_SIZE = 4
-GRADIENT_ACCUMULATION = 4
+LEARNING_RATE = 1e-4 if IS_31B else 2e-4
+EPOCHS = 1 if IS_31B else 3
+BATCH_SIZE = 1 if IS_31B else 4
+GRADIENT_ACCUMULATION = 16 if IS_31B else 4
 OUTPUT_DIR = "models/gemma4-physics-edu"
 DATA_FILE = "data/training-data.jsonl"
 HF_REPO = "syu21125/gemma4-physics-edu"  # HuggingFace Hub backup
@@ -45,8 +48,10 @@ AUTO_SHUTDOWN = "--no-shutdown" not in sys.argv
 print("=" * 60)
 print(" GEMMA 4 PHYSICS EDUCATION FINE-TUNING")
 print("=" * 60)
-print(f"  Model: {MODEL_NAME}")
+print(f"  Model: {MODEL_NAME} ({'31B mode' if IS_31B else 'E4B mode'})")
 print(f"  LoRA: rank={LORA_RANK}, alpha={LORA_ALPHA}")
+print(f"  Batch: {BATCH_SIZE} x {GRADIENT_ACCUMULATION} (eff={BATCH_SIZE*GRADIENT_ACCUMULATION})")
+print(f"  Seq: {MAX_SEQ_LEN}, Epochs: {EPOCHS}, LR: {LEARNING_RATE}")
 print(f"  Data: {DATA_FILE}")
 print(f"  Auto-shutdown: {AUTO_SHUTDOWN}")
 print(f"  GPU: {torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU'}")

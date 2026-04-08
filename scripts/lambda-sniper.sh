@@ -15,8 +15,8 @@ set -euo pipefail
 
 LAMBDA_API="https://cloud.lambdalabs.com/api/v1"
 REGION="${LAMBDA_REGION:-us-east-1}"
-GPU_TYPE="${LAMBDA_GPU:-gpu_1x_a100_sxm4}"  # 1x A100 80GB
-SSH_KEY="${LAMBDA_SSH_KEY:-}"
+GPU_TYPE="${LAMBDA_GPU:-gpu_1x_a10}"  # 1x A10 24GB (E4B에 충분, $1.29/hr)
+SSH_KEY="${LAMBDA_SSH_KEY:-u2dia-ubuntu-main}"
 POLL_INTERVAL=30
 KANBAN_URL="http://localhost:5555"
 KANBAN_TEAM="team-a170bcf1"

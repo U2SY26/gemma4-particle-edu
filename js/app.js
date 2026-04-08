@@ -82,7 +82,7 @@ class App {
         window.addEventListener('resize', () => this._onResize());
 
         // Start animation loop
-        this.renderer.setAnimationLoop((time) => this._animate(time));
+        this.renderer.setAnimationLoop((time, frame) => this._animate(time, frame));
 
         this._updateStatus('Ready');
         this._updateParticleCount(this.activeParticleCount);
@@ -750,7 +750,7 @@ class App {
 
     // ==================== ANIMATION ====================
 
-    _animate(time) {
+    _animate(time, frame) {
         const timeSeconds = time / 1000;
         let dt = Math.min(timeSeconds - this.lastTime, 0.033);
         this.lastTime = timeSeconds;
@@ -779,7 +779,7 @@ class App {
             this.particleSystem.updateFromPhysics(this.physics.pos, this.physics.vel);
         }
 
-        this.xrController.update();
+        this.xrController.update(time, frame);
         this.neonRenderer.render();
     }
 

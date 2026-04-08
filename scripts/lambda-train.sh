@@ -63,7 +63,8 @@ fi
 # ─── Training with monitoring ───
 echo "[3/5] Starting training..."
 echo "  Data: $(wc -l < data/training-data.jsonl) pairs"
-echo "  Model: ${MODEL:-google/gemma-4-E4B-it}"
+export MODEL="${MODEL:-google/gemma-4-E4B-it}"
+echo "  Model: $MODEL"
 echo ""
 
 # Run training in background, capture PID

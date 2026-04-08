@@ -53,7 +53,7 @@ For web deployment, the same pipeline runs with Gemini 2.5 Pro as a fallback whe
 
 **Rendering**: Three.js WebGL with neon bloom, instanced mesh for 25K particles at 60fps.
 
-**Templates**: 30 built-in templates including buildings, bridges, DNA, galaxies, transistors, circuits, plus 10 AP Physics education presets (free fall, projectile motion, pendulum, wave interference, etc.)
+**Templates**: 60 built-in presets across buildings, bridges, towers, weather, nature, education — including 10 AP Physics curriculum presets (free fall, projectile motion, pendulum, wave interference, etc.)
 
 ---
 
@@ -103,7 +103,7 @@ The web demo uses Gemini Pro as a cloud fallback for accessibility, but the pipe
 - **Deployed**: Running in Visual Science Lab (8,470 installs)
 - **Bilingual**: Korean + English i18n (124 labels + 60 presets)
 - **Open source**: MIT license, teachers can extend
-- **27 E2E tests passing**: Verified quality
+- **40 E2E tests passing**: Verified quality
 
 ---
 
