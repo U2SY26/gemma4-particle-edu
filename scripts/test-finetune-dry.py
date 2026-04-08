@@ -60,7 +60,7 @@ print("\n[3/7] Model Loading (4-bit)...")
 try:
     t0 = time.time()
     model, tokenizer = FastLanguageModel.from_pretrained(
-        model_name="google/gemma-2-4b-it",
+        model_name="google/gemma-4-E4B-it",
         max_seq_length=1024,  # Short for dry run
         dtype=None,
         load_in_4bit=True,
@@ -128,7 +128,10 @@ try:
     print(f"  OK: {len(dataset)} samples formatted")
 
     # Check token lengths
-    sample = tokenizer(dataset[0]["text"], return_tensors="pt")
+    try:
+        sample = tokenizer(text=dataset[0]["text"], return_tensors="pt")
+    except TypeError:
+        sample = tokenizer(dataset[0]["text"], return_tensors="pt")
     print(f"  Sample token length: {sample['input_ids'].shape[1]}")
 except Exception as e:
     print(f"  FAIL: {e}")

@@ -28,7 +28,7 @@ from pathlib import Path
 # CONFIG
 # ═══════════════════════════════════════════
 
-MODEL_NAME = "google/gemma-2-4b-it"  # Gemma 4 E4B
+MODEL_NAME = os.environ.get("MODEL", "google/gemma-4-E4B-it")  # Gemma 4 E4B (or E2B, 31B)
 MAX_SEQ_LEN = 2048
 LORA_RANK = 16
 LORA_ALPHA = 32
