@@ -145,7 +145,43 @@ else
     echo "  Local backup: ${LOCAL_BACKUP}/"
 fi
 
-# ─── [6/6] 사용자 최종 확인 ───
+# ─── [6/7] 다른 프로젝트 보호 체크 ───
+echo ""
+echo "[6/7] Checking for other active projects on this instance..."
+OTHER_PROCS=$(ssh -o ConnectTimeout=10 ${SSH_USER}@${IP} \
+    "ps aux | grep -E 'python|train|nemotron|benchmark' | grep -v grep | grep -v gemma4-particle" 2>/dev/null || echo "")
+
+if [ -n "$OTHER_PROCS" ]; then
+    echo -e "${RED}WARNING: Other training processes detected:${NC}"
+    echo "$OTHER_PROCS"
+    echo ""
+    echo -e "${RED}This instance is SHARED. Terminating will KILL these processes.${NC}"
+    echo -e "${RED}Estimated cost of other projects' loss: UNKNOWN (potentially \$100+)${NC}"
+    echo ""
+    read -p "Are you SURE you want to terminate? Other projects will be DESTROYED. Type 'I UNDERSTAND': " SHARED_CONFIRM
+    if [ "$SHARED_CONFIRM" != "I UNDERSTAND" ]; then
+        fail "Cancelled — other projects are running. Wait for them to finish."
+    fi
+    warn "Proceeding despite shared instance — user confirmed"
+else
+    pass "No other training processes detected — safe to terminate"
+fi
+
+# Show current billing estimate
+echo ""
+echo "Current Lambda instances (billing check):"
+curl -s -H "Authorization: Bearer ${LAMBDA_API_KEY:-}" \
+    "https://cloud.lambdalabs.com/api/v1/instances" 2>/dev/null | python3 -c "
+import sys, json
+try:
+    data = json.load(sys.stdin).get('data', [])
+    for i in data:
+        cost = i['instance_type']['price_cents_per_hour'] / 100
+        print(f'  {i[\"id\"][:12]}... | {i[\"name\"]} | {i[\"instance_type\"][\"name\"]} | \${cost}/hr | {i[\"status\"]}')
+except: pass
+" 2>/dev/null
+
+# ─── [7/7] 사용자 최종 확인 ───
 echo ""
 echo "═══════════════════════════════════════════════════"
 echo " VERIFICATION SUMMARY"
@@ -157,7 +193,7 @@ echo "  GGUF:      $(ls ${LOCAL_BACKUP}/gguf/*.gguf 2>/dev/null | wc -l) files"
 echo "  Log:       $([ -f ${LOCAL_BACKUP}/training.log ] && echo 'YES' || echo 'NO')"
 echo "═══════════════════════════════════════════════════"
 echo ""
-echo -e "${YELLOW}All checks passed. Ready to terminate instance ${INSTANCE_ID}.${NC}"
+echo -e "${YELLOW}All 7 checks passed. Ready to terminate instance ${INSTANCE_ID}.${NC}"
 echo ""
 read -p "Type 'TERMINATE' to proceed (anything else to cancel): " CONFIRM
 

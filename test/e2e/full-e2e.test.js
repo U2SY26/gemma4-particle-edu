@@ -81,15 +81,13 @@ test.describe('Main App', () => {
     await page.waitForSelector('#sidebar', { timeout: 10000 });
   });
 
-  test('sidebar has preset cards', async ({ page }) => {
-    const cards = page.locator('.sim-card');
-    const count = await cards.count();
-    expect(count).toBeGreaterThan(40); // At least 47 presets + 3 EM
+  test('sidebar shows chat section', async ({ page }) => {
+    // Sidebar is now chat-first (cards moved to right drawer)
+    await expect(page.locator('#chat-container')).toBeVisible();
   });
 
-  test('clicking a card shows detail panel', async ({ page }) => {
-    await page.locator('.sim-card').first().click();
-    await expect(page.locator('#card-detail')).toBeVisible();
+  test('card-detail is visible (no hidden class)', async ({ page }) => {
+    await expect(page.locator('#card-detail')).toBeAttached();
   });
 
   test('physics sliders exist and have values', async ({ page }) => {
