@@ -1256,7 +1256,24 @@ Correct? Reply ONLY \`\`\`json: {"qa":"pass","reason":"..."} or corrected simula
             'STEP 4: GENERATE'
         );
         if (!step4) return null;
-        this._showWorkflowStep(4, '🔧', t('wfGenerate'), 'JSON 생성 완료', 'done');
+
+        // Safety check: Step 4 MUST contain parseable JSON
+        let step4Json = this._extractSimParams(step4);
+        if (!step4Json) {
+            // Retry once with stricter prompt
+            this._showWorkflowStep(4, '🔧', t('wfGenerate'), 'JSON 재생성 중...', 'running');
+            const step4retry = await this._callProviderStreaming(
+                `The previous response did not contain valid JSON. Please generate ONLY a \`\`\`json block.\n` +
+                `Requirements: {"simulation":{"prompt":"...","title":"...","domain":"...","physics":{gravity, damping, springStiffness, particleCount, temperature, density, viscosity, friction, bounciness, windX, turbulence, seismic}}}\n` +
+                `Based on: ${step1.slice(0, 150)}\nValues: ${step2.slice(0, 200)}\nDesign: ${step3.slice(0, 150)}`,
+                'You MUST output ONLY a ```json block. No other text. Valid JSON only.',
+                'STEP 4: GENERATE (retry)'
+            );
+            if (step4retry) {
+                step4Json = this._extractSimParams(step4retry);
+            }
+        }
+        this._showWorkflowStep(4, '🔧', t('wfGenerate'), step4Json ? 'JSON 생성 완료' : 'JSON 생성 실패 — 기본값 적용', step4Json ? 'done' : 'error');
 
         // ── Step 5: VALIDATE ──
         this._showWorkflowStep(5, '✅', t('wfValidate'), '검증 중...', 'running');
@@ -1651,24 +1668,78 @@ silicon: density=2329, gravity=-9.81, temp=293K, springK=40
     }
 
     _extractSimParams(response) {
-        // Find ```json ... ``` block
-        const match = response.match(/```json\s*([\s\S]*?)```/);
-        if (!match) return null;
-        try {
-            const parsed = JSON.parse(match[1]);
-            const sim = parsed.simulation || null;
-            if (!sim) return null;
+        if (!response) return null;
 
-            // Apply domain-specific physics defaults if domain is specified
-            if (sim.domain && DOMAIN_PHYSICS[sim.domain]) {
-                sim.physics = { ...BASE_PHYSICS, ...DOMAIN_PHYSICS[sim.domain], ...(sim.physics || {}) };
-            }
+        // Strategy 1: Standard ```json ... ``` block
+        let jsonStr = null;
+        const match1 = response.match(/```json\s*([\s\S]*?)```/);
+        if (match1) jsonStr = match1[1];
 
-            return sim;
-        } catch (err) {
-            console.warn('[Ollama] Failed to parse simulation JSON from response:', err.message || err);
-            return null;
+        // Strategy 2: ``` ... ``` without json tag
+        if (!jsonStr) {
+            const match2 = response.match(/```\s*([\s\S]*?)```/);
+            if (match2 && match2[1].includes('"simulation"')) jsonStr = match2[1];
         }
+
+        // Strategy 3: Find raw JSON object with "simulation" key
+        if (!jsonStr) {
+            const match3 = response.match(/\{[\s\S]*"simulation"[\s\S]*\}/);
+            if (match3) jsonStr = match3[0];
+        }
+
+        if (!jsonStr) return null;
+
+        // Attempt to repair common JSON issues from LLMs
+        let parsed = null;
+        try {
+            parsed = JSON.parse(jsonStr);
+        } catch {
+            // Repair: remove trailing commas before } or ]
+            let fixed = jsonStr.replace(/,\s*([}\]])/g, '$1');
+            // Repair: single quotes to double quotes (risky but common LLM error)
+            fixed = fixed.replace(/'/g, '"');
+            // Repair: unquoted keys
+            fixed = fixed.replace(/(\{|,)\s*(\w+)\s*:/g, '$1"$2":');
+            // Repair: remove comments
+            fixed = fixed.replace(/\/\/[^\n]*/g, '');
+            // Repair: truncated JSON — try to close brackets
+            const openBraces = (fixed.match(/\{/g) || []).length;
+            const closeBraces = (fixed.match(/\}/g) || []).length;
+            for (let i = 0; i < openBraces - closeBraces; i++) fixed += '}';
+            const openBrackets = (fixed.match(/\[/g) || []).length;
+            const closeBrackets = (fixed.match(/\]/g) || []).length;
+            for (let i = 0; i < openBrackets - closeBrackets; i++) fixed += ']';
+
+            try {
+                parsed = JSON.parse(fixed);
+                console.log('[JSON Repair] Successfully repaired malformed JSON');
+            } catch (err2) {
+                console.warn('[JSON] All parse attempts failed:', err2.message);
+                return null;
+            }
+        }
+
+        const sim = parsed.simulation || parsed;
+        if (!sim || typeof sim !== 'object') return null;
+
+        // Ensure physics object exists with defaults
+        if (!sim.physics) sim.physics = {};
+        sim.physics = { ...BASE_PHYSICS, ...(sim.physics || {}) };
+
+        // Apply domain-specific physics defaults if domain is specified
+        if (sim.domain && DOMAIN_PHYSICS[sim.domain]) {
+            sim.physics = { ...BASE_PHYSICS, ...DOMAIN_PHYSICS[sim.domain], ...(sim.physics || {}) };
+        }
+
+        // Validate critical physics values are numbers
+        const p = sim.physics;
+        if (typeof p.gravity !== 'number') p.gravity = -9.81;
+        if (typeof p.damping !== 'number' || p.damping <= 0 || p.damping > 1) p.damping = 0.97;
+        if (typeof p.temperature !== 'number' || p.temperature < 0) p.temperature = 293;
+        if (typeof p.particleCount !== 'number') p.particleCount = 25000;
+        p.particleCount = Math.max(1000, Math.min(50000, Math.round(p.particleCount)));
+
+        return sim;
     }
 
     _updateStreamingMessage(text) {

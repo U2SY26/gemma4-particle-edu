@@ -4,7 +4,7 @@
  */
 
 const OLLAMA_URL = 'http://localhost:11434/api/chat';
-const MODEL = 'gemma4';
+const MODEL = 'gemma4:31b';
 
 const SCENARIOS = [
     // Physics
