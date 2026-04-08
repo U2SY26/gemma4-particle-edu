@@ -1083,13 +1083,14 @@ Correct? Reply ONLY \`\`\`json: {"qa":"pass","reason":"..."} or corrected simula
     }
 
     /**
-     * Streaming provider call — shows real-time LLM text in the chat UI.
-     * Used by DAG workflow to display actual reasoning process.
+     * Streaming provider call — shows real-time LLM text as an independent chat bubble.
+     * Replit-style: each DAG step appears as its own AI message with live typing.
      * @param {string} prompt - User message
      * @param {string} systemPrompt - System prompt
+     * @param {string} stepLabel - Display label (e.g. "ANALYZE", "RESEARCH")
      * @returns {Promise<string|null>} Full accumulated response text
      */
-    async _callProviderStreaming(prompt, systemPrompt) {
+    async _callProviderStreaming(prompt, systemPrompt, stepLabel = '') {
         try {
             const res = await fetch('/api/chat', {
                 method: 'POST',
@@ -1102,6 +1103,23 @@ Correct? Reply ONLY \`\`\`json: {"qa":"pass","reason":"..."} or corrected simula
                 }),
             });
             if (!res.ok) return null;
+
+            // Create a dedicated chat bubble for this step
+            const chatBox = document.getElementById('chat-messages');
+            const bubble = document.createElement('div');
+            bubble.className = 'chat-msg assistant dag-step-msg';
+            bubble.style.cssText = 'white-space:pre-wrap;word-break:break-word;line-height:1.6;border-left:3px solid var(--accent-blue);margin:4px 0;padding:8px 12px;font-size:0.88em;';
+            if (stepLabel) {
+                const header = document.createElement('div');
+                header.style.cssText = 'color:var(--accent-blue);font-weight:700;font-size:0.85em;margin-bottom:4px;letter-spacing:0.5px;';
+                header.textContent = stepLabel;
+                bubble.appendChild(header);
+            }
+            const content = document.createElement('div');
+            content.className = 'dag-step-content';
+            bubble.appendChild(content);
+            chatBox.appendChild(bubble);
+
             const reader = res.body.getReader();
             const decoder = new TextDecoder();
             let stepText = '';
@@ -1120,15 +1138,28 @@ Correct? Reply ONLY \`\`\`json: {"qa":"pass","reason":"..."} or corrected simula
                         const j = JSON.parse(line.slice(6));
                         if (j.message?.content) {
                             stepText += j.message.content;
-                            // Live update: show accumulated text across all DAG steps
-                            this._updateStreamingMessage(this._currentStreamText + stepText);
+                            // Live typing into this step's bubble
+                            content.innerHTML = this._renderStepMarkdown(stepText) + '<span class="streaming-cursor">▊</span>';
+                            chatBox.scrollTop = chatBox.scrollHeight;
                         }
                     } catch {}
                 }
             }
 
+            // Finalize: remove cursor, keep content
+            content.innerHTML = this._renderStepMarkdown(stepText);
             return stepText || null;
         } catch { return null; }
+    }
+
+    /** Lightweight markdown for step content */
+    _renderStepMarkdown(text) {
+        return this._escapeHtml(text)
+            .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+            .replace(/`([^`]+)`/g, '<code style="background:rgba(0,0,0,0.3);padding:1px 4px;border-radius:3px;font-size:0.9em">$1</code>')
+            .replace(/```json\s*([\s\S]*?)```/g, '<pre style="background:rgba(0,0,0,0.3);padding:8px;border-radius:4px;font-size:0.85em;overflow-x:auto;margin:6px 0"><code>$1</code></pre>')
+            .replace(/```\s*([\s\S]*?)```/g, '<pre style="background:rgba(0,0,0,0.3);padding:8px;border-radius:4px;font-size:0.85em;overflow-x:auto;margin:6px 0"><code>$1</code></pre>')
+            .replace(/\n/g, '<br>');
     }
 
     // ==================== GEMMA 4 DAG AGENT WORKFLOW ====================
@@ -1156,22 +1187,18 @@ Correct? Reply ONLY \`\`\`json: {"qa":"pass","reason":"..."} or corrected simula
 
         // ── Step 1: ANALYZE ──
         this._showWorkflowStep(1, '🔍', t('wfAnalyze'), '요청 분석 중...', 'running');
-        this._currentStreamText = '🔍 ANALYZE\n';
-        this._updateStreamingMessage(this._currentStreamText);
 
         const step1 = await this._callProviderStreaming(
             `[STEP 1: ANALYZE]\nUser request: "${userMessage}"\n\n` +
             `Identify:\n1. What object/phenomenon to simulate\n2. Key physical properties needed\n3. Relevant science domain (physics/chemistry/biology/astronomy/earth_science/engineering/mathematics/materials)\n4. Scale (nano/human/planetary)\n\nRespond in 3-4 bullet points.`,
-            SYS_ANALYZE
+            SYS_ANALYZE,
+            'STEP 1: ANALYZE'
         );
         if (!step1) return null;
-        this._currentStreamText += step1 + '\n\n';
         this._showWorkflowStep(1, '🔍', t('wfAnalyze'), '분석 완료', 'done');
 
         // ── Step 2: RESEARCH ──
         this._showWorkflowStep(2, '📚', t('wfResearch'), '물성치 조사 중...', 'running');
-        this._currentStreamText += '📚 RESEARCH\n';
-        this._updateStreamingMessage(this._currentStreamText);
 
         const step2 = await this._callProviderStreaming(
             `[STEP 2: RESEARCH PHYSICAL PROPERTIES]\n` +
@@ -1184,16 +1211,14 @@ Correct? Reply ONLY \`\`\`json: {"qa":"pass","reason":"..."} or corrected simula
             `- viscosity (sim scale): air=0, water=1, honey=10\n` +
             `- seismic, windX, turbulence as needed\n\n` +
             `List each value with justification. Be PRECISE.`,
-            SYS_RESEARCH
+            SYS_RESEARCH,
+            'STEP 2: RESEARCH'
         );
         if (!step2) return null;
-        this._currentStreamText += step2 + '\n\n';
         this._showWorkflowStep(2, '📚', t('wfResearch'), '조사 완료', 'done');
 
         // ── Step 3: DESIGN ──
         this._showWorkflowStep(3, '📐', t('wfDesign'), '파티클 배치 설계 중...', 'running');
-        this._currentStreamText += '📐 DESIGN\n';
-        this._updateStreamingMessage(this._currentStreamText);
 
         const step3 = await this._callProviderStreaming(
             `[STEP 3: DESIGN PARTICLE LAYOUT]\n` +
@@ -1204,16 +1229,14 @@ Correct? Reply ONLY \`\`\`json: {"qa":"pass","reason":"..."} or corrected simula
             `- What connections between particles? (chain, grid, nearest:N, all, surface, none)\n` +
             `- Which parts are structural vs ambient?\n\n` +
             `Describe the layout plan briefly.`,
-            SYS_DESIGN
+            SYS_DESIGN,
+            'STEP 3: DESIGN'
         );
         if (!step3) return null;
-        this._currentStreamText += step3 + '\n\n';
         this._showWorkflowStep(3, '📐', t('wfDesign'), '설계 완료', 'done');
 
         // ── Step 4: GENERATE ──
         this._showWorkflowStep(4, '🔧', t('wfGenerate'), 'JSON 생성 중...', 'running');
-        this._currentStreamText += '🔧 GENERATE\n';
-        this._updateStreamingMessage(this._currentStreamText);
 
         const step4 = await this._callProviderStreaming(
             `[STEP 4: GENERATE SIMULATION JSON]\n` +
@@ -1229,16 +1252,14 @@ Correct? Reply ONLY \`\`\`json: {"qa":"pass","reason":"..."} or corrected simula
             'Available shapes: helix, sphere, random_sphere, grid, ring, disk, line, wave, spiral, shell, cylinder, cone, torus, random_box, point_cloud\n' +
             'Available connects: chain, grid, nearest:N, all, surface, none\n' +
             'Available colors: cyan, magenta, lime, orange, purple, blue, pink, yellow, teal, indigo',
-            SYS_GENERATE
+            SYS_GENERATE,
+            'STEP 4: GENERATE'
         );
         if (!step4) return null;
-        this._currentStreamText += step4 + '\n\n';
         this._showWorkflowStep(4, '🔧', t('wfGenerate'), 'JSON 생성 완료', 'done');
 
         // ── Step 5: VALIDATE ──
         this._showWorkflowStep(5, '✅', t('wfValidate'), '검증 중...', 'running');
-        this._currentStreamText += '✅ VALIDATE\n';
-        this._updateStreamingMessage(this._currentStreamText);
 
         const step5 = await this._callProviderStreaming(
             `[STEP 5: VALIDATE]\n` +
@@ -1252,19 +1273,17 @@ Correct? Reply ONLY \`\`\`json: {"qa":"pass","reason":"..."} or corrected simula
             `If ALL correct: respond with the same JSON.\n` +
             `If ANY wrong: respond with CORRECTED JSON.\n` +
             `ALWAYS include \`\`\`json block.`,
-            SYS_VALIDATE
+            SYS_VALIDATE,
+            'STEP 5: VALIDATE'
         );
-        if (step5) {
-            this._currentStreamText += step5;
-        }
         this._showWorkflowStep(5, '✅', t('wfValidate'), '검증 완료', 'done');
 
         // Use step5 (validated) or step4 (if step5 failed)
         const finalResponse = step5 || step4;
 
-        // Compose a full response for chat display
-        const fullResponse = `🔍 **분석:**\n${step1}\n\n📚 **물성치:**\n${step2}\n\n📐 **설계:**\n${step3}\n\n🔧 **생성:**\n${step4}\n\n✅ **검증:**\n${finalResponse}`;
-        return fullResponse;
+        // Each step already displayed as independent chat bubble
+        // Return final JSON-containing response for parameter extraction
+        return finalResponse;
     }
 
     // ==================== WORKFLOW VISUALIZATION ====================
@@ -1415,14 +1434,44 @@ cyan, magenta, lime, orange, purple, blue, pink, yellow, teal, indigo
 
 #### Roles (particle visual weight): 1=foundation(heavy), 2=column, 3=beam, 4=brace, 5=arch/decorative
 
-#### Domain examples:
-- DNA: two helices (backbone) + rungs between them (hydrogen bonds)
-- Solar system: ring (orbit) + sphere (planet) per orbit layer
-- Crystal lattice: grid with grid connections
-- Neuron: random_sphere (soma) + helix (axon) + point_cloud (dendrites)
-- Galaxy: spiral (disk) + random_sphere (core) + point_cloud (halo)
-- Pendulum: line (string) + sphere (bob)
-- Volcano: cone (mountain) + cylinder (magma chamber) + point_cloud (eruption)
+#### Domain examples (use these patterns for custom simulations):
+**Biology/Chemistry:**
+- DNA: two helices (backbone) + rungs between them (hydrogen bonds), gravity=0, temp=310K
+- Protein folding: random_sphere (amino acids) + chain connections, gravity=0, viscosity=0.5
+- Cell division: sphere (cell) splitting into two spheres, gravity=0
+- Blood flow: cylinder (vessel) + point_cloud (red cells, charge=-1) + ring (valve), viscosity=3
+- Chemical reaction: two sphere groups (reactants, different colors) + point_cloud (products)
+
+**Physics/Engineering:**
+- Pendulum: line (string) + sphere (bob), gravity=-9.81, damping=0.999
+- Projectile: sphere launched with windX velocity, gravity=-9.81
+- Wave interference: two wave groups overlapping, springK=15
+- Heat transfer: grid (hot side, temp=1000K) + grid (cold side, temp=293K)
+- Fluid in pipe: cylinder (pipe) + point_cloud (fluid particles), viscosity=2
+
+**Electromagnetism:**
+- PN junction: sphere (P-type, charge=+1, pink) + sphere (N-type, charge=-1, blue) + disk (depletion zone, charge=0, gray), chargeStrength=5
+- Capacitor: two disk groups (plates, charge=+1/-1) + point_cloud (E-field lines), electricFieldY=5
+- Transistor: cylinder (source, charge=-1) + line (channel) + cylinder (drain) + disk (gate, charge=+1), gateVoltage=0
+- Electromagnetic wave: wave (E-field) + wave (B-field, rotated 90 degrees)
+
+**Astronomy/Earth:**
+- Solar system: ring (orbit) + sphere (planet) per orbit layer, gravity=0
+- Galaxy: spiral (disk) + random_sphere (core) + point_cloud (halo), gravity=0
+- Volcano: cone (mountain) + cylinder (magma chamber) + point_cloud (eruption), temp=1500K
+- Earthquake: grid (building) + seismic=7, seismicFreq=3
+- Comet: sphere (nucleus, ice) + cone (tail, spread), gravity=0, windX=-5
+
+**Semiconductor/Nano:**
+- Silicon crystal: grid with grid connections, density=2329, temp=293K
+- Quantum dot: shell (outer) + random_sphere (electron cloud), gravity=0, charge=-1
+- Carbon nanotube: helix (tube wall) + chain connections, gravity=0
+- Graphene sheet: grid (single layer, flat), gravity=0, springK=100
+
+**Mathematics:**
+- Fractal: spiral + recursive scaling, gravity=0
+- Mobius strip: helix (twisted ring, turns=0.5), gravity=0
+- Fibonacci spiral: spiral (golden ratio), gravity=0
 
 When the \`domain\` field is set, appropriate physics defaults are auto-applied (e.g., zero gravity for astronomy, high viscosity for biology).
 
