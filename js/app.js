@@ -244,6 +244,7 @@ class App {
         const urlLang = urlParams.get('lang');
         if (urlLang && ['ko', 'en'].includes(urlLang)) {
             setLang(urlLang);
+            this._applyLang(); // Apply language immediately so placeholders update
         }
         if (urlPrompt) {
             // Auto-enter sim page with the URL prompt, skip landing
