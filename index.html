@@ -138,6 +138,15 @@
 
     <!-- ========== RIGHT PARAMETER DRAWER ========== -->
     <aside id="right-drawer" class="right-drawer">
+        <!-- Drawer Tab Navigation -->
+        <div id="drawer-tabs" style="display:flex;border-bottom:1px solid rgba(255,255,255,0.08);padding:0 4px;gap:0;flex-shrink:0">
+            <button class="drawer-tab active" data-tab="params" style="flex:1;padding:8px 4px;background:none;border:none;border-bottom:2px solid var(--accent-blue);color:var(--text-primary);font-size:10px;font-weight:600;cursor:pointer;letter-spacing:0.5px" data-i18n="tabParams">PARAMS</button>
+            <button class="drawer-tab" data-tab="presets" style="flex:1;padding:8px 4px;background:none;border:none;border-bottom:2px solid transparent;color:var(--text-secondary);font-size:10px;font-weight:600;cursor:pointer;letter-spacing:0.5px" data-i18n="tabPresets">PRESETS</button>
+            <button class="drawer-tab" data-tab="benchmark" style="flex:1;padding:8px 4px;background:none;border:none;border-bottom:2px solid transparent;color:var(--text-secondary);font-size:10px;font-weight:600;cursor:pointer;letter-spacing:0.5px" data-i18n="tabBenchmark">BENCH</button>
+        </div>
+
+        <!-- Tab: PARAMS (physics sliders) -->
+        <div id="tab-params" class="drawer-tab-panel" style="overflow-y:auto;flex:1">
         <!-- Material & Ground Selection -->
         <div id="material-select-section">
             <h3 class="section-title" data-toggle="material-select-params" role="button" aria-expanded="true" tabindex="0">
@@ -496,6 +505,30 @@
                 <button id="load-more-history" class="btn-secondary" style="display:none">
                     <span data-i18n="loadMore">Load More</span>
                 </button>
+            </div>
+        </div>
+        </div><!-- /tab-params -->
+
+        <!-- Tab: PRESETS -->
+        <div id="tab-presets" class="drawer-tab-panel" style="overflow-y:auto;flex:1;display:none">
+            <div style="padding:8px">
+                <div style="font-size:11px;font-weight:600;color:var(--text-secondary);letter-spacing:0.5px;margin-bottom:8px" data-i18n="tabPresetsTitle">SIMULATION PRESETS</div>
+                <div id="drawer-preset-list" style="display:flex;flex-direction:column;gap:4px">
+                    <!-- Populated by JS from card-list -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: BENCHMARK -->
+        <div id="tab-benchmark" class="drawer-tab-panel" style="overflow-y:auto;flex:1;display:none">
+            <div style="padding:8px">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+                    <span style="font-size:11px;font-weight:600;color:var(--accent-blue);letter-spacing:0.5px">BENCHMARK 300</span>
+                    <a href="/docs/final-benchmark-report.pdf" target="_blank" style="font-size:9px;color:var(--accent-green);text-decoration:none;padding:1px 5px;border:1px solid rgba(63,185,80,0.3);border-radius:3px" data-i18n="benchReport">31p Report</a>
+                </div>
+                <input id="drawer-bench-search" type="text" placeholder="Search..." data-i18n-placeholder="benchSearch" style="width:100%;padding:6px 10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:6px;color:var(--text-primary);font-size:11px;outline:none;margin-bottom:8px;box-sizing:border-box" />
+                <div id="drawer-bench-list" style="display:flex;flex-direction:column;gap:2px">
+                </div>
             </div>
         </div>
     </aside>

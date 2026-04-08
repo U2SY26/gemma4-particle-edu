@@ -388,6 +388,81 @@ class App {
                 drawerToggle.textContent = drawer.classList.contains('open') ? '\u25B6' : '\u25C0';
             });
         }
+
+        // Drawer tab switching
+        const tabs = document.querySelectorAll('.drawer-tab');
+        const panels = document.querySelectorAll('.drawer-tab-panel');
+        for (const tab of tabs) {
+            tab.addEventListener('click', () => {
+                const target = tab.dataset.tab;
+                // Update tab styles
+                for (const t of tabs) {
+                    t.style.borderBottomColor = t.dataset.tab === target ? 'var(--accent-blue)' : 'transparent';
+                    t.style.color = t.dataset.tab === target ? 'var(--text-primary)' : 'var(--text-secondary)';
+                    t.classList.toggle('active', t.dataset.tab === target);
+                }
+                // Show/hide panels
+                for (const p of panels) {
+                    p.style.display = p.id === `tab-${target}` ? '' : 'none';
+                }
+                // Populate presets tab on first open
+                if (target === 'presets' && !this._presetsPopulated) {
+                    this._populateDrawerPresets();
+                    this._presetsPopulated = true;
+                }
+                // Populate benchmark tab on first open
+                if (target === 'benchmark' && !this._benchPopulated) {
+                    this._populateDrawerBenchmark();
+                    this._benchPopulated = true;
+                }
+            });
+        }
+    }
+
+    _populateDrawerPresets() {
+        const list = document.getElementById('drawer-preset-list');
+        if (!list || !this.simManager) return;
+        const cards = this.simManager.cards || [];
+        for (const card of cards) {
+            const el = document.createElement('div');
+            el.style.cssText = 'padding:6px 8px;border-radius:4px;cursor:pointer;font-size:11px;border-left:2px solid transparent;transition:all 0.15s';
+            el.onmouseenter = () => { el.style.background = 'rgba(88,166,255,0.08)'; el.style.borderLeftColor = 'var(--accent-blue)'; };
+            el.onmouseleave = () => { el.style.background = ''; el.style.borderLeftColor = 'transparent'; };
+            const tags = (card.tags || []).map(t => `<span style="font-size:9px;color:var(--text-secondary);background:rgba(255,255,255,0.06);padding:1px 4px;border-radius:2px">${t}</span>`).join(' ');
+            el.innerHTML = `<div style="font-weight:500;color:var(--text-primary)">${card.name}</div><div style="margin-top:2px">${tags}</div>`;
+            el.addEventListener('click', () => this.simManager.selectCard(card.id));
+            list.appendChild(el);
+        }
+    }
+
+    _populateDrawerBenchmark() {
+        const list = document.getElementById('drawer-bench-list');
+        const search = document.getElementById('drawer-bench-search');
+        if (!list || !this.simManager?._benchmarkScenarios) return;
+
+        const scenarios = this.simManager._benchmarkScenarios;
+        const render = (items) => {
+            list.innerHTML = '';
+            for (const s of items) {
+                const el = document.createElement('div');
+                el.style.cssText = 'padding:5px 6px;border-radius:3px;cursor:pointer;font-size:10px;border-left:2px solid transparent;transition:all 0.15s';
+                el.onmouseenter = () => { el.style.background = 'rgba(88,166,255,0.08)'; el.style.borderLeftColor = 'var(--accent-blue)'; };
+                el.onmouseleave = () => { el.style.background = ''; el.style.borderLeftColor = 'transparent'; };
+                const pdfId = String(s.id).padStart(3, '0');
+                const accColor = s.accuracy === 100 ? 'var(--accent-green)' : 'var(--accent-yellow)';
+                el.innerHTML = `<div style="display:flex;gap:4px;align-items:center"><span style="flex:1;color:var(--text-primary)">#${s.id} ${s.title}</span><a href="/docs/benchmarks/bench-${pdfId}.pdf" target="_blank" style="color:var(--accent-blue);text-decoration:none;font-size:9px" onclick="event.stopPropagation()">PDF</a></div><div style="color:var(--text-secondary);font-size:9px">${s.material || ''} <span style="color:${accColor}">${s.accuracy}%</span></div>`;
+                el.addEventListener('click', (e) => { if (!e.target.closest('a')) this.simManager._applyBenchmarkScenario(s); });
+                list.appendChild(el);
+            }
+        };
+        render(scenarios);
+
+        if (search) {
+            search.addEventListener('input', () => {
+                const q = search.value.toLowerCase().trim();
+                render(q ? scenarios.filter(s => s.title.toLowerCase().includes(q) || (s.material || '').toLowerCase().includes(q)) : scenarios);
+            });
+        }
     }
 
     _initMaterialUI() {

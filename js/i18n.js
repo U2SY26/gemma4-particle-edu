@@ -155,6 +155,11 @@ const LANG = {
         serverGemma4: '온라인 (Gemma 4)',
         serverGemini: '온라인 (Gemini)',
         serverClaude: '온라인 (Claude)',
+        // Drawer tabs
+        tabParams: '파라미터',
+        tabPresets: '프리셋',
+        tabBenchmark: '벤치',
+        tabPresetsTitle: '시뮬레이션 프리셋',
         // Benchmark
         benchReport: '31p 보고서',
         benchSearch: '시나리오 검색...',
@@ -314,6 +319,11 @@ const LANG = {
         serverGemma4: 'ONLINE (Gemma 4)',
         serverGemini: 'ONLINE (Gemini)',
         serverClaude: 'ONLINE (Claude)',
+        // Drawer tabs
+        tabParams: 'PARAMS',
+        tabPresets: 'PRESETS',
+        tabBenchmark: 'BENCH',
+        tabPresetsTitle: 'SIMULATION PRESETS',
         // Benchmark
         benchReport: '31p Report',
         benchSearch: 'Search scenarios...',
