@@ -1,4 +1,7 @@
 /**
+ * @deprecated Not used by main app flow. SimulationManager._sendToOllama handles chat directly.
+ * Kept for reference. May be removed in future cleanup.
+ *
  * GemmaChat — Ollama streaming chat client with simulation parameter extraction.
  *
  * Communicates with the Express /api/chat SSE endpoint, manages conversation

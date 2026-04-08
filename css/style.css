@@ -1837,6 +1837,46 @@ textarea.text-input {
     .right-drawer.open ~ #right-drawer-toggle {
         right: 85%;
     }
+
+    /* Touch-friendly: larger tap targets for mobile */
+    input[type="range"] {
+        height: 32px;
+        -webkit-appearance: none;
+        appearance: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+        width: 24px;
+        height: 24px;
+    }
+
+    .param-group label {
+        min-height: 32px;
+        display: flex;
+        align-items: center;
+    }
+
+    .suggestion-chip,
+    .landing-chip {
+        min-height: 40px;
+        padding: 10px 16px;
+    }
+
+    #chat-input {
+        min-height: 40px;
+        font-size: 14px;
+    }
+
+    #chat-send-btn,
+    #chat-image-btn {
+        min-width: 40px;
+        min-height: 40px;
+    }
+
+    .drawer-tab {
+        min-height: 40px;
+        font-size: 11px;
+    }
 }
 
 /* ==================== UTILITY CLASSES ==================== */

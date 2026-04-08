@@ -11,6 +11,7 @@ COPY css/ css/
 COPY api/ api/
 COPY public/ public/
 COPY data/ data/
+COPY docs/ docs/
 
 EXPOSE 3000
 
