@@ -73,6 +73,28 @@ JavaScript, Express.js, Three.js, WebGL, Ollama, Gemma 4
 4. Ollama API 호출 시 스트리밍 SSE 사용
 5. Ollama 미연결 시 기존 키워드 NLP 폴백 유지
 
+## Lambda GPU 안전 규칙 (위반 시 $25~$168 손실 실제 발생함)
+
+> **이 규칙은 최우선 순위. 비용 절약 판단보다 안전이 먼저.**
+
+1. **다른 프로젝트 인스턴스 절대 금지** — 인스턴스 이름에 `gemma4`가 없으면 terminate/조작/SSH 금지. nemotron, konbu 등은 다른 프로젝트 소속.
+2. **사용자가 "놔둬/신경끄고"라고 한 대상은 절대 건드리지 않음** — 어떤 판단으로도 무시 불가
+3. **인스턴스 자동 생성 금지** — 스나이퍼는 재고 알림만. 생성은 사용자 "생성해" 후에만
+4. **terminate 전 개별 사용자 확인** — "이 인스턴스(이름, IP) terminate 할까요?" 물어본 후에만
+5. **일괄 terminate 금지** — 인스턴스 하나씩 용도 확인
+6. **safe_terminate.sh 6단계 후에만 terminate** — rsync 백업 → 크기 일치 확인 → 사용자 승인
+7. **비용 실시간 보고** — 매 점검마다 (가동시간 × $/hr) 누적 비용 보고
+8. **GPU 0% = 유휴가 아닐 수 있음** — CPU 작업(업로드, rsync)이 진행 중일 수 있음
+
+## 이상 보고 규칙
+
+> **이상 발생 시 칸반 supervisor를 통해 사용자에게 보고한다.**
+
+- Lambda OOM/에러/유휴 감지 시 → 칸반 progress_note + supervisor 메시지
+- 학습 실패/중단 시 → 즉시 보고, 임의 재시작 금지
+- 비용 이상(예상 초과) 시 → 즉시 보고
+- 다른 프로젝트 인스턴스 관련 이상 발견 시 → 보고만, 절대 조작 금지
+
 ## 주요 문서
 - `docs/competition-overview.md` — 대회 개요 (트랙, 상금, 제출물, 평가 기준)
 - `docs/superpowers/specs/2026-04-04-gemma4-particle-edu-design.md` — 설계 문서

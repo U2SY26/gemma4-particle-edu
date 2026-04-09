@@ -1,0 +1,4 @@
+models/
+backups/
+.venv/
+unsloth_compiled_cache/

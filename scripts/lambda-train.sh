@@ -15,7 +15,7 @@
 
 set -euo pipefail
 
-MAX_RUNTIME_SEC=10800  # 3 hours hard limit
+MAX_RUNTIME_SEC=86400  # 24 hours (비용 상한 없음 — 학습 완료까지 대기)
 LOG_FILE="training.log"
 PID_FILE="/tmp/train.pid"
 

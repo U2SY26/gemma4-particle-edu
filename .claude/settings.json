@@ -31,6 +31,15 @@
             "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/kanban-enforce.sh"
           }
         ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/lambda-safety.sh"
+          }
+        ]
       }
     ]
   }

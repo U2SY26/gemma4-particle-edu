@@ -4,8 +4,57 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY || '';
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-pro';
 
+// ==================== 138 MATERIAL REFERENCE TABLE (SI units) ====================
+const REFERENCE_MATERIALS = {
+  steel:{density:7850,gravity:-9.81,temp:293,springK:55},iron:{density:7874,gravity:-9.81,temp:293,springK:50},aluminum:{density:2700,gravity:-9.81,temp:293,springK:40},copper:{density:8960,gravity:-9.81,temp:293,springK:45},titanium:{density:4506,gravity:-9.81,temp:293,springK:50},gold:{density:19320,gravity:-9.81,temp:293,springK:30},silver:{density:10490,gravity:-9.81,temp:293,springK:35},platinum:{density:21450,gravity:-9.81,temp:293,springK:40},tungsten:{density:19250,gravity:-9.81,temp:293,springK:80},zinc:{density:7134,gravity:-9.81,temp:293,springK:35},nickel:{density:8908,gravity:-9.81,temp:293,springK:45},lead:{density:11340,gravity:-9.81,temp:293,springK:10},tin:{density:7310,gravity:-9.81,temp:293,springK:20},chromium:{density:7190,gravity:-9.81,temp:293,springK:55},manganese:{density:7470,gravity:-9.81,temp:293,springK:45},cobalt:{density:8900,gravity:-9.81,temp:293,springK:50},lithium:{density:534,gravity:-9.81,temp:293,springK:5},sodium:{density:971,gravity:-9.81,temp:293,springK:3},mercury:{density:13546,gravity:-9.81,temp:293,springK:1,viscosity:1.5},brass:{density:8500,gravity:-9.81,temp:293,springK:40},bronze:{density:8800,gravity:-9.81,temp:293,springK:42},stainless_steel:{density:8000,gravity:-9.81,temp:293,springK:55},cast_iron:{density:7200,gravity:-9.81,temp:293,springK:35},magnesium:{density:1738,gravity:-9.81,temp:293,springK:25},cesium:{density:1930,gravity:-9.81,temp:293,springK:2},
+  concrete:{density:2400,gravity:-9.81,temp:293,springK:35},wood:{density:700,gravity:-9.81,temp:293,springK:12},limestone:{density:2700,gravity:-9.81,temp:293,springK:30},stone:{density:2500,gravity:-9.81,temp:293,springK:35},brick:{density:1900,gravity:-9.81,temp:293,springK:25},glass:{density:2500,gravity:-9.81,temp:293,springK:15},marble:{density:2700,gravity:-9.81,temp:293,springK:30},granite:{density:2700,gravity:-9.81,temp:293,springK:40},sandstone:{density:2300,gravity:-9.81,temp:293,springK:20},slate:{density:2800,gravity:-9.81,temp:293,springK:35},asphalt:{density:2360,gravity:-9.81,temp:293,springK:8},plywood:{density:600,gravity:-9.81,temp:293,springK:10},cement:{density:1500,gravity:-9.81,temp:293,springK:30},fiberglass:{density:2550,gravity:-9.81,temp:293,springK:25},rebar:{density:7850,gravity:-9.81,temp:293,springK:55},
+  rubber:{density:1100,gravity:-9.81,temp:293,springK:5},plastic:{density:1100,gravity:-9.81,temp:293,springK:8},nylon:{density:1140,gravity:-9.81,temp:293,springK:10},polyethylene:{density:950,gravity:-9.81,temp:293,springK:4},pvc:{density:1400,gravity:-9.81,temp:293,springK:12},polystyrene:{density:1050,gravity:-9.81,temp:293,springK:15},teflon:{density:2200,gravity:-9.81,temp:293,springK:2},kevlar:{density:1440,gravity:-9.81,temp:293,springK:70},epoxy:{density:1200,gravity:-9.81,temp:293,springK:20},silicone:{density:1100,gravity:-9.81,temp:293,springK:3},acrylic:{density:1180,gravity:-9.81,temp:293,springK:15},foam:{density:30,gravity:-9.81,temp:293,springK:1},
+  ceramic:{density:2500,gravity:-9.81,temp:293,springK:45},diamond:{density:3515,gravity:-9.81,temp:293,springK:150},quartz:{density:2650,gravity:-9.81,temp:293,springK:40},sapphire:{density:3980,gravity:-9.81,temp:293,springK:80},ruby:{density:4010,gravity:-9.81,temp:293,springK:80},
+  water:{density:1000,gravity:-9.81,temp:293,springK:5,viscosity:1.0},seawater:{density:1025,gravity:-9.81,temp:288,springK:5,viscosity:1.1},oil:{density:900,gravity:-9.81,temp:293,springK:2,viscosity:30},ethanol:{density:789,gravity:-9.81,temp:293,springK:2,viscosity:1.2},glycerol:{density:1261,gravity:-9.81,temp:293,springK:2,viscosity:1400},honey:{density:1420,gravity:-9.81,temp:293,springK:1,viscosity:10},lava:{density:2600,gravity:-9.81,temp:1500,springK:3,viscosity:8},liquid_nitrogen:{density:808,gravity:-9.81,temp:77,springK:1,viscosity:0.2},
+  air:{density:1.225,gravity:-9.81,temp:293,springK:1,viscosity:0},helium:{density:0.164,gravity:-9.81,temp:293,springK:1},hydrogen:{density:0.082,gravity:-9.81,temp:293,springK:1},
+  sand:{density:1600,gravity:-9.81,temp:293,springK:3},clay:{density:1750,gravity:-9.81,temp:293,springK:5},ice:{density:917,gravity:-9.81,temp:273,springK:30},snow:{density:100,gravity:-9.81,temp:273,springK:1},
+  dna:{density:1700,gravity:0,temp:310,springK:30,viscosity:0.5},protein:{density:1350,gravity:0,temp:310,springK:20,viscosity:0.5},blood:{density:1060,gravity:-9.81,temp:310,springK:5,viscosity:3},bone:{density:1900,gravity:-9.81,temp:310,springK:50},
+  graphene:{density:2267,gravity:0,temp:293,springK:100},aerogel:{density:100,gravity:0,temp:293,springK:1},silicon:{density:2329,gravity:-9.81,temp:293,springK:40},carbon_nanotube:{density:1600,gravity:0,temp:293,springK:120},superconductor:{density:6300,gravity:-9.81,temp:77,springK:45},
+  plasma:{density:1025,gravity:0,temp:5778,springK:2,viscosity:0},stellar_plasma:{density:1400,gravity:-274,temp:5778,springK:2},neutron_star:{density:1e17,gravity:-1e12,temp:1e6,springK:100},
+};
+
+// ==================== TOOL DEFINITIONS ====================
+const TOOL_DEFINITIONS = [
+  {
+    type: "function",
+    function: {
+      name: "lookup_material",
+      description: "Look up exact SI-unit physical properties for a material. MUST be called before setting physics values. Returns density(kg/m3), gravity(m/s2), temperature(K), springStiffness, viscosity.",
+      parameters: {
+        type: "object",
+        required: ["material_name"],
+        properties: {
+          material_name: {
+            type: "string",
+            description: "Material name in English lowercase (e.g. 'steel', 'water', 'graphene', 'dna', 'lava')"
+          }
+        }
+      }
+    }
+  }
+];
+
+function executeTool(name, args) {
+  if (name === 'lookup_material') {
+    const key = (args.material_name || '').toLowerCase().replace(/\s+/g, '_');
+    const mat = REFERENCE_MATERIALS[key];
+    if (mat) return JSON.stringify({ material: key, ...mat, source: 'CRC/NIST reference' });
+    // fuzzy match
+    const fuzzy = Object.keys(REFERENCE_MATERIALS).find(k => k.includes(key) || key.includes(k));
+    if (fuzzy) return JSON.stringify({ material: fuzzy, ...REFERENCE_MATERIALS[fuzzy], source: 'CRC/NIST reference (fuzzy match)' });
+    return JSON.stringify({ error: `Unknown material: ${args.material_name}. Available: ${Object.keys(REFERENCE_MATERIALS).slice(0, 20).join(', ')}...` });
+  }
+  return JSON.stringify({ error: `Unknown tool: ${name}` });
+}
+
+// ==================== HANDLER ====================
+
 export default async function handler(req, res) {
-  // CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -17,13 +66,13 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'messages array is required' });
   }
 
-  // Provider order: Ollama (local) → Gemini Pro (streaming) → Claude (fallback)
+  // Provider order: Ollama (with tool calling) → Gemini Pro → Claude
 
-  // 1. Try Ollama (local dev with Gemma 4)
-  const ollamaOk = await tryOllamaStream(messages, res);
+  // 1. Try Ollama with Function Calling
+  const ollamaOk = await tryOllamaWithTools(messages, res);
   if (ollamaOk) return;
 
-  // 2. Try Gemini Pro with streaming (primary web provider)
+  // 2. Try Gemini Pro with streaming
   if (GEMINI_API_KEY) {
     const geminiOk = await tryGeminiStream(messages, res);
     if (geminiOk) return;
@@ -35,14 +84,69 @@ export default async function handler(req, res) {
     if (claudeResult) return sendAsSSE(res, claudeResult.content, 'claude');
   }
 
-  // 4. All providers failed
   if (!res.headersSent) {
     return res.status(503).json({ error: 'No AI provider available' });
   }
 }
 
-// ==================== OLLAMA (streaming passthrough) ====================
+// ==================== OLLAMA WITH FUNCTION CALLING ====================
 
+async function tryOllamaWithTools(messages, res) {
+  try {
+    // Step 1: Non-streaming call with tools to check for tool_calls
+    const firstRes = await fetch(`${OLLAMA_BASE}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: OLLAMA_MODEL,
+        messages,
+        tools: TOOL_DEFINITIONS,
+        stream: false,
+      }),
+    });
+    if (!firstRes.ok) return false;
+    const firstData = await firstRes.json();
+
+    // Step 2: If model made tool calls, execute them and re-call
+    if (firstData.message?.tool_calls && firstData.message.tool_calls.length > 0) {
+      const updatedMessages = [...messages, firstData.message];
+
+      for (const tc of firstData.message.tool_calls) {
+        const args = typeof tc.function.arguments === 'string'
+          ? JSON.parse(tc.function.arguments)
+          : tc.function.arguments;
+        const result = executeTool(tc.function.name, args);
+        updatedMessages.push({ role: 'tool', content: result });
+      }
+
+      // Step 3: Final streaming call with tool results
+      const finalRes = await fetch(`${OLLAMA_BASE}/api/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: OLLAMA_MODEL,
+          messages: updatedMessages,
+          stream: true,
+        }),
+      });
+      if (!finalRes.ok) return false;
+      return await streamOllamaResponse(finalRes, res, 'ollama+tools');
+    }
+
+    // No tool calls — stream the already-received response as SSE
+    const content = firstData.message?.content || '';
+    if (content) {
+      sendAsSSE(res, content, 'ollama');
+      return true;
+    }
+    return false;
+  } catch {
+    // Fallback: try plain streaming without tools
+    return await tryOllamaStream(messages, res);
+  }
+}
+
+// Plain Ollama streaming (fallback if tools fail)
 async function tryOllamaStream(messages, res) {
   try {
     const ollamaRes = await fetch(`${OLLAMA_BASE}/api/chat`, {
@@ -51,37 +155,57 @@ async function tryOllamaStream(messages, res) {
       body: JSON.stringify({ model: OLLAMA_MODEL, messages, stream: true }),
     });
     if (!ollamaRes.ok) return false;
-
-    res.setHeader('Content-Type', 'text/event-stream');
-    res.setHeader('Cache-Control', 'no-cache');
-    res.setHeader('Connection', 'keep-alive');
-
-    const reader = ollamaRes.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer = '';
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      buffer += decoder.decode(value, { stream: true });
-      const lines = buffer.split('\n');
-      buffer = lines.pop() || '';
-      for (const line of lines) {
-        const trimmed = line.trim();
-        if (trimmed) res.write(`data: ${trimmed}\n\n`);
-      }
-    }
-    if (buffer.trim()) res.write(`data: ${buffer.trim()}\n\n`);
-    res.end();
-    return true;
+    return await streamOllamaResponse(ollamaRes, res, 'ollama');
   } catch { return false; }
+}
+
+async function streamOllamaResponse(ollamaRes, res, provider) {
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+
+  const reader = ollamaRes.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+  let sentAny = false;
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split('\n');
+    buffer = lines.pop() || '';
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed) continue;
+      // Inject provider info
+      try {
+        const parsed = JSON.parse(trimmed);
+        parsed.provider = provider;
+        res.write(`data: ${JSON.stringify(parsed)}\n\n`);
+      } catch {
+        res.write(`data: ${trimmed}\n\n`);
+      }
+      sentAny = true;
+    }
+  }
+  if (buffer.trim()) {
+    try {
+      const parsed = JSON.parse(buffer.trim());
+      parsed.provider = provider;
+      res.write(`data: ${JSON.stringify(parsed)}\n\n`);
+    } catch {
+      res.write(`data: ${buffer.trim()}\n\n`);
+    }
+  }
+  res.end();
+  return sentAny;
 }
 
 // ==================== GEMINI PRO (SSE streaming) ====================
 
 async function tryGeminiStream(messages, res) {
   try {
-    // Convert messages to Gemini format
     const contents = messages
       .filter(m => m.role !== 'system')
       .map(m => {
@@ -95,39 +219,25 @@ async function tryGeminiStream(messages, res) {
       });
 
     const systemInstruction = messages.find(m => m.role === 'system');
-
     const body = {
       contents,
-      generationConfig: {
-        temperature: 1.0,
-        maxOutputTokens: 8192,
-      },
+      generationConfig: { temperature: 1.0, maxOutputTokens: 8192 },
     };
     if (systemInstruction) {
       body.systemInstruction = { parts: [{ text: systemInstruction.content }] };
     }
 
-    // Use streamGenerateContent with SSE for real-time streaming
     const geminiRes = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:streamGenerateContent?alt=sse&key=${GEMINI_API_KEY}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      }
+      { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
     );
 
-    if (!geminiRes.ok) {
-      // Fallback: try non-streaming if streaming fails
-      return await tryGeminiFallback(messages, res);
-    }
+    if (!geminiRes.ok) return await tryGeminiFallback(messages, res);
 
-    // Set SSE headers
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
 
-    // Read Gemini SSE stream → convert to Ollama-compatible SSE
     const reader = geminiRes.body.getReader();
     const decoder = new TextDecoder();
     let buffer = '';
@@ -139,97 +249,55 @@ async function tryGeminiStream(messages, res) {
       buffer += decoder.decode(value, { stream: true });
       const lines = buffer.split('\n');
       buffer = lines.pop() || '';
-
       for (const line of lines) {
         if (!line.startsWith('data: ')) continue;
         const payload = line.slice(6).trim();
         if (!payload || payload === '[DONE]') continue;
-
         try {
           const geminiData = JSON.parse(payload);
           const parts = geminiData.candidates?.[0]?.content?.parts;
           if (!parts) continue;
-
-          // Extract text content (skip thinking/thought parts)
           for (const part of parts) {
             if (part.text) {
-              const ollamaChunk = JSON.stringify({
-                message: { role: 'assistant', content: part.text },
-                done: false,
-                provider: 'gemini',
-              });
-              res.write(`data: ${ollamaChunk}\n\n`);
+              res.write(`data: ${JSON.stringify({ message: { role: 'assistant', content: part.text }, done: false, provider: 'gemini' })}\n\n`);
               sentAny = true;
             }
           }
-        } catch {
-          // Skip unparseable chunks
-        }
+        } catch {}
       }
     }
-
-    // Send done event
     if (sentAny) {
-      const doneChunk = JSON.stringify({
-        message: { role: 'assistant', content: '' },
-        done: true,
-        provider: 'gemini',
-      });
-      res.write(`data: ${doneChunk}\n\n`);
+      res.write(`data: ${JSON.stringify({ message: { role: 'assistant', content: '' }, done: true, provider: 'gemini' })}\n\n`);
     }
-
     res.end();
     return sentAny;
-  } catch {
-    return false;
-  }
+  } catch { return false; }
 }
 
-// Non-streaming Gemini fallback (if streaming endpoint fails)
 async function tryGeminiFallback(messages, res) {
   try {
-    const contents = messages
-      .filter(m => m.role !== 'system')
-      .map(m => {
-        const parts = [{ text: m.content }];
-        if (m.images && Array.isArray(m.images)) {
-          for (const img of m.images) {
-            parts.push({ inline_data: { mime_type: 'image/jpeg', data: img } });
-          }
-        }
-        return { role: m.role === 'assistant' ? 'model' : 'user', parts };
-      });
-
+    const contents = messages.filter(m => m.role !== 'system').map(m => {
+      const parts = [{ text: m.content }];
+      if (m.images && Array.isArray(m.images)) {
+        for (const img of m.images) parts.push({ inline_data: { mime_type: 'image/jpeg', data: img } });
+      }
+      return { role: m.role === 'assistant' ? 'model' : 'user', parts };
+    });
     const systemInstruction = messages.find(m => m.role === 'system');
-    const body = {
-      contents,
-      generationConfig: {
-        temperature: 1.0,
-        maxOutputTokens: 8192,
-      },
-    };
-    if (systemInstruction) {
-      body.systemInstruction = { parts: [{ text: systemInstruction.content }] };
-    }
+    const body = { contents, generationConfig: { temperature: 1.0, maxOutputTokens: 8192 } };
+    if (systemInstruction) body.systemInstruction = { parts: [{ text: systemInstruction.content }] };
 
     const geminiRes = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      }
+      { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
     );
     if (!geminiRes.ok) return false;
     const data = await geminiRes.json();
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
     if (!text) return false;
-
     sendAsSSE(res, text, 'gemini');
     return true;
-  } catch {
-    return false;
-  }
+  } catch { return false; }
 }
 
 // ==================== CLAUDE (fallback) ====================
@@ -238,26 +306,15 @@ async function tryClaude(messages) {
   try {
     const systemMsg = messages.find(m => m.role === 'system');
     const chatMsgs = messages.filter(m => m.role !== 'system');
-
     const claudeRes = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 4096,
-        system: systemMsg?.content || '',
-        messages: chatMsgs.map(m => ({ role: m.role, content: m.content })),
-      }),
+      headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 4096, system: systemMsg?.content || '', messages: chatMsgs.map(m => ({ role: m.role, content: m.content })) }),
     });
     if (!claudeRes.ok) return null;
     const data = await claudeRes.json();
     const text = data.content?.[0]?.text;
-    if (!text) return null;
-    return { content: text, provider: 'claude' };
+    return text ? { content: text, provider: 'claude' } : null;
   } catch { return null; }
 }
 
@@ -267,24 +324,11 @@ function sendAsSSE(res, text, provider) {
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
   res.setHeader('Connection', 'keep-alive');
-
-  // Chunk the text to simulate streaming for better UX
   const chunkSize = 20;
   for (let i = 0; i < text.length; i += chunkSize) {
     const chunk = text.slice(i, i + chunkSize);
-    const ollamaChunk = JSON.stringify({
-      message: { role: 'assistant', content: chunk },
-      done: false,
-      provider,
-    });
-    res.write(`data: ${ollamaChunk}\n\n`);
+    res.write(`data: ${JSON.stringify({ message: { role: 'assistant', content: chunk }, done: false, provider })}\n\n`);
   }
-
-  const doneChunk = JSON.stringify({
-    message: { role: 'assistant', content: '' },
-    done: true,
-    provider,
-  });
-  res.write(`data: ${doneChunk}\n\n`);
+  res.write(`data: ${JSON.stringify({ message: { role: 'assistant', content: '' }, done: true, provider })}\n\n`);
   res.end();
 }

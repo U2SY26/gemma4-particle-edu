@@ -1,0 +1,21 @@
+{
+  "date": "2026-04-08T14:59:53.434Z",
+  "results": [
+    {
+      "model": "gemma4",
+      "jsonSuccess": 14,
+      "checksPass": 3,
+      "totalChecks": 18,
+      "avgTime": 8.284699999999999,
+      "totalTime": 165.694
+    },
+    {
+      "model": "gemma4-physics-edu",
+      "jsonSuccess": 20,
+      "checksPass": 18,
+      "totalChecks": 28,
+      "avgTime": 5.621,
+      "totalTime": 112.42
+    }
+  ]
+}
