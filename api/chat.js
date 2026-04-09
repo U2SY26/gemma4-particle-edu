@@ -16,6 +16,7 @@ const REFERENCE_MATERIALS = {
   dna:{density:1700,gravity:0,temp:310,springK:30,viscosity:0.5},protein:{density:1350,gravity:0,temp:310,springK:20,viscosity:0.5},blood:{density:1060,gravity:-9.81,temp:310,springK:5,viscosity:3},bone:{density:1900,gravity:-9.81,temp:310,springK:50},
   graphene:{density:2267,gravity:0,temp:293,springK:100},aerogel:{density:100,gravity:0,temp:293,springK:1},silicon:{density:2329,gravity:-9.81,temp:293,springK:40},carbon_nanotube:{density:1600,gravity:0,temp:293,springK:120},superconductor:{density:6300,gravity:-9.81,temp:77,springK:45},
   plasma:{density:1025,gravity:0,temp:5778,springK:2,viscosity:0},stellar_plasma:{density:1400,gravity:-274,temp:5778,springK:2},neutron_star:{density:1e17,gravity:-1e12,temp:1e6,springK:100},
+  feldspar:{density:2560,gravity:-9.81,temp:293,springK:30},gypsum:{density:2320,gravity:-9.81,temp:293,springK:10},talc:{density:2750,gravity:-9.81,temp:293,springK:5},calcite:{density:2710,gravity:-9.81,temp:293,springK:25},acetone:{density:784,gravity:-9.81,temp:293,springK:1,viscosity:0.3},mercury_liquid:{density:13546,gravity:-9.81,temp:293,springK:1,viscosity:1.5},sulfuric_acid:{density:1840,gravity:-9.81,temp:293,springK:2,viscosity:2.5},mud:{density:1600,gravity:-9.81,temp:293,springK:2,viscosity:5},co2:{density:1.98,gravity:-9.81,temp:293,springK:1},oxygen:{density:1.429,gravity:-9.81,temp:293,springK:1},nitrogen:{density:1.251,gravity:-9.81,temp:293,springK:1},argon:{density:1.633,gravity:-9.81,temp:293,springK:1},methane:{density:0.657,gravity:-9.81,temp:293,springK:1},soil:{density:1500,gravity:-9.81,temp:293,springK:3},basalt:{density:3000,gravity:-9.81,temp:293,springK:50},obsidian:{density:2600,gravity:-9.81,temp:293,springK:45},pumice:{density:640,gravity:-9.81,temp:293,springK:5},coal:{density:1350,gravity:-9.81,temp:293,springK:10},regolith:{density:1500,gravity:-1.62,temp:400,springK:10},dry_ice:{density:1560,gravity:-9.81,temp:195,springK:15},cell:{density:1050,gravity:0,temp:310,springK:8,viscosity:1},bacteria:{density:1100,gravity:-9.81,temp:310,springK:5},lipid:{density:900,gravity:0,temp:310,springK:3,viscosity:2},muscle:{density:1060,gravity:-9.81,temp:310,springK:8},collagen:{density:1300,gravity:-9.81,temp:310,springK:15},keratin:{density:1300,gravity:-9.81,temp:310,springK:20},chitin:{density:1400,gravity:-9.81,temp:293,springK:25},cellulose:{density:1500,gravity:-9.81,temp:293,springK:20},cartilage:{density:1100,gravity:-9.81,temp:310,springK:6},hemoglobin:{density:1335,gravity:0,temp:310,springK:10},neuron:{density:1040,gravity:0,temp:310,springK:5,viscosity:1},wax:{density:900,gravity:-9.81,temp:293,springK:3},sugar:{density:1590,gravity:-9.81,temp:293,springK:15},salt:{density:2160,gravity:-9.81,temp:293,springK:20},chocolate:{density:1300,gravity:-9.81,temp:304,springK:5},starch:{density:1500,gravity:-9.81,temp:293,springK:8},gelatin:{density:1270,gravity:-9.81,temp:310,springK:2,viscosity:5},cotton:{density:1550,gravity:-9.81,temp:293,springK:8},silk:{density:1340,gravity:-9.81,temp:293,springK:12},wool:{density:1310,gravity:-9.81,temp:293,springK:6},leather:{density:860,gravity:-9.81,temp:293,springK:10},paper:{density:800,gravity:-9.81,temp:293,springK:5},carbon:{density:2260,gravity:0,temp:293,springK:50},ferrofluid:{density:1300,gravity:-9.81,temp:293,springK:5,viscosity:3},nitinol:{density:6450,gravity:-9.81,temp:373,springK:30},perovskite:{density:5100,gravity:-9.81,temp:293,springK:25},metamaterial:{density:1000,gravity:-9.81,temp:293,springK:10},piezoelectric:{density:7500,gravity:-9.81,temp:293,springK:40},semiconductor:{density:2329,gravity:-9.81,temp:293,springK:40},photon:{density:0,gravity:0,temp:2.7,springK:1},dark_matter:{density:0,gravity:0,temp:2.7,springK:1},comet_ice:{density:600,gravity:0,temp:150,springK:10},nebula_gas:{density:0.001,gravity:0,temp:10000,springK:1},
 };
 
 // ==================== TOOL DEFINITIONS ====================
@@ -93,7 +94,10 @@ export default async function handler(req, res) {
 
 async function tryOllamaWithTools(messages, res) {
   try {
-    // Step 1: Non-streaming call with tools to check for tool_calls
+    // Step 1: Non-streaming call with tools (30s timeout for tool call phase)
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 30000);
+
     const firstRes = await fetch(`${OLLAMA_BASE}/api/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -103,7 +107,9 @@ async function tryOllamaWithTools(messages, res) {
         tools: TOOL_DEFINITIONS,
         stream: false,
       }),
+      signal: controller.signal,
     });
+    clearTimeout(timeout);
     if (!firstRes.ok) return false;
     const firstData = await firstRes.json();
 
