@@ -29,17 +29,18 @@ from pathlib import Path
 # ═══════════════════════════════════════════
 
 MODEL_NAME = os.environ.get("MODEL", "google/gemma-4-E4B-it")
-IS_31B = "31B" in MODEL_NAME or "31b" in MODEL_NAME
+# 대형 모델 감지 — 26B, 27B, 31B 모두 H100 80GB OOM 위험
+IS_LARGE = any(x in MODEL_NAME for x in ["26B", "26b", "27B", "27b", "31B", "31b"])
 
-# 31B vs E4B 자동 분기 — 31B는 H100 80GB에서 OOM 방지 설정
-MAX_SEQ_LEN = 1024 if IS_31B else 2048
-LORA_RANK = 8 if IS_31B else 16
-LORA_ALPHA = 16 if IS_31B else 32
+# 대형 모델 vs E4B 자동 분기
+MAX_SEQ_LEN = 1024 if IS_LARGE else 2048
+LORA_RANK = 8 if IS_LARGE else 16
+LORA_ALPHA = 16 if IS_LARGE else 32
 LORA_DROPOUT = 0.05
-LEARNING_RATE = 1e-4 if IS_31B else 2e-4
-EPOCHS = 1 if IS_31B else 3
-BATCH_SIZE = 1 if IS_31B else 4
-GRADIENT_ACCUMULATION = 16 if IS_31B else 4
+LEARNING_RATE = 1e-4 if IS_LARGE else 2e-4
+EPOCHS = 1 if IS_LARGE else 3
+BATCH_SIZE = 1 if IS_LARGE else 4
+GRADIENT_ACCUMULATION = 16 if IS_LARGE else 4
 OUTPUT_DIR = "models/gemma4-physics-edu"
 DATA_FILE = "data/training-data.jsonl"
 HF_REPO = "syu21125/gemma4-physics-edu"  # HuggingFace Hub backup
@@ -48,7 +49,7 @@ AUTO_SHUTDOWN = "--no-shutdown" not in sys.argv
 print("=" * 60)
 print(" GEMMA 4 PHYSICS EDUCATION FINE-TUNING")
 print("=" * 60)
-print(f"  Model: {MODEL_NAME} ({'31B mode' if IS_31B else 'E4B mode'})")
+print(f"  Model: {MODEL_NAME} ({'LARGE mode (26B+)' if IS_LARGE else 'E4B mode'})")
 print(f"  LoRA: rank={LORA_RANK}, alpha={LORA_ALPHA}")
 print(f"  Batch: {BATCH_SIZE} x {GRADIENT_ACCUMULATION} (eff={BATCH_SIZE*GRADIENT_ACCUMULATION})")
 print(f"  Seq: {MAX_SEQ_LEN}, Epochs: {EPOCHS}, LR: {LEARNING_RATE}")

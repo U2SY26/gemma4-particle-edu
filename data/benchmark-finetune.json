@@ -1,21 +1,21 @@
 {
-  "date": "2026-04-08T14:59:53.434Z",
+  "date": "2026-04-09T22:35:12.640Z",
   "results": [
     {
-      "model": "gemma4",
-      "jsonSuccess": 14,
-      "checksPass": 3,
-      "totalChecks": 18,
-      "avgTime": 8.284699999999999,
-      "totalTime": 165.694
+      "model": "gemma4-physics-edu",
+      "jsonSuccess": 16,
+      "checksPass": 17,
+      "totalChecks": 22,
+      "avgTime": 6.260249999999999,
+      "totalTime": 125.20499999999998
     },
     {
-      "model": "gemma4-physics-edu",
-      "jsonSuccess": 20,
-      "checksPass": 18,
-      "totalChecks": 28,
-      "avgTime": 5.621,
-      "totalTime": 112.42
+      "model": "gemma4",
+      "jsonSuccess": 15,
+      "checksPass": 6,
+      "totalChecks": 21,
+      "avgTime": 10.660249999999998,
+      "totalTime": 213.20499999999996
     }
   ]
 }
