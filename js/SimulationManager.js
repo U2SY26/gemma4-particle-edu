@@ -867,8 +867,12 @@ export class SimulationManager {
         card.chat.push(msg);
         this._renderChat(card.chat);
 
-        // Save to server
-        if (this.serverOnline) {
+        // Save to server — but only for cards that actually exist on the server.
+        // `preset-*` and `local-*` IDs are client-side placeholders that never got
+        // persisted (offline mode or failed sync) and would 404 the chat endpoint.
+        const isClientOnlyCard = typeof card.id === 'string' &&
+            (card.id.startsWith('preset-') || card.id.startsWith('local-'));
+        if (this.serverOnline && !isClientOnlyCard) {
             try {
                 await fetch(`${API_BASE}/api/cards/${card.id}/chat`, {
                     method: 'POST',
@@ -2020,11 +2024,6 @@ silicon: density=2329, gravity=-9.81, temp=293K, springK=40
     // ==================== UI INITIALIZATION ====================
 
     _initUI() {
-        // New card button
-        document.getElementById('new-card-btn').addEventListener('click', () => {
-            this.createCard();
-        });
-
         // Section toggles
         document.querySelectorAll('.section-title').forEach(title => {
             title.addEventListener('click', () => {

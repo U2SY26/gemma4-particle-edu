@@ -25,78 +25,108 @@ class App {
     }
 
     _init() {
-        // Renderer
-        this.renderer = new THREE.WebGLRenderer({
-            antialias: true,
-            powerPreference: 'high-performance',
-        });
+        try {
+            // Renderer
+            this.renderer = new THREE.WebGLRenderer({
+                antialias: true,
+                powerPreference: 'high-performance',
+            });
 
-        const container = document.getElementById('canvas-container');
-        this.renderer.setSize(container.clientWidth, container.clientHeight);
-        container.appendChild(this.renderer.domElement);
+            const container = document.getElementById('canvas-container');
+            this.renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(this.renderer.domElement);
 
-        // Scene & Camera
-        this.scene = new THREE.Scene();
-        this.camera = new THREE.PerspectiveCamera(
-            60, container.clientWidth / container.clientHeight, 0.1, 200
-        );
-        this.camera.position.set(8, 6, 12);
-        this.camera.lookAt(0, 3, 0);
+            // Scene & Camera
+            this.scene = new THREE.Scene();
+            this.camera = new THREE.PerspectiveCamera(
+                60, container.clientWidth / container.clientHeight, 0.1, 200
+            );
+            this.camera.position.set(8, 6, 12);
+            this.camera.lookAt(0, 3, 0);
 
-        // Auto-detect GPU quality
-        this.quality = detectQuality(this.renderer);
-        const MAX_PARTICLES = this.quality.maxParticles;
-        console.log(`[Quality] ${this.quality.label} - Max particles: ${MAX_PARTICLES}`);
+            // Auto-detect GPU quality
+            this.quality = detectQuality(this.renderer);
+            const MAX_PARTICLES = this.quality.maxParticles;
+            console.log(`[Quality] ${this.quality.label} - Max particles: ${MAX_PARTICLES}`);
 
-        // Initialize modules with quality settings
-        this.neonRenderer = new NeonRenderer(this.renderer, this.scene, this.camera, this.quality);
-        this.particleSystem = new ParticleSystem(this.scene, MAX_PARTICLES, this.quality);
-        this.physics = new PhysicsEngine(MAX_PARTICLES);
-        this.archGen = new ArchitectureGenerator();
-        this.xrController = new XRController(this.renderer, this.scene, this.camera);
+            // Initialize modules with quality settings
+            this.neonRenderer = new NeonRenderer(this.renderer, this.scene, this.camera, this.quality);
+            this.particleSystem = new ParticleSystem(this.scene, MAX_PARTICLES, this.quality);
+            this.physics = new PhysicsEngine(MAX_PARTICLES);
+            this.archGen = new ArchitectureGenerator();
+            this.xrController = new XRController(this.renderer, this.scene, this.camera);
 
-        // Spawn initial particles (clamped to quality tier max)
-        this.activeParticleCount = Math.min(this.activeParticleCount, MAX_PARTICLES);
-        const initialPositions = this.particleSystem.spawnOnGround(this.activeParticleCount, GROUND_SPREAD);
-        this.physics.initPositions(initialPositions, this.activeParticleCount);
+            // Spawn initial particles (clamped to quality tier max)
+            this.activeParticleCount = Math.min(this.activeParticleCount, MAX_PARTICLES);
+            const initialPositions = this.particleSystem.spawnOnGround(this.activeParticleCount, GROUND_SPREAD);
+            this.physics.initPositions(initialPositions, this.activeParticleCount);
 
-        // Simulation Manager (sidebar + cards)
-        this.simManager = new SimulationManager(
-            (card) => this._onCardSelect(card),
-            (physics) => this._onPhysicsChange(physics),
-        );
+            // Simulation Manager (sidebar + cards)
+            this.simManager = new SimulationManager(
+                (card) => this._onCardSelect(card),
+                (physics) => this._onPhysicsChange(physics),
+            );
 
-        // Connect voice input to chat
-        this.xrController.setVoiceCallback((transcript) => {
-            const chatInput = document.getElementById('chat-input');
-            if (chatInput && this.simManager) {
-                chatInput.value = transcript;
-                this.simManager._handleChatSubmit();
-            }
-        });
+            // Connect voice input to chat
+            this.xrController.setVoiceCallback((transcript) => {
+                const chatInput = document.getElementById('chat-input');
+                if (chatInput && this.simManager) {
+                    chatInput.value = transcript;
+                    this.simManager._handleChatSubmit();
+                }
+            });
 
-        // UI
-        this._setupUI();
+            // UI
+            this._setupUI();
 
-        // Resize handler
-        window.addEventListener('resize', () => this._onResize());
+            // Resize handler
+            window.addEventListener('resize', () => this._onResize());
 
-        // Start animation loop
-        this.renderer.setAnimationLoop((time, frame) => this._animate(time, frame));
+            // Start animation loop
+            this.renderer.setAnimationLoop((time, frame) => this._animate(time, frame));
 
-        this._updateStatus('Ready');
-        this._updateParticleCount(this.activeParticleCount);
-        this._updateQualityBadge();
+            this._updateStatus('Ready');
+            this._updateParticleCount(this.activeParticleCount);
+            this._updateQualityBadge();
 
-        // Hide loading overlay after Three.js init completes
-        const overlay = document.getElementById('loading-overlay');
-        if (overlay) overlay.style.display = 'none';
+            // Landing page logic
+            this._initLandingPage();
 
-        // Landing page logic
-        this._initLandingPage();
+            // Mobile sidebar toggle
+            this._initMobileToggle();
+        } catch (err) {
+            // Surface the failure so users aren't left staring at a spinner forever
+            console.error('[App] Initialization failed:', err);
+            this._showInitError(err);
+        } finally {
+            // Always hide the loading overlay so the UI (or the error banner) becomes visible
+            const overlay = document.getElementById('loading-overlay');
+            if (overlay) overlay.style.display = 'none';
+        }
+    }
 
-        // Mobile sidebar toggle
-        this._initMobileToggle();
+    _showInitError(err) {
+        const container = document.getElementById('canvas-container') || document.body;
+        const banner = document.createElement('div');
+        banner.setAttribute('role', 'alert');
+        banner.style.cssText = [
+            'position:fixed', 'inset:auto 16px 16px 16px', 'z-index:2000',
+            'max-width:720px', 'margin:0 auto',
+            'padding:14px 18px', 'border-radius:10px',
+            'background:rgba(20,24,36,0.96)', 'color:#ff6b6b',
+            'border:1px solid rgba(255,107,107,0.35)',
+            'font:500 13px/1.4 Inter, system-ui, sans-serif',
+            'box-shadow:0 12px 40px rgba(0,0,0,0.45)',
+        ].join(';');
+        const title = document.createElement('div');
+        title.textContent = 'Simulation failed to initialize';
+        title.style.cssText = 'font-weight:600;margin-bottom:4px;color:#ff8a8a;letter-spacing:0.3px';
+        const detail = document.createElement('div');
+        detail.textContent = (err && (err.message || String(err))) || 'Unknown error';
+        detail.style.cssText = 'color:#e7e9ef;font-family:JetBrains Mono, monospace;font-size:12px;word-break:break-word';
+        banner.appendChild(title);
+        banner.appendChild(detail);
+        container.appendChild(banner);
     }
 
     _initLandingPage() {
