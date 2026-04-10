@@ -1,0 +1,91 @@
+{
+  "date": "2026-04-11",
+  "description": "Gemma 4 전체 파인튜닝 비교 — E4B, 26B-A4B, 31B Dense",
+  "results": [
+    {
+      "model": "gemma4 (base 9B)",
+      "size_gb": 9.6,
+      "params": "9B",
+      "type": "Dense",
+      "jsonSuccess": 0.30,
+      "physicsAccuracy": 0.00,
+      "avgTime_sec": 12.7,
+      "finetuning_cost_usd": 0,
+      "notes": "Base 모델"
+    },
+    {
+      "model": "gemma4-physics-edu (E4B FT)",
+      "size_gb": 5.3,
+      "params": "4.5B",
+      "type": "Dense QLoRA r=16",
+      "jsonSuccess": 0.70,
+      "physicsAccuracy": 0.77,
+      "avgTime_sec": 8.9,
+      "finetuning_cost_usd": 0.55,
+      "notes": "✓ 가장 큰 개선. JSON +40%p, 물리 +77%p"
+    },
+    {
+      "model": "gemma4:26b (base MoE)",
+      "size_gb": 17,
+      "params": "26B (4B active)",
+      "type": "MoE",
+      "jsonSuccess": 0.95,
+      "physicsAccuracy": 0.22,
+      "avgTime_sec": 9.3,
+      "finetuning_cost_usd": 0,
+      "notes": "Base MoE"
+    },
+    {
+      "model": "gemma4-26b-physics-edu",
+      "size_gb": 19,
+      "params": "26B (4B active)",
+      "type": "MoE QLoRA r=8",
+      "jsonSuccess": 0.90,
+      "physicsAccuracy": 0.31,
+      "avgTime_sec": 9.3,
+      "finetuning_cost_usd": 2.40,
+      "notes": "소폭 개선. Base가 이미 우수해 효과 제한적"
+    },
+    {
+      "model": "gemma4:31b (base Dense)",
+      "size_gb": 19,
+      "params": "31B",
+      "type": "Dense",
+      "jsonSuccess": 1.00,
+      "physicsAccuracy": 0.21,
+      "avgTime_sec": 20.6,
+      "finetuning_cost_usd": 0,
+      "notes": "Base Dense. JSON 완벽, 속도 느림"
+    },
+    {
+      "model": "gemma4-31b-physics-edu-shallow",
+      "size_gb": 19,
+      "params": "31B",
+      "type": "Dense QLoRA r=8, 1ep",
+      "jsonSuccess": 1.00,
+      "physicsAccuracy": 0.18,
+      "avgTime_sec": 21.1,
+      "finetuning_cost_usd": 2.55,
+      "notes": "효과 없음"
+    },
+    {
+      "model": "gemma4-31b-physics-edu-deep",
+      "size_gb": 19,
+      "params": "31B",
+      "type": "Dense QLoRA r=64, 3ep",
+      "jsonSuccess": 1.00,
+      "physicsAccuracy": 0.18,
+      "avgTime_sec": 20.0,
+      "finetuning_cost_usd": 2.55,
+      "notes": "깊어도 효과 없음"
+    }
+  ],
+  "conclusions": [
+    "E4B QLoRA가 가장 효과적 (cost-effective): $0.55로 물리 정확도 77% 달성",
+    "26B MoE는 Base가 이미 JSON 95%라 개선 여지 작음",
+    "31B Dense는 JSON 100%지만 물리 정확도는 907쌍 데이터로 개선 불가",
+    "907쌍 학습 데이터는 E4B에는 충분하지만 대형 모델에는 부족",
+    "Function Calling으로 물질 테이블 lookup이 파인튜닝보다 효과적"
+  ],
+  "total_gpu_cost_usd": 10.10
+}

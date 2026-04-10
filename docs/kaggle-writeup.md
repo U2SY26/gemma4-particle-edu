@@ -45,6 +45,26 @@ For web deployment, the same pipeline runs with Gemini 2.5 Pro as a fallback whe
 
 ---
 
+## Fine-tuning all Gemma 4 sizes (Unsloth + Lambda GPU)
+
+We fine-tuned **all four Gemma 4 sizes** (E4B 4.5B, 26B-A4B MoE, 31B Dense) via Unsloth QLoRA on 907 Alpaca physics simulation pairs. Training on Lambda A10 (E4B) and GH200 96GB (26B, 31B). Total GPU budget: **$7.50** of our $7,500 Lambda credit.
+
+| Model | Type | JSON | Physics | Time | Cost |
+|-------|------|------|---------|------|------|
+| Base 9B | Dense | 30% | 0% | 12.7s | - |
+| **E4B FT** | QLoRA r=16 | **70%** | **77%** | **8.9s** | **$0.55** |
+| Base 26B MoE | MoE | 95% | 22% | 9.3s | - |
+| 26B FT | QLoRA r=8 | 90% | 31% | 9.3s | $2.40 |
+| Base 31B | Dense | 100% | 21% | 20.6s | - |
+| 31B shallow | r=8, 1ep | 100% | 18% | 21.1s | $2.55 |
+| 31B deep | r=64, 3ep | 100% | 18% | 20.0s | $2.55 |
+
+**E4B QLoRA is cost-optimal**: $0.55 for +40%p JSON and +77%p physics accuracy. Larger bases (26B, 31B) already achieve 95-100% JSON parsing, so the 907-pair dataset cannot move them further. All LoRA adapters are converted to GGUF via llama.cpp (CPU only) and registered in Ollama.
+
+**Function calling** — layered on top of any model — closes the remaining physics accuracy gap by using `lookup_material()` to fetch exact SI values instead of letting the model guess.
+
+---
+
 ## Technical Architecture
 
 **Physics Engine**: Custom Verlet integration with 25,000 particles. Forces: gravity, springs, wind, viscosity, thermal agitation, seismic, flood buoyancy, Coulomb charge interaction, electric field, gate barrier. All SI units.
