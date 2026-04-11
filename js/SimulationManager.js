@@ -6,6 +6,9 @@
 import { t, tPreset } from './i18n.js';
 
 const API_BASE = '';  // Same origin
+// URL param ?model=gemma4 → use Gemma 4 via Google AI Studio
+const _urlModel = new URLSearchParams(window.location.search).get('model');
+const AI_MODEL = _urlModel || null;  // null = default (Gemini), 'gemma4' = Gemma 4 AI Studio
 
 // Default physics template
 const BASE_PHYSICS = {
@@ -327,6 +330,9 @@ export class SimulationManager {
                 // Determine the active provider label
                 if (this._ollamaAvailable) {
                     document.getElementById('server-label').textContent = t('serverGemma4');
+                    this._removeOfflineBanner();
+                } else if (AI_MODEL === 'gemma4' && providers.gemini) {
+                    document.getElementById('server-label').textContent = t('serverGemma4') + ' (AI Studio)';
                     this._removeOfflineBanner();
                 } else if (providers.gemini) {
                     document.getElementById('server-label').textContent = t('serverGemini');
@@ -947,17 +953,24 @@ export class SimulationManager {
                         }
 
                         // Store particle spec on card for universal pipeline
-                        if (simParams.particles) {
+                        // Known built-in templates — prefer these over AI-generated particle groups
+                        const _KNOWN_TEMPLATES = ['house','tower','bridge','dome','pyramid','cathedral','temple','castle','wall','stadium','arch','sphere','cube','molecule','dna','protein','solar_system','galaxy','asteroid_field','cloud','tornado','rain','water_drop','river','ocean_wave','magnet','electron_cloud','transistor','circuit','skyscraper'];
+                        const _searchText = ((simParams.prompt || '') + ' ' + (simParams.title || '')).toLowerCase();
+                        const _matchedTemplate = _KNOWN_TEMPLATES.find(t => _searchText.includes(t));
+
+                        if (simParams.particles && !_matchedTemplate) {
+                            // Custom particle spec — no built-in template match
                             card.particleSpec = simParams.particles;
                             card.prompt = simParams.prompt || 'custom';
                             if (simParams.title) card.name = simParams.title;
                             document.getElementById('prompt-input').value = card.prompt;
                             if (this.onCardSelect) this.onCardSelect(card);
-                        } else if (simParams.prompt) {
-                            // Clear any previous particle spec — fall back to template
+                        } else if (_matchedTemplate || simParams.prompt) {
+                            // Built-in template match found, or plain prompt — use template generator
                             card.particleSpec = null;
-                            card.prompt = simParams.prompt;
-                            document.getElementById('prompt-input').value = simParams.prompt;
+                            card.prompt = _matchedTemplate || simParams.prompt;
+                            if (simParams.title) card.name = simParams.title;
+                            document.getElementById('prompt-input').value = card.prompt;
                             if (this.onCardSelect) this.onCardSelect(card);
                         }
 
@@ -1074,7 +1087,7 @@ Correct? Reply ONLY \`\`\`json: {"qa":"pass","reason":"..."} or corrected simula
     async _callOllamaSync(prompt, systemPrompt = 'QA validator. Reply ONLY ```json.') {
         try {
             const res = await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: prompt }] }) });
+                body: JSON.stringify({ messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: prompt }], ...(AI_MODEL && { model: AI_MODEL }) }) });
             if (!res.ok) return null;
             const reader = res.body.getReader(); const decoder = new TextDecoder();
             let full = '', buffer = '';
@@ -1103,7 +1116,8 @@ Correct? Reply ONLY \`\`\`json: {"qa":"pass","reason":"..."} or corrected simula
                     messages: [
                         { role: 'system', content: systemPrompt },
                         { role: 'user', content: prompt }
-                    ]
+                    ],
+                    ...(AI_MODEL && { model: AI_MODEL }),
                 }),
             });
             if (!res.ok) return null;
@@ -1628,7 +1642,7 @@ silicon: density=2329, gravity=-9.81, temp=293K, springK=40
             const response = await fetch(`${API_BASE}/api/chat`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ messages }),
+                body: JSON.stringify({ messages, ...(AI_MODEL && { model: AI_MODEL }) }),
             });
 
             if (!response.ok) throw new Error('Ollama unavailable');

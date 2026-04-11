@@ -170,7 +170,11 @@ export class PhysicsEngine {
         this.hasTarget.fill(0);
         this.targetStiffness.fill(0);
 
-        // Set new targets
+        // Set new targets AND snap particle positions to targets.
+        // Rationale: springs added via setSprings() use restLength based on
+        // structure geometry. If particles start at random positions, spring
+        // displacement becomes massive (50m vs 0.06m restLength) → explosive
+        // forces. Snapping to targets ensures spring displacement starts near 0.
         const count = Math.min(assignments.length, this.activeCount);
         for (let i = 0; i < count; i++) {
             const particleIdx = assignments[i];
@@ -178,14 +182,27 @@ export class PhysicsEngine {
 
             const src = i * 3;
             const dst = particleIdx * 3;
-            this.targetPos[dst] = targets[src];
-            this.targetPos[dst + 1] = targets[src + 1];
-            this.targetPos[dst + 2] = targets[src + 2];
+            const tx = targets[src];
+            const ty = targets[src + 1];
+            const tz = targets[src + 2];
+            this.targetPos[dst] = tx;
+            this.targetPos[dst + 1] = ty;
+            this.targetPos[dst + 2] = tz;
+            // Snap current and previous position to target (zero velocity, zero displacement)
+            this.pos[dst] = tx;
+            this.pos[dst + 1] = ty;
+            this.pos[dst + 2] = tz;
+            this.prevPos[dst] = tx;
+            this.prevPos[dst + 1] = ty;
+            this.prevPos[dst + 2] = tz;
+            this.vel[dst] = 0;
+            this.vel[dst + 1] = 0;
+            this.vel[dst + 2] = 0;
             this.hasTarget[particleIdx] = 1;
             this.targetStiffness[particleIdx] = this.TARGET_SPRING_K;
         }
 
-        // Begin transition
+        // Begin transition (ramps spring/target stiffness from 0→1 for smooth stabilization)
         this.transitionTime = 0;
         this.isTransitioning = true;
         this.stiffnessRamp = 0;
@@ -409,8 +426,12 @@ export class PhysicsEngine {
             const ny = dy * invDist;
             const nz = dz * invDist;
 
-            // Spring force
-            const displacement = dist - restLength;
+            // Spring force — clamp displacement to prevent explosive forces
+            // if particles drift far from rest (edge cases, teleports, hazards)
+            let displacement = dist - restLength;
+            const maxDisp = restLength * 5; // allow up to 5x rest stretch
+            if (displacement > maxDisp) displacement = maxDisp;
+            else if (displacement < -maxDisp) displacement = -maxDisp;
             const k = stiffness * ramp;
             const fx = k * displacement * nx;
             const fy = k * displacement * ny;

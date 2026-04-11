@@ -12,3 +12,8 @@ playwright-report/
 models/
 backups/
 .venv/
+.playwright-mcp/
+unsloth_compiled_cache/
+scripts/*.bak.*
+e2e-*.png
+data/history.json

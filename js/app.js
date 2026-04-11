@@ -857,3 +857,5 @@ class App {
 
 // ==================== START ====================
 const app = new App();
+// Expose for E2E testing (read-only access to physics state)
+window.__app = app;

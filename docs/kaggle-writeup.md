@@ -41,7 +41,9 @@ Single-call mode: 84% pass rate. 5-step DAG: 99.4%.
 
 **Electromagnetic Physics**: Real Coulomb force calculation (Particle-in-Cell, O(n)), electric field force (F=qE), and gate voltage control for transistor simulations. Students manipulate E-field sliders and watch charged particles respond.
 
-For web deployment, the same pipeline runs with Gemini 2.5 Pro as a fallback when Ollama is unavailable. The pipeline, prompts, and 138-material reference database are identical.
+**Cloud Deployment**: When Ollama is unavailable, the same pipeline runs with **Gemma 4 31B via Google AI Studio** (`generativelanguage.googleapis.com`). Same API, same prompts, same 138-material reference database — the only difference is the inference backend. Activated via `?model=gemma4` URL parameter. Gemini 2.5 Pro serves as a secondary fallback. Thought tokens from Gemma 4's reasoning are filtered server-side.
+
+**Function Calling on AI Studio Gemma 4**: The `lookup_material()` tool (138-material SI database) is exposed to Gemma 4 via Google's `functionDeclarations` format. The server performs a non-streaming call to detect `functionCall` parts, executes the tool locally against `REFERENCE_MATERIALS`, sends the `functionResponse` back, and streams the final answer as `provider: "gemma4+tools"`. A shared module (`api/chat-tools.js`) is imported by both `api/chat.js` (Vercel) and `server.js` (Express local) to keep Ollama and AI Studio paths in sync. AI Studio access is **free** (15 RPM, ~1,000 RPD, no credit card) — the same Gemini API key unlocks Gemma 4.
 
 ---
 
@@ -67,7 +69,7 @@ We fine-tuned **all four Gemma 4 sizes** (E4B 4.5B, 26B-A4B MoE, 31B Dense) via 
 
 ## Technical Architecture
 
-**Physics Engine**: Custom Verlet integration with 25,000 particles. Forces: gravity, springs, wind, viscosity, thermal agitation, seismic, flood buoyancy, Coulomb charge interaction, electric field, gate barrier. All SI units.
+**Physics Engine**: Custom Verlet integration with 25,000 particles. Forces: gravity, springs, wind, viscosity, thermal agitation, seismic, flood buoyancy, Coulomb charge interaction, electric field, gate barrier. All SI units. Structural stability verified by automated Playwright tests: (1) 30-second pyramid drift test — spread stays constant to 4 decimal places (6.56×9.65×8.75 m), max particle velocity 0.006 m/s, drift under 0.1%; (2) **30-template batch stability test — all 30 built-in templates (pyramid, skyscraper, bridge, tornado, solar_system, transistor, circuit, DNA, protein, galaxy, etc.) stay stable for 20 seconds each with zero explosions, zero NaN particles, max velocity ≤ 0.78 m/s across the entire suite**. Explosion fix: particles snap to target positions at structure build time + spring displacement clamped to 5× rest length.
 
 **138 Materials**: Steel (7850 kg/m3), water (1000), graphene (2267), DNA (1700), plasma (1025), diamond (3515), aerogel (100), blood (1060), etc. All with density, gravity, temperature, spring stiffness from CRC/NIST references.
 
@@ -112,7 +114,7 @@ The entire 300-scenario benchmark ran locally via Ollama with zero API cost.
 - Works offline after initial model download
 - Schools with restricted internet can use it
 
-The web demo uses Gemini Pro as a cloud fallback for accessibility, but the pipeline is identical. The Kaggle notebook demonstrates Ollama + Gemma 4 running on Kaggle GPU.
+The web demo supports **Gemma 4 31B via Google AI Studio** as a cloud fallback (`?model=gemma4`), using the same pipeline and prompts. Gemini 2.5 Pro serves as a secondary fallback. The Kaggle notebook demonstrates Ollama + Gemma 4 running on Kaggle GPU.
 
 ---
 
@@ -123,7 +125,7 @@ The web demo uses Gemini Pro as a cloud fallback for accessibility, but the pipe
 - **Deployed**: Running in Visual Science Lab (8,470 installs)
 - **Bilingual**: Korean + English i18n (124 labels + 60 presets)
 - **Open source**: MIT license, teachers can extend
-- **40 E2E tests passing**: Verified quality
+- **49 E2E tests passing**: Including 30-second pyramid drift test (0.1% drift) and 30-template × 20-second batch stability (30/30 stable, zero explosions)
 
 ---
 
