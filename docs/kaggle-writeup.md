@@ -125,7 +125,7 @@ The web demo supports **Gemma 4 31B via Google AI Studio** as a cloud fallback (
 - **Deployed**: Running in Visual Science Lab (8,470 installs)
 - **Bilingual**: Korean + English i18n (124 labels + 60 presets)
 - **Open source**: MIT license, teachers can extend
-- **49 E2E tests passing**: Including 30-second pyramid drift test (0.1% drift) and 30-template × 20-second batch stability (30/30 stable, zero explosions)
+- **50 E2E tests passing**: Including 30-second pyramid drift test (0.1% drift), 30-template × 20-second batch stability (30/30 stable, zero explosions), and a live production smoke test
 
 ---
 
