@@ -15,12 +15,6 @@
     ],
     "deny": []
   },
-  "mcpServers": {
-    "kanban": {
-      "type": "url",
-      "url": "http://localhost:5555/mcp"
-    }
-  },
   "hooks": {
     "PreToolUse": [
       {
