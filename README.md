@@ -7,7 +7,7 @@
 Free, open-source 3D physics simulation platform powered by **Gemma 4** and **Ollama**. Students describe physical phenomena in natural language and watch them come to life through real-time particle simulations.
 
 **Live Demo**: [gemma4-particle-edu.vercel.app](https://gemma4-particle-edu.vercel.app)
-**Video**: [YouTube (3 min)](https://youtu.be/3e-LZPHBA2M)
+**Video**: [YouTube (3 min)](https://youtu.be/RfKFMAT6lk0)
 **Benchmark Dataset**: [Kaggle](https://www.kaggle.com/datasets/syu21125/gemma4-particle-edu-benchmark-300)
 
 ---
@@ -172,7 +172,7 @@ docker compose up
 **[Kaggle Gemma 4 Good Hackathon](https://kaggle.com/competitions/gemma-4-good-hackathon)** -- $200,000 prize pool
 
 - **Tracks**: Future of Education + Ollama Special Tech + Main
-- **Video**: [YouTube](https://youtu.be/3e-LZPHBA2M)
+- **Video**: [YouTube](https://youtu.be/RfKFMAT6lk0)
 - **Live Demo**: [gemma4-particle-edu.vercel.app](https://gemma4-particle-edu.vercel.app)
 - **Deadline**: 2026-05-18
 

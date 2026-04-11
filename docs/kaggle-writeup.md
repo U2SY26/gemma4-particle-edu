@@ -131,7 +131,7 @@ The web demo supports **Gemma 4 31B via Google AI Studio** as a cloud fallback (
 
 ## Links
 
-- **Video**: [https://youtu.be/3e-LZPHBA2M](https://youtu.be/3e-LZPHBA2M)
+- **Video**: [https://youtu.be/RfKFMAT6lk0](https://youtu.be/RfKFMAT6lk0)
 - **GitHub**: [https://github.com/U2SY26/gemma4-particle-edu](https://github.com/U2SY26/gemma4-particle-edu)
 - **Live Demo**: [https://gemma4-particle-edu.vercel.app](https://gemma4-particle-edu.vercel.app)
 - **Benchmark Dataset**: [Kaggle](https://www.kaggle.com/datasets/syu21125/gemma4-particle-edu-benchmark-300)
