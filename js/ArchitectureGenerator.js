@@ -63,13 +63,25 @@ export class ArchitectureGenerator {
         // Prefers bigger structures over denser packing for visual clarity.
         const minSpacing = 0.04;
 
+        // Type-specific max scale — physical objects with natural size must
+        // not balloon when the particle budget exceeds their base capacity.
+        // DNA/protein/molecule/transistor/circuit are real objects; filling
+        // the budget must come from density, not from a 60m wire loop.
+        const MAX_SCALE_BY_TYPE = {
+            dna: 1.8, protein: 1.8, molecule: 1.5,
+            electron_cloud: 2.0, magnet: 2.0,
+            transistor: 2.0, circuit: 2.0,
+        };
+        const maxScale = MAX_SCALE_BY_TYPE[params.type] || Infinity;
+
         this.spacing = baseSpacing;
         let count = this._generateTemplate(params).positions.length / 3;
 
         // Iterate: scale up, then binary-search spacing
         for (let round = 0; round < 4 && count < totalParticles * 0.95; round++) {
             const deficit = totalParticles / Math.max(count, 1);
-            params.scale *= Math.pow(deficit, 0.4); // grow structure
+            const nextScale = params.scale * Math.pow(deficit, 0.4);
+            params.scale = Math.min(maxScale, nextScale); // capped growth
 
             // Binary-search spacing within this scale
             let lo = minSpacing, hi = Math.max(this.spacing, baseSpacing);
@@ -85,6 +97,11 @@ export class ArchitectureGenerator {
             }
             this.spacing = (lo + hi) / 2;
             count = this._generateTemplate(params).positions.length / 3;
+
+            // If scale is maxed out and we still can't reach budget,
+            // stop scaling — structural particles fill what they fill,
+            // remainder stays as free ambient (handled downstream).
+            if (params.scale >= maxScale && count < totalParticles * 0.95) break;
         }
 
         let structure = this._generateTemplate(params);
@@ -99,15 +116,22 @@ export class ArchitectureGenerator {
             structCount = totalParticles;
         }
 
+        // For capped types (physical objects with natural size), always use
+        // structCount as the effective count — no ambient filler. Otherwise
+        // stray particles sit wherever they previously were (ground sheet
+        // from init), visually appearing as a wall below the structure.
+        const isCapped = maxScale !== Infinity;
+        const effectiveCount = isCapped ? structCount : totalParticles;
+
         const assignments = new Uint32Array(structCount);
         for (let i = 0; i < structCount; i++) {
             assignments[i] = i;
         }
 
-        const allRoles = new Uint8Array(totalParticles);
-        const allLoads = new Float32Array(totalParticles);
-        allRoles.set(structure.roles.subarray(0, Math.min(structCount, totalParticles)));
-        allLoads.set(structure.loads.subarray(0, Math.min(structCount, totalParticles)));
+        const allRoles = new Uint8Array(effectiveCount);
+        const allLoads = new Float32Array(effectiveCount);
+        allRoles.set(structure.roles.subarray(0, Math.min(structCount, effectiveCount)));
+        allLoads.set(structure.loads.subarray(0, Math.min(structCount, effectiveCount)));
 
         this._calculateLoads(allLoads, structure.connections, allRoles, structCount);
 
@@ -117,8 +141,8 @@ export class ArchitectureGenerator {
         // Carry per-particle charge data from EM templates (null for non-EM templates)
         let allCharges = null;
         if (structure.charges) {
-            allCharges = new Float32Array(totalParticles);
-            allCharges.set(structure.charges.subarray(0, Math.min(structCount, totalParticles)));
+            allCharges = new Float32Array(effectiveCount);
+            allCharges.set(structure.charges.subarray(0, Math.min(structCount, effectiveCount)));
         }
 
         return {
@@ -130,9 +154,9 @@ export class ArchitectureGenerator {
             charges: allCharges,
             metadata: {
                 type: params.type,
-                particleCount: totalParticles,
+                particleCount: effectiveCount,
                 structuralParticles: structCount,
-                ambientParticles: totalParticles - structCount,
+                ambientParticles: effectiveCount - structCount,
                 description: params.description,
             }
         };
@@ -3377,12 +3401,42 @@ export class ArchitectureGenerator {
         }
     }
 
-    /** Random box — width, height, depth */
+    /** Random box — width, height, depth.
+     *  When no explicit size/center is given, auto-fit to the bounding box of
+     *  already-placed structures in this spec, so an "environment" group
+     *  encompasses the scene instead of forming a 6x6x6 wall at [0,5,0]. */
     _shapeRandomBox(positions, roles, params, count, role) {
-        const w = params.width || 6;
-        const h = params.height || 6;
-        const d = params.depth || 6;
-        const { cx, cy, cz } = this._center(params);
+        const hasExplicitSize   = params.width != null || params.height != null || params.depth != null;
+        const hasExplicitCenter = params.center != null;
+
+        let w, h, d, cx, cy, cz;
+
+        if (!hasExplicitSize && !hasExplicitCenter && positions.length >= 3) {
+            // Auto-fit to bounding box of all previously-placed particles
+            let minX = Infinity, maxX = -Infinity;
+            let minY = Infinity, maxY = -Infinity;
+            let minZ = Infinity, maxZ = -Infinity;
+            const n = positions.length;
+            for (let i = 0; i < n; i += 3) {
+                const x = positions[i], y = positions[i + 1], z = positions[i + 2];
+                if (x < minX) minX = x; if (x > maxX) maxX = x;
+                if (y < minY) minY = y; if (y > maxY) maxY = y;
+                if (z < minZ) minZ = z; if (z > maxZ) maxZ = z;
+            }
+            const pad = 1.3;
+            w = Math.max(2, (maxX - minX) * pad);
+            h = Math.max(2, (maxY - minY) * pad);
+            d = Math.max(2, (maxZ - minZ) * pad);
+            cx = (minX + maxX) / 2;
+            cy = (minY + maxY) / 2;
+            cz = (minZ + maxZ) / 2;
+        } else {
+            w = params.width || 6;
+            h = params.height || 6;
+            d = params.depth || 6;
+            const c = this._center(params);
+            cx = c.cx; cy = c.cy; cz = c.cz;
+        }
 
         for (let i = 0; i < count; i++) {
             positions.push(

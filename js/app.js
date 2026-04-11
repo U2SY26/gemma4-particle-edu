@@ -735,16 +735,22 @@ class App {
             this.currentStructure = structure;
 
             const needed = structure.metadata.particleCount;
-            if (needed > this.particleSystem.activeCount) {
-                for (let i = this.particleSystem.activeCount; i < needed; i++) {
-                    const idx = i * 3;
-                    this.physics.pos[idx] = (Math.random() - 0.5) * GROUND_SPREAD;
-                    this.physics.pos[idx + 1] = Math.random() * 0.3;
-                    this.physics.pos[idx + 2] = (Math.random() - 0.5) * GROUND_SPREAD;
-                    this.physics.prevPos[idx] = this.physics.pos[idx];
-                    this.physics.prevPos[idx + 1] = this.physics.pos[idx + 1];
-                    this.physics.prevPos[idx + 2] = this.physics.pos[idx + 2];
+            if (needed !== this.particleSystem.activeCount) {
+                if (needed > this.particleSystem.activeCount) {
+                    // Grow: spawn new particles in the ground zone
+                    for (let i = this.particleSystem.activeCount; i < needed; i++) {
+                        const idx = i * 3;
+                        this.physics.pos[idx] = (Math.random() - 0.5) * GROUND_SPREAD;
+                        this.physics.pos[idx + 1] = Math.random() * 0.3;
+                        this.physics.pos[idx + 2] = (Math.random() - 0.5) * GROUND_SPREAD;
+                        this.physics.prevPos[idx] = this.physics.pos[idx];
+                        this.physics.prevPos[idx + 1] = this.physics.pos[idx + 1];
+                        this.physics.prevPos[idx + 2] = this.physics.pos[idx + 2];
+                    }
                 }
+                // Shrink or grow — always sync the active count to the structure's needs
+                // so capped templates (DNA, protein, etc.) don't leave ghost ambient
+                // particles sitting as a wall below the structure.
                 this.particleSystem.setActiveCount(needed);
                 this.physics.activeCount = needed;
             }
