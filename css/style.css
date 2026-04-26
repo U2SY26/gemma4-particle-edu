@@ -1552,15 +1552,51 @@ textarea.text-input {
 
 .landing-about {
     margin: 30px 0;
-    padding: 20px;
+    padding: 16px 20px;
     background: rgba(255, 255, 255, 0.02);
     border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
+/* <details> 컴팩트화 — 접힌 상태 padding 줄임 */
+.landing-about:not([open]) {
+    padding: 12px 20px;
+}
+
+.landing-about > summary {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    user-select: none;
+    padding: 0;
+}
+
+.landing-about > summary::-webkit-details-marker { display: none; }
+
+.landing-about > summary::before {
+    content: "▶";
+    font-size: 11px;
+    color: rgba(230, 237, 243, 0.5);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+}
+
+.landing-about[open] > summary::before {
+    transform: rotate(90deg);
+}
+
+.landing-about > summary > h2,
 .landing-about h2 {
-    font-size: 18px;
+    font-size: 16px;
     color: #e6edf3;
-    margin: 0 0 10px;
+    margin: 0;
+    font-weight: 600;
+}
+
+.landing-about[open] > summary {
+    margin-bottom: 12px;
 }
 
 .landing-about h3 {
