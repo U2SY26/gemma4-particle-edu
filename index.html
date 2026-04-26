@@ -211,14 +211,15 @@
     <!-- ========== RIGHT PARAMETER DRAWER ========== -->
     <aside id="right-drawer" class="right-drawer">
         <!-- Drawer Tab Navigation -->
+        <!-- 2026-04-26: 사용자 요청 — PRESETS 첫 진입 (300 템플릿 노출), PARAMS 는 펄스 애니메이션으로 알림 -->
         <div id="drawer-tabs" style="display:flex;border-bottom:1px solid rgba(255,255,255,0.08);padding:0 4px;gap:0;flex-shrink:0">
-            <button class="drawer-tab active" data-tab="params" style="flex:1;padding:8px 4px;background:none;border:none;border-bottom:2px solid var(--accent-blue);color:var(--text-primary);font-size:10px;font-weight:600;cursor:pointer;letter-spacing:0.5px" data-i18n="tabParams">PARAMS</button>
-            <button class="drawer-tab" data-tab="presets" style="flex:1;padding:8px 4px;background:none;border:none;border-bottom:2px solid transparent;color:var(--text-secondary);font-size:10px;font-weight:600;cursor:pointer;letter-spacing:0.5px" data-i18n="tabPresets">PRESETS</button>
-            <button class="drawer-tab" data-tab="benchmark" style="flex:1;padding:8px 4px;background:none;border:none;border-bottom:2px solid transparent;color:var(--text-secondary);font-size:10px;font-weight:600;cursor:pointer;letter-spacing:0.5px" data-i18n="tabBenchmark">BENCH</button>
+            <button class="drawer-tab active" data-tab="presets" style="flex:1;padding:8px 4px;background:none;border:none;border-bottom:2px solid var(--accent-blue);color:var(--text-primary);font-size:10px;font-weight:600;cursor:pointer;letter-spacing:0.5px" data-i18n="tabPresets">🎨 PRESETS</button>
+            <button class="drawer-tab drawer-tab-pulse" data-tab="params" style="flex:1;padding:8px 4px;background:none;border:none;border-bottom:2px solid transparent;color:var(--text-secondary);font-size:10px;font-weight:600;cursor:pointer;letter-spacing:0.5px;position:relative" data-i18n="tabParams">⚙️ PARAMS</button>
+            <button class="drawer-tab" data-tab="benchmark" style="flex:1;padding:8px 4px;background:none;border:none;border-bottom:2px solid transparent;color:var(--text-secondary);font-size:10px;font-weight:600;cursor:pointer;letter-spacing:0.5px" data-i18n="tabBenchmark">📊 BENCH</button>
         </div>
 
         <!-- Tab: PARAMS (physics sliders) -->
-        <div id="tab-params" class="drawer-tab-panel" style="overflow-y:auto;flex:1">
+        <div id="tab-params" class="drawer-tab-panel" style="overflow-y:auto;flex:1;display:none">
         <!-- Material & Ground Selection -->
         <div id="material-select-section">
             <h3 class="section-title" data-toggle="material-select-params" role="button" aria-expanded="true" tabindex="0">
@@ -581,12 +582,23 @@
         </div>
         </div><!-- /tab-params -->
 
-        <!-- Tab: PRESETS -->
-        <div id="tab-presets" class="drawer-tab-panel" style="overflow-y:auto;flex:1;display:none">
+        <!-- Tab: PRESETS — 300 시나리오 카탈로그 (사용자 요청 2026-04-26) -->
+        <div id="tab-presets" class="drawer-tab-panel" style="overflow-y:auto;flex:1;display:block">
             <div style="padding:8px">
-                <div style="font-size:11px;font-weight:600;color:var(--text-secondary);letter-spacing:0.5px;margin-bottom:8px" data-i18n="tabPresetsTitle">SIMULATION PRESETS</div>
-                <div id="drawer-preset-list" style="display:flex;flex-direction:column;gap:4px">
-                    <!-- Populated by JS from card-list -->
+                <div style="font-size:11px;font-weight:600;color:var(--text-secondary);letter-spacing:0.5px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center">
+                    <span data-i18n="tabPresetsTitle">🎨 300 SIMULATIONS</span>
+                    <input id="preset-search" type="text" placeholder="검색..." style="font-size:10px;padding:3px 6px;width:80px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:var(--text-primary);border-radius:3px"/>
+                </div>
+                <!-- 카테고리 빠른 필터 -->
+                <div id="preset-category-filter" style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:8px;font-size:9px">
+                    <button class="preset-cat-btn active" data-cat="all" style="padding:3px 7px;background:rgba(0,212,255,0.2);border:1px solid var(--accent-blue);color:var(--text-primary);border-radius:10px;cursor:pointer">전체</button>
+                    <button class="preset-cat-btn" data-cat="building" style="padding:3px 7px;background:transparent;border:1px solid rgba(255,255,255,0.1);color:var(--text-secondary);border-radius:10px;cursor:pointer">🏛️ 건축</button>
+                    <button class="preset-cat-btn" data-cat="bio" style="padding:3px 7px;background:transparent;border:1px solid rgba(255,255,255,0.1);color:var(--text-secondary);border-radius:10px;cursor:pointer">🧬 생물</button>
+                    <button class="preset-cat-btn" data-cat="space" style="padding:3px 7px;background:transparent;border:1px solid rgba(255,255,255,0.1);color:var(--text-secondary);border-radius:10px;cursor:pointer">🌌 우주</button>
+                    <button class="preset-cat-btn" data-cat="physics" style="padding:3px 7px;background:transparent;border:1px solid rgba(255,255,255,0.1);color:var(--text-secondary);border-radius:10px;cursor:pointer">⚛️ 물리</button>
+                </div>
+                <div id="drawer-preset-list" style="display:flex;flex-direction:column;gap:3px">
+                    <div style="text-align:center;padding:20px;color:var(--text-secondary);font-size:10px">로딩 중...</div>
                 </div>
             </div>
         </div>

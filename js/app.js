@@ -450,20 +450,116 @@ class App {
         }
     }
 
-    _populateDrawerPresets() {
+    async _populateDrawerPresets() {
         const list = document.getElementById('drawer-preset-list');
         if (!list || !this.simManager) return;
-        const cards = this.simManager.cards || [];
-        for (const card of cards) {
-            const el = document.createElement('div');
-            el.style.cssText = 'padding:6px 8px;border-radius:4px;cursor:pointer;font-size:11px;border-left:2px solid transparent;transition:all 0.15s';
-            el.onmouseenter = () => { el.style.background = 'rgba(88,166,255,0.08)'; el.style.borderLeftColor = 'var(--accent-blue)'; };
-            el.onmouseleave = () => { el.style.background = ''; el.style.borderLeftColor = 'transparent'; };
-            const tags = (card.tags || []).map(t => `<span style="font-size:9px;color:var(--text-secondary);background:rgba(255,255,255,0.06);padding:1px 4px;border-radius:2px">${t}</span>`).join(' ');
-            el.innerHTML = `<div style="font-weight:500;color:var(--text-primary)">${card.name}</div><div style="margin-top:2px">${tags}</div>`;
-            el.addEventListener('click', () => this.simManager.selectCard(card.id));
-            list.appendChild(el);
+
+        // 300 시나리오 + 기존 cards 통합 (사용자 요청 2026-04-26)
+        let scenarios = this.simManager._benchmarkScenarios;
+        if (!scenarios) {
+            try {
+                const res = await fetch('/data/benchmark-300.json');
+                const data = await res.json();
+                scenarios = data.scenarios || [];
+                this.simManager._benchmarkScenarios = scenarios;
+            } catch (e) {
+                console.warn('[Presets] 300 시나리오 로드 실패', e);
+                scenarios = [];
+            }
         }
+
+        // 카테고리 자동 분류
+        const categorize = (s) => {
+            const t = (s.title || '').toLowerCase();
+            const m = (s.material || '').toLowerCase();
+            if (/피라미드|타워|아파트|건물|성당|다리|bridge|tower|cathedral|building|pyramid|skyscraper/.test(t) || /steel|concrete|brick|wood|iron/.test(m)) return 'building';
+            if (/dna|세포|단백질|박테리아|virus|cell|protein|bacteria|혈액|뼈|근육/.test(t)) return 'bio';
+            if (/태양|행성|블랙홀|은하|별|소행성|sun|planet|black hole|galaxy|star|asteroid|nebula|comet|moon|earth/.test(t)) return 'space';
+            if (/전기|자기|중력|광자|전자|쿼크|electromagnetic|gravity|electron|photon|quark|magnet|laser|plasma/.test(t)) return 'physics';
+            return 'building'; // default
+        };
+
+        const iconMap = { building: '🏛️', bio: '🧬', space: '🌌', physics: '⚛️' };
+
+        let filtered = scenarios.map(s => ({ ...s, _cat: categorize(s) }));
+        let activeCat = 'all';
+        let searchQuery = '';
+
+        const render = () => {
+            list.innerHTML = '';
+            const items = filtered.filter(s => {
+                const catOk = activeCat === 'all' || s._cat === activeCat;
+                const qOk = !searchQuery || (s.title || '').toLowerCase().includes(searchQuery);
+                return catOk && qOk;
+            }).slice(0, 100); // 한 번에 100개만 렌더 (perf)
+
+            if (items.length === 0) {
+                list.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-secondary);font-size:10px">결과 없음</div>';
+                return;
+            }
+
+            for (const s of items) {
+                const el = document.createElement('div');
+                el.className = 'preset-card';
+                const stars = '★'.repeat(s.stars || 0);
+                el.innerHTML = `
+                    <span class="preset-card-icon">${iconMap[s._cat]}</span>
+                    <span class="preset-card-title">${s.title}</span>
+                    <span class="preset-card-stars">${stars}</span>
+                `;
+                el.title = `${s.material || ''} | ${s.particles || 0} particles | accuracy ${s.accuracy || 0}%`;
+                el.addEventListener('click', () => {
+                    if (this.simManager._applyBenchmarkScenario) {
+                        this.simManager._applyBenchmarkScenario(s);
+                    } else {
+                        // Fallback: 자연어 prompt 로 전송
+                        const input = document.getElementById('chat-input');
+                        if (input) {
+                            input.value = s.title;
+                            document.getElementById('chat-send-btn')?.click();
+                        }
+                    }
+                });
+                list.appendChild(el);
+            }
+
+            const totalCount = filtered.filter(s => activeCat === 'all' || s._cat === activeCat).length;
+            if (totalCount > 100) {
+                const more = document.createElement('div');
+                more.style.cssText = 'text-align:center;padding:8px;color:var(--text-secondary);font-size:9px';
+                more.textContent = `${items.length} / ${totalCount}개 표시 (검색하여 필터링)`;
+                list.appendChild(more);
+            }
+        };
+
+        // 카테고리 필터 버튼 이벤트
+        document.querySelectorAll('.preset-cat-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.preset-cat-btn').forEach(b => {
+                    b.classList.remove('active');
+                    b.style.background = 'transparent';
+                    b.style.borderColor = 'rgba(255,255,255,0.1)';
+                    b.style.color = 'var(--text-secondary)';
+                });
+                btn.classList.add('active');
+                btn.style.background = 'rgba(0,212,255,0.2)';
+                btn.style.borderColor = 'var(--accent-blue)';
+                btn.style.color = 'var(--text-primary)';
+                activeCat = btn.dataset.cat;
+                render();
+            });
+        });
+
+        // 검색 이벤트
+        const searchInput = document.getElementById('preset-search');
+        if (searchInput) {
+            searchInput.addEventListener('input', () => {
+                searchQuery = searchInput.value.trim().toLowerCase();
+                render();
+            });
+        }
+
+        render();
     }
 
     _populateDrawerBenchmark() {
