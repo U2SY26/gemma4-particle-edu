@@ -1354,6 +1354,144 @@ textarea.text-input {
     padding: 20px;
 }
 
+/* ========== LANDING EXTRA — 앱 소개 + 광고 (2026-04-26) ========== */
+#landing-page {
+    /* 스크롤 가능하게 */
+    overflow-y: auto !important;
+}
+
+.landing-extra {
+    margin-top: 60px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(230, 237, 243, 0.08);
+    text-align: left;
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.landing-intro-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-bottom: 30px;
+}
+
+.landing-intro-card {
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.landing-intro-card:hover {
+    border-color: rgba(101, 93, 255, 0.4);
+    background: rgba(101, 93, 255, 0.05);
+}
+
+.landing-intro-icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.landing-intro-card h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #e6edf3;
+    margin: 0 0 4px;
+}
+
+.landing-intro-card p {
+    font-size: 12px;
+    color: rgba(230, 237, 243, 0.6);
+    line-height: 1.5;
+    margin: 0;
+}
+
+.landing-intro-card a {
+    color: #00d4ff;
+    text-decoration: none;
+}
+
+.landing-intro-card a:hover {
+    text-decoration: underline;
+}
+
+.landing-ad-slot {
+    margin: 24px auto;
+    min-height: 90px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    padding: 8px;
+    text-align: center;
+}
+
+.landing-about {
+    margin: 30px 0;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+}
+
+.landing-about h2 {
+    font-size: 18px;
+    color: #e6edf3;
+    margin: 0 0 10px;
+}
+
+.landing-about h3 {
+    font-size: 14px;
+    color: #e6edf3;
+    margin: 16px 0 8px;
+}
+
+.landing-about p {
+    font-size: 13px;
+    color: rgba(230, 237, 243, 0.7);
+    line-height: 1.7;
+    margin: 0 0 8px;
+}
+
+.landing-about ul {
+    margin: 8px 0 0;
+    padding-left: 20px;
+}
+
+.landing-about li {
+    font-size: 12px;
+    color: rgba(230, 237, 243, 0.6);
+    line-height: 1.8;
+}
+
+.landing-footer {
+    margin: 30px 0 60px;
+    text-align: center;
+    font-size: 12px;
+    color: rgba(230, 237, 243, 0.4);
+}
+
+.landing-footer p {
+    margin: 4px 0;
+}
+
+.landing-footer a {
+    color: rgba(230, 237, 243, 0.6);
+    text-decoration: none;
+}
+
+.landing-footer a:hover {
+    color: #00d4ff;
+    text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+    .landing-intro-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 .landing-title {
     font-size: 52px;
     font-weight: 700;
