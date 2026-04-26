@@ -45,59 +45,52 @@
 
             <!-- ========== APP INTRO + AD SECTION (Landing scrollable area) ========== -->
             <section class="landing-extra">
-                <!-- App intro -->
-                <div class="landing-intro">
-                    <div class="landing-intro-grid">
-                        <div class="landing-intro-card">
-                            <div class="landing-intro-icon">⚛️</div>
-                            <h3>25,000 파티클</h3>
-                            <p>실시간 물리 시뮬레이션 — GPU 가속 WebGL 렌더링</p>
-                        </div>
-                        <div class="landing-intro-card">
-                            <div class="landing-intro-icon">🤖</div>
-                            <h3>AI 자연어 제어</h3>
-                            <p>한국어/영어로 시뮬레이션 만들기 — Gemma 4 + Gemini</p>
-                        </div>
-                        <div class="landing-intro-card">
-                            <div class="landing-intro-icon">🏗️</div>
-                            <h3>건축·재료·반도체</h3>
-                            <p>피라미드 · 다리 · DNA · 태양계 · 블랙홀 · 지진</p>
-                        </div>
-                        <div class="landing-intro-card">
-                            <div class="landing-intro-icon">📱</div>
-                            <h3>모바일 앱</h3>
-                            <p><a href="https://play.google.com/store/apps/details?id=com.sciencelab.science_lab_flutter" target="_blank" rel="noopener">눈으로 보는 과학</a> 261+ STEM 시뮬레이션</p>
+                <!-- 4개 카드 + 사이트 소개를 하나의 <details>로 통합 (SEO 안전, 기본 접힘) -->
+                <details class="landing-extra-details">
+                    <summary>
+                        <h2 style="display:inline">앱 소개 / About this app</h2>
+                    </summary>
+
+                    <!-- App intro 4 cards -->
+                    <div class="landing-intro">
+                        <div class="landing-intro-grid">
+                            <div class="landing-intro-card">
+                                <div class="landing-intro-icon">⚛️</div>
+                                <h3>25,000 파티클</h3>
+                                <p>실시간 물리 시뮬레이션 — GPU 가속 WebGL 렌더링</p>
+                            </div>
+                            <div class="landing-intro-card">
+                                <div class="landing-intro-icon">🤖</div>
+                                <h3>AI 자연어 제어</h3>
+                                <p>한국어/영어로 시뮬레이션 만들기 — Gemma 4 + Gemini</p>
+                            </div>
+                            <div class="landing-intro-card">
+                                <div class="landing-intro-icon">🏗️</div>
+                                <h3>건축·재료·반도체</h3>
+                                <p>피라미드 · 다리 · DNA · 태양계 · 블랙홀 · 지진</p>
+                            </div>
+                            <div class="landing-intro-card">
+                                <div class="landing-intro-icon">📱</div>
+                                <h3>모바일 앱</h3>
+                                <p><a href="https://play.google.com/store/apps/details?id=com.sciencelab.science_lab_flutter" target="_blank" rel="noopener">눈으로 보는 과학</a> 261+ STEM 시뮬레이션</p>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- AdSense slot 1 — 비활성 2026-04-26 -->
-                <!--
-                <div class="landing-ad-slot">
-                    <ins class="adsbygoogle"
-                         style="display:block;text-align:center"
-                         data-ad-layout="in-article"
-                         data-ad-format="fluid"
-                         data-ad-client="ca-pub-2988937021017804"
-                         data-ad-slot="auto"></ins>
-                </div>
-                -->
-
-                <!-- 사이트 소개 / SEO 콘텐츠 — <details>로 접기 (SEO 100% 안전) -->
-                <details class="landing-about">
-                    <summary>
-                        <h2 style="display:inline">What is Gemma 4 Particle Edu?</h2>
-                    </summary>
-                    <p>An interactive 3D particle physics playground powered by AI. Type natural-language prompts in Korean or English to simulate architecture, materials science, semiconductors, biology and astronomy with up to 25,000 GPU-accelerated particles.</p>
-                    <p>Built with Three.js, WebGL and Gemma 4 / Gemini AI. Free to use. No installation required.</p>
-                    <h3>Featured simulations</h3>
-                    <ul>
-                        <li>🏛️ Architecture — pyramid, suspension bridge, gothic cathedral, 20-floor tower, steel skyscraper</li>
-                        <li>🌀 Natural phenomena — tornado, earthquake, hurricane, snow load</li>
-                        <li>🧬 Biology — DNA double helix, protein folding, virus structure</li>
-                        <li>🌍 Astronomy — solar system, black hole gravity well, asteroid belt</li>
-                        <li>⚡ Physics — electromagnetic field, plasma, semiconductor MOSFET, lithium-ion battery</li>
-                    </ul>
+                    <!-- 사이트 소개 본문 (SEO 100% 안전 — details 안 평문은 항상 DOM 존재, 검색엔진은 펼친 상태로 인덱싱) -->
+                    <div class="landing-about-content">
+                        <h3>What is Gemma 4 Particle Edu?</h3>
+                        <p>An interactive 3D particle physics playground powered by AI. Type natural-language prompts in Korean or English to simulate architecture, materials science, semiconductors, biology and astronomy with up to 25,000 GPU-accelerated particles.</p>
+                        <p>Built with Three.js, WebGL and Gemma 4 / Gemini AI. Free to use. No installation required.</p>
+                        <h3>Featured simulations</h3>
+                        <ul>
+                            <li>🏛️ Architecture — pyramid, suspension bridge, gothic cathedral, 20-floor tower, steel skyscraper</li>
+                            <li>🌀 Natural phenomena — tornado, earthquake, hurricane, snow load</li>
+                            <li>🧬 Biology — DNA double helix, protein folding, virus structure</li>
+                            <li>🌍 Astronomy — solar system, black hole gravity well, asteroid belt</li>
+                            <li>⚡ Physics — electromagnetic field, plasma, semiconductor MOSFET, lithium-ion battery</li>
+                        </ul>
+                    </div>
                 </details>
 
                 <!-- AdSense slot 2 — 비활성 2026-04-26 -->

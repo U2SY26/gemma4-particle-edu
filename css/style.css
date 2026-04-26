@@ -1558,11 +1558,21 @@ textarea.text-input {
     border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-/* <details> 컴팩트화 — 접힌 상태 padding 줄임 */
-.landing-about:not([open]) {
+/* <details> 통합 박스 — 4 카드 + 사이트 소개 함께 접기 (2026-04-26) */
+.landing-extra-details {
+    margin: 20px 0 30px;
     padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: padding 0.2s;
 }
 
+.landing-extra-details[open] {
+    padding: 16px 20px;
+}
+
+.landing-extra-details > summary,
 .landing-about > summary {
     cursor: pointer;
     list-style: none;
@@ -1573,8 +1583,10 @@ textarea.text-input {
     padding: 0;
 }
 
+.landing-extra-details > summary::-webkit-details-marker,
 .landing-about > summary::-webkit-details-marker { display: none; }
 
+.landing-extra-details > summary::before,
 .landing-about > summary::before {
     content: "▶";
     font-size: 11px;
@@ -1583,10 +1595,12 @@ textarea.text-input {
     flex-shrink: 0;
 }
 
+.landing-extra-details[open] > summary::before,
 .landing-about[open] > summary::before {
     transform: rotate(90deg);
 }
 
+.landing-extra-details > summary > h2,
 .landing-about > summary > h2,
 .landing-about h2 {
     font-size: 16px;
@@ -1595,8 +1609,38 @@ textarea.text-input {
     font-weight: 600;
 }
 
+.landing-extra-details[open] > summary,
 .landing-about[open] > summary {
-    margin-bottom: 12px;
+    margin-bottom: 16px;
+}
+
+.landing-extra-details .landing-intro {
+    margin-top: 8px;
+    margin-bottom: 16px;
+}
+
+.landing-about-content h3 {
+    font-size: 14px;
+    color: #e6edf3;
+    margin: 16px 0 8px;
+}
+
+.landing-about-content p {
+    font-size: 13px;
+    color: rgba(230, 237, 243, 0.7);
+    line-height: 1.7;
+    margin: 0 0 8px;
+}
+
+.landing-about-content ul {
+    margin: 8px 0 0;
+    padding-left: 20px;
+}
+
+.landing-about-content li {
+    font-size: 12px;
+    color: rgba(230, 237, 243, 0.6);
+    line-height: 1.8;
 }
 
 .landing-about h3 {
