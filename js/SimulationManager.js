@@ -1821,6 +1821,11 @@ silicon: density=2329, gravity=-9.81, temp=293K, springK=40
     }
 
     async _loadHistory(page = 0) {
+        // 정적 배포(Vercel) — 서버 미접속 시 fetch 자체를 건너뛰어 콘솔 404 에러 방지
+        if (this.serverOnline === false) {
+            this._loadHistoryFromLocalStorage(page);
+            return;
+        }
         try {
             const res = await fetch(`/api/history?page=${page}&limit=20`);
             if (!res.ok) throw new Error('Server returned ' + res.status);
@@ -1853,6 +1858,24 @@ silicon: density=2329, gravity=-9.81, temp=293K, springK=40
             } catch (err) {
                 console.warn('[History] localStorage fallback load failed:', err.message || err);
             }
+        }
+    }
+
+    _loadHistoryFromLocalStorage(page = 0) {
+        try {
+            const history = JSON.parse(localStorage.getItem('sim-history') || '[]');
+            const start = page * 20;
+            const items = history.slice(start, start + 20);
+            this._renderHistoryList(items, page === 0);
+            const countEl = document.getElementById('history-count');
+            if (countEl) countEl.textContent = history.length;
+            const loadMoreBtn = document.getElementById('load-more-history');
+            if (loadMoreBtn) {
+                loadMoreBtn.style.display = start + 20 < history.length ? 'block' : 'none';
+                loadMoreBtn.onclick = () => this._loadHistory(page + 1);
+            }
+        } catch (err) {
+            console.warn('[History] localStorage load failed:', err.message || err);
         }
     }
 
